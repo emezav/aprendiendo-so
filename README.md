@@ -1,4 +1,4 @@
-# Aprendiendo Sistemas Operativos para procesadores Intel			{#mainpage}
+# Aprendiendo Sistemas Operativos para procesadores Intel
 
 Aprendiendo SO - Aprendizaje de las bases iniciales para el estudio y/o
 construcción de Sistemas Operativos, usando como caso de estudio los
