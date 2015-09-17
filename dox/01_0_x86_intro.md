@@ -1,89 +1,155 @@
-Generalidades de la arquitectura IA-32
+Generalidades de la arquitectura x86
 ======================================
+Reseña histórica
+----------------
+La compañía Intel, creadora de la arquitectura x86 y principal fabricante de
+procesadores que la implementan, decidió diseñarlos de tal forma que el código
+desarrollado para computadores de hace 30 o más años (el 80386 o el 80486) pueda
+ser ejecutado en procesadores actuales sin necesidad de modificaciones y sin
+penalidad en su desempeño. Esto implica una serie de decisiones de diseño en su
+estructura interna y en su funcionamiento que en ciertas ocasiones limita a los
+programas, pero que también ofrece una ventaja competitiva relacionada con la
+adopción masiva de los procesadores y la posibilidad de ejecutar programas
+creados para procesadores anteriores en las versiones actuales sin mayores
+modificaciones.
 
-Intel, el fabricante de los procesadores de arquitectura IA-32, ha
-decidido mantener compatibilidad hacia atrás para permitir que el código
-desarrollado para procesadores desde 386 o 486 pueda ser ejecutado en
-procesadores actuales. Esto implica una serie de decisiones de diseño en
-la estructura interna y en el funcionamiento de los procesadores, que en
-ciertas ocasiones limita a los programas pero que también ofrece una
-ventaja competitiva relacionada con la adopción masiva de los
-procesadores y la posibilidad de ejecutar programas creados para
-procesadores anteriores en las versiones actuales sin virtualmente
-ninguna modificación.
+La arquitectura x86 tiene sus raíces en los procesadores 8086 y el 8088, a
+finales de los años 70. Estos procesadores implementaban un esquema de
+organización de memoria denominado segmentación, mediante el cual era posible
+referenciar direcciones de memoria mayores a las que se podían almacenar en un
+registro de propósito general. Usando la combinación de registros de segmento y
+registros de propósito general de 16 bits, estos procesadores podían referenciar
+hasta 1 MB  de memoria .
 
-Cada procesador actual cuenta con algunas o todas las características de
-la arquitectura IA-32. Por ejemplo, algunos procesadores actuales poseen
-múltiples núcleos con registros de 32 bits o múltiples núcleos con
-registros de 64 bits. Un procesador Intel Core 2 Duo cuenta con dos
-núcleos con registros de 32 bits, y un procesador Xeon generalmente
-incluye varios núcleos con registros de 64 bits. La generación actual de
-procesadores Intel Core (Core I3, Core I5 y Core I7) implementan
-arquitecturas de 2, 4 y hasta 6 núcleos con registros de 64 bits.
+A principios de los años 80 se presentó el procesador 80286 (286). Este
+procesador fue el primero en implementar el modo protegido y el manejo de
+memoria virtual. En este modo protegido, era posible referenciar hasta 16 MB de
+memoria y se contaba con características para aislar la ejecución de los
+programas en espacios de memoria independientes.
 
-No obstante, para mantener la compatibilidad hacia atrás, todos los
-procesadores inician en un modo de operación denominado Modo Real
-(también llamado Modo de Direcciones Real o Real Addres Mode), en el
-cual se comportan como un procesador 8086 con algunas extensiones que le
-permiten habilitar el modo de operación en el cual aprovechan todas sus
-características.
+El nacimiento oficial de la arquitectura x86 (que Intel luego llamaría IA-32) se
+da con el lanzamiento del procesador 80386 (386) a mediados de los años 80.
+Contaba con registros de propósito general de 32 bits, lo cual le permitía desde
+el punto de vista teórico referenciar hasta 4 GB (2^32 bytes) de memoria. No
+obstante, debido a las limitaciones tecnológicas para fabricar memorias con esta
+capacidad, se usaban memorias de capacidad mucho menor. 
 
-El conocimiento de la arquitectura IA-32 ofrece una posibilidad sin
-igual para el aprendizaje de la programación básica de una amplia gama
-de procesadores, desde la programación en modo real hasta la
-programación en modo protegido, usado por los Sistemas Operativos
-Modernos.
+El procesador 386 contaba con un modo de operación especial, el Modo Virtual
+8086, que ofrecía compatibilidad a los programas desarrollados para procesadores
+anteriores. Adicionalmente, el 386 implementaba un esquema más general de
+segmentación de memoria y también incluía facilidades para la paginación, que
+consiste en  dividir la memoria en regiones lógicas de igual tamaño denominadas
+páginas. Con la paginación fue posible implementar de forma eficiente el
+concepto de memoria virtual, que permite a los programas (y al sistema
+operativo) usar un espacio lineal de memoria de 4 GB, aún si se cuenta con menor
+cantidad de RAM.
 
-En los siguientes apartados se presentan los conceptos básicos
-relacionados con la programación de procesadores de la Arquitectura
-IA-32
+A pesar que el 386 fue introducido a la industria hace varias décadas, aún se
+pueden encontrar en sistemas embebidos y en aplicaciones aeroespaciales. Algunos
+sistemas de control de aeronaves, e incluso el Telescopio Espacial Hubble usaron
+este procesador hasta hace algunos años.
+
+A finales de los años 80 se introdujo el procesador 80486 (486), que marcó un
+hito en la historia del computador personal (PC). Unido a los primeros sistemas
+operativos para PC, este procesador fue uno de los principales promotores de la
+computación personal una escala no vista hasta entonces. El procesador 486
+mejoraba el desempeño de su predecesor,  incluyendo la capacidad de tener varias
+instrucciones en diferentes niveles de ejecución al mismo tiempo. También
+implementaba una memoria caché de primer nivel dentro del procesador, con lo
+cual se aumentaba la posibilidad de ejecutar una instrucción en un ciclo de
+reloj. Adicionalmente, incluía una unidad de punto flotante y capacidades para
+el manejo de la energía. 
+
+A principios de los años 90 apareció el procesador Pentium, que por su diseño
+mejoró notablemente las capacidades del 486. Los aspectos más notables de los
+procesadores Pentium y posteriores (Pentium II, III, etc.) fueron su capacidad
+para ejecutar varias instrucciones por ciclo de reloj, la introducción de un
+segundo nivel de caché y la adición de las extensiones MMX (diseñadas para
+acelerar el desempeño de la multimedia y las comunicaciones).
+
+En el año 2000 se invirtieron los papeles entre los grandes fabricantes de
+procesadores. La empresa AMD, que  hasta ese momento había logrado mantenerse en
+el negocio fabricando procesadores compatibles con Intel, creó una
+especificación llamada AMD64. El éxito de esta especificación consistió en
+mantener total compatibilidad hacia atrás con la arquitectura x86 de Intel, pero
+adicionar nuevas características entre las que sobresale la expansión a 64 bits
+de los registros de los sistemas x86. 
+
+El primer procesador en implementar la arquitectura AMD64 fue el ADM K8, lanzado
+en el año 2004. Un año después, Intel lanzaría los procesadores Pentium 4, los
+cuales implementaban la especificación AMD64. Intel inicialmente acuñó el
+término EM64T a su implementación de AMD64, y finalmente la denominó Intel 64.
+De forma general, la arquitectura de 64 bits se denomina x86-64, y cada
+fabricante nombra su implementación de forma diferente.
+
+Los procesadores posteriores hasta los que están disponibles hoy en día se
+dividen en familias que incluyen características entre las que sobresalen:
+múltiples núcleos de procesamiento (por ejemplo Intel Dual Core, Core 2 duo,
+Core I3, I5, I7 o Xeon), implementación de x86 o x86-64, mejoras en el caché,
+extensiones multimedia, mejoras en la gestión de energía, características para
+movilidad y tecnologías de virtualización (VT).
+
+Cada procesador actual cuenta con algunas o todas las características de las
+arquitecturas x86 y x86-64. Por ejemplo, algunos procesadores actuales poseen
+múltiples núcleos con registros de 32 bits o múltiples núcleos con registros de
+64 bits.  Un procesador Intel Core 2 Duo cuenta con dos núcleos con registros de
+32 bits, y un procesador Xeon generalmente incluye varios núcleos con registros
+de 64 bits. 
+
+Los procesadores de generación actual de Intel Core (Core I3, Core I5 y Core I7)
+también implementan arquitecturas x86 en sus modelos de entrada y x64-64 en sus
+modelos más potentes. Por su parte, AMD ofrece entre otros los procesadores
+Sempron, cuyos diferentes modelos implementan la arquitectura x86 y AMD64,
+Athlon, FX, que implementan la arquitectura AMD64.
 
 Modos de Operación
 ==================
+Todos los procesadores x86 inician en un modo de operación denominado modo real
+de direcciones (Real Address Mode), o simplemente modo real, en el cual se
+comportan procesadores 8086 con algunas extensiones que le permiten habilitar su
+modo de operación nativo (el modo protegido). Si el procesador implementa
+x86-64, a partir del modo protegido se puede entrar al modo de 64 bits.
 
-Los procesadores IA-32 pueden operar en varios modos:
+De acuerdo con el manual de Intel, los modos de operación existentes son:
 
-- Modo protegido: Este es el modo nativo del procesador. Aprovecha todas
-  las características de su arquitectura, tales como registros de 32 bits,
-  y el acceso a todo su conjunto de instrucciones y extensiones.
+- Modo real (Modo de direcciones reales): En este modo el procesador se
+	encuentra en un entorno de ejecución en el cual se comporta como un 8086 muy
+	rápido, y sólo tiene acceso a   un conjunto limitado de instrucciones que le
+	permiten ejecutar tareas básicas y habilitar el modo protegido. La
+	limitación más notable en este modo consiste en que sólo se puede acceder a
+	los 16 bits menos significativos de los registros de propósito general, y
+	sólo se pueden utilizar los 20 bits menos significativos del bus de
+	direcciones. Esto causa que en modo real solo se pueda acceder a 1  Megabyte
+	de memoria. En un sistema moderno, el cargador de arranque (o el mismo
+	sistema operativo) realiza la carga de sus componentes básicos y luego pasa
+	a modo protegido.
 
-- Modo real: En este modo el procesador se encuentra en un entorno de
-  ejecución en el cual se comporta como un 8086 muy rápido, y sólo tiene
-  acceso a un conjunto limitado de instrucciones que le permiten ejecutar
-  tareas básicas y habilitar el modo protegido. La limitación más notable
-  en este modo consiste en que sólo se puede acceder a los 16 bits menos
-  significativos de los registros de propósito general, y sólo se pueden
-  utilizar los 20 bits menos significativos del bus de direcciones. Esto
-  causa que en modo real solo se pueda acceder a 1 Megabyte de memoria.
-  Todos los procesadores de IA-32 inician su operación en este modo.
+- Modo protegido: Este es el modo nativo del procesador, en el cual se ejecutan
+	todos (o la mayoría de) los sistemas operativos modernos para procesadores
+	de 32 bits. Permite todas las características de su arquitectura, tales el
+	acceso a todos los bits de sus registros para referenciar memoria, y el
+	acceso a todo su conjunto de instrucciones y extensiones. En modo protegido,
+	cualquier código (del sistema operativo, o de una tarea) se puede ejecutar
+	en diferentes niveles de privilegio, enumerados de 0 a 3. El nivel con mayor
+	privilegio es el 0, y el de menor privilegio es 3. Para operar en modo
+	protegido, el procesador requiere una serie de estructuras de datos que
+	deben ser configuradas por software antes de activarlo.
+- Modo de mantenimiento del sistema: En este modo se puede pasar a un entorno de
+	ejecución limitado, para realizar tareas de mantenimiento o depuración. 
+- Modo Virtual 8086: Este es un sub-modo al cual se puede acceder cuando el
+	procesador opera en modo protegido. Permite ejecutar código desarrollado
+	para 8086 en un entorno multi-tarea y protegido.
+- Modo Largo: (Llamado Modo IA-32e por Intel). En este modo se implementa la
+	arquitectura x86-64, e incluye dos modos: modo de compatibilidad y modo de
+	64 bits. El modo de compatibilidad permite la ejecución de programas
+	desarrollados para modo protegido de 32 bits sin ninguna modificación, y el
+	modo de 64 bits proporciona soporte para acceder a los 64 bits de los
+	registros y un espacio de direcciones mayor que 64 Gigabytes.
 
-- Modo de mantenimiento del sistema: En este modo se puede pasar a un
-  entorno de ejecución limitado, para realizar tareas de mantenimiento o
-  depuración.
+Espacio de direcciones de memoria
+---------------------------------
 
-- Modo Virtual 8086: Este es un sub-modo al cual se puede acceder cuando
-  el procesador opera en modo protegido. Permite ejecutar código
-  desarrollado para 8086 en un entorno multi-tarea y protegido.
-
-- Modo IA32-e: Para procesadores de 64 bits, además de los modos
-  anteriores existen otros dos sub-modos: modo de compatibilidad y modo de
-  64 bits. El modo de compatibilidad permite la ejecución de programas
-  desarrollados para modo protegido sin ninguna modificación, y el modo de
-  64 bits proporciona soporte para acceder a los 64 bits de los registros
-  y un espacio de direcciones mayor que 64 Gigabytes.
-  
-Entorno de Ejecución
-=====================
-
-Cualquier programa o tarea a ser ejecutado en un procesador de
-arquitectura IA-32 cuenta con un entorno de ejecución compuesto por un
-espacio de direcciones de memoria y un conjunto de registros. A
-continuación se describen estos componentes.
-
-Espacio Lineal de Direcciones
------------------------------
-
-En la arquitectura IA-32 la memoria puede ser vista como una secuencia
+En la arquitectura x86 la memoria puede ser vista como una secuencia
 lineal (o un arreglo) de bytes, uno tras del otro. A cada byte le
 corresponde una dirección única (Ver figura).
 
@@ -111,16 +177,16 @@ corresponde una dirección única (Ver figura).
 
 El código dentro de una tarea o un programa puede referenciar un espacio
 lineal de direcciones tan grande como lo permitan los registros del
-procesador. Por ejemplo, en modo real sólo es posible acceder a los 64
-KB dentro de un segmento definido (2 elevado a la 16 = 64 KB), y en modo
-protegido de 32 bits se puede acceder a un espacio lineal de hasta 4 GB
-(2 elevado a la 32 = 4 GB).
+procesador y el modo de operación en que se encuentre. Por ejemplo, en modo real
+sólo es posible acceder a los 64 KB dentro de un segmento definido (2 elevado a
+la 16 = 64KB), y en modo protegido de 32 bits se puede acceder a un espacio
+lineal de hasta 4 GB (2 elevado a la 32 = 4 GB).
 
 Este espacio lineal puede estar mapeado directamente a la memoria
 física. Si el procesador cuenta con las extensiones requeridas, es
 posible acceder a un espacio físico de hasta 64 Gigabytes.
 
-Se debe recordar que la arquitectura IA-32 siempre hace uso de un modelo
+Se debe recordar que la arquitectura x86 siempre hace uso de un modelo
 de memoria segmentado, sin importar su modo de operación. Los
 sistemas operativos actuales optan por usar un modelo plano (Flat) en
 modo protegido, por lo cual pueden tener acceso a todo el espacio lineal
@@ -129,7 +195,7 @@ de direcciones.
 Espacio de Direcciones de Entrada / Salida
 ------------------------------------------
 
-Los procesadores IA-32 incluyen otro espacio, diferente
+Los procesadores x86 incluyen otro espacio, diferente
 al espacio lineal de direcciones , llamado espacio de direcciones de
 Entrada / Salida. A este espacio de 65536 (64K) direcciones se mapean
 los registros de los controladores de dispositivos de entrada / salida
@@ -175,7 +241,7 @@ direcciones A20, que en los procesadores actuales se encuentra
 deshabilitada al inicio para permitir la compatibilidad con programas
 desarrollados para procesadores anteriores.
 
-Conjunto de Registros IA-32
+Conjunto de Registros
 ---------------------------
 
 El procesador cuenta con una serie de registros en los cuales puede
@@ -183,7 +249,7 @@ almacenar datos. Estos registros pueden ser clasificados en:
 
 - Registros de propósito general: Utilizados para almacenar valores,
   realizar operaciones aritméticas o lógicas o para referenciar el espacio
-  de direcciones lineal o de E/S. En procesadores IA-32 bits existen ocho
+  de direcciones lineal o de E/S. Existen ocho
   (8) registros de propósito general, cada uno de los cuales tiene un
   tamaño de 32 bits. Estos registros son: EAX, EBX, ECX, EDX, ESI, EDI,
   ESP y EBP. A pesar que se denominan registros de propósito general, y
@@ -193,7 +259,7 @@ almacenar datos. Estos registros pueden ser clasificados en:
   del tamaño del operando.
 
 - Registros de segmento: Estos registros permiten almacenar apuntadores al
-  espacio de direcciones lineal. Los procesadores IA-32 poseen seis (6)
+  espacio de direcciones lineal. Los procesadores x86 poseen seis (6)
   registros de segmento. Estos son: CS (código), DS (datos), ES, FS, GS
   (datos), y SS (pila). Su uso depende del modo de operación. En modo
   real, los registros de segmento almacenan un apuntador a la dirección
@@ -226,10 +292,10 @@ almacenar datos. Estos registros pueden ser clasificados en:
 
 - Registros de depuración: Estos registros contienen información que puede
   ser usada para depurar el código que está ejecutando el procesador. Los
-  procesadores IA-32 cuentan con ocho (8) registros de depuración, DR0 a
+  procesadores x86 cuentan con ocho (8) registros de depuración, DR0 a
   DR7.
 
-- Registros específicos: Cada variante de procesador IA-32 incluye otros
+- Registros específicos: Cada variante de procesador incluye otros
   registros, tales como los registros MMX, los registros de la unidad de
   punto flotante (FPU) entre otros.
 
@@ -294,7 +360,7 @@ Y EBP se disponen de la misma forma que ESI.
 Formato de almacenamiento de datos
 ----------------------------------
 
-El formato de almacenamiento de la arquitectura IA-32 es Little-Endian,
+El formato de almacenamiento de la arquitectura x86 es Little-Endian,
 lo cual significa que los bits menos significativos de un número se
 almacenan en las posiciones menores de la memoria y de los registros, y
 los bits más significativos se almacenan en posiciones superiores. La
@@ -338,12 +404,12 @@ El mismo número almacenado en memoria se ve así:
                +-----------------------+           
 
 
-Registros principales de IA-32
-------------------------------
+Registros principales
+---------------------
 
-Si bien todos los registros de la arquitectura IA-32 son importantes,
-existen algunos que determinan el modo de ejecución y el estado del
-procesador. A continuación se presenta el formato de estos registros.
+Si bien todos los registros del procesador son importantes,
+existen algunos que determinan su modo de ejecución y su estado.
+A continuación se presenta el formato de estos registros.
 
 Registro EFLAGS
 ---------------
@@ -393,10 +459,10 @@ Los bits del registro EFLAGS se pueden clasificar en:
   interrupciones, mientras un valor de 0 en este bit deshabilita las
   interrupciones.
 
-- Bits reservados: Estos bits se reservan por la arquitectura IA-32 para
+- Bits reservados: Estos bits se reservan por la arquitectura para
   futura expansión. Deben permanecer con los valores que se muestran en la
   figura (cero o uno). No se deben usar, ya que es posible que en
-  versiones posteriores de los procesadores IA-32 tengan un significado
+  versiones posteriores de los procesadores tengan un significado
   específico.
 
 Registro CR0
@@ -444,7 +510,7 @@ por el código inicial del kernel.
 Organización de la Memoria
 ==========================
 
-La memoria en los procesadores de arquitectura IA-32 se puede organizar
+La memoria en los procesadores de arquitectura x86 se puede organizar
 y manejar en tres formas básicas: Modo Segmentado, Modo Real de
 Direcciones y Modo Plano Estas tres organizaciones permiten referenciar el 
 espacio **lineal** de direcciones.. A continuación se muestran los detalles de
@@ -563,7 +629,7 @@ Modo Plano (Flat)
 El modo plano es otro caso especial del modo segmentado. La memoria en
 este modo se presenta como un espacio continuo de direcciones (espacio
 lineal de direcciones). Para procesadores de 32 bits, este espacio
-abarca desde el byte 0 hasta el byte 2**32 - 1 (4GB). En la práctica,
+abarca desde el byte 0 hasta el byte 2 ^ 32 - 1 (4GB). En la práctica,
 el modo plano se puede activar al definir segmentos que ocupan todo el
 espacio lineal (con base = 0 y un tamaño igual al máximo tamaño
 disponible).
