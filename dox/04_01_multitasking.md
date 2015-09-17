@@ -3,6 +3,7 @@ Multitarea
 
 El Sistema Operativo deberá inicializar un entorno en el cual las tareas se
 puedan ejecutar. Este entorno está constituido por:
+
 1. Un Segmento de Estado de Tarea (TSS) referenciado por un Descriptor dentro de
    la GDT y por su respectivo selector.
 2. Dos descriptores Descriptores de segmento de código y datos dentro de la GDT
@@ -19,7 +20,6 @@ necesarios para operar en modo protegido de 32 bits.
 Estructura de Datos de una Tarea
 --------------------------------
 
-
 El sistema operativo debe almacenar la información de cada tarea en una
 estructura de datos que permita identificarla de forma única. La información de
 esta estructura de datos depende de cada sistema operativo, pero se pueden
@@ -28,11 +28,11 @@ identificar algunos campos relevantes:
 - Identificador de la Tarea (generalmente denominado PID - Process ID)
 - Identificador de la Tarea Padre (PPID), si se usa en esquema jerárquico de tareas.
 - Estado de la tarea, desde el punto de vista del sistema operativo. Algunos
-	estados generales son:
-	- Listo : La tarea se encuentra en espera de que se le asigne la CPU
-	- Ejecución : La tarea tiene asignada la CPU y se están ejecutando sus instrucciones
-	- Bloqueado: La tarea se encuentra esperando a que suceda un evento para continuar su ejecución
-	- Terminado : La tarea ha terminado la ejecución y está lista para que el sistema operativo libere los recursos asociados a ella
+  estados generales son:
+  - Listo : La tarea se encuentra en espera de que se le asigne la CPU
+  - Ejecución : La tarea tiene asignada la CPU y se están ejecutando sus instrucciones
+  - Bloqueado: La tarea se encuentra esperando a que suceda un evento para continuar su ejecución
+  - Terminado : La tarea ha terminado la ejecución y está lista para que el sistema operativo libere los recursos asociados a ella
 - Nivel de privilegios de la tarea, que puede estar asociado a los niveles de privilegios del procesador o a una jerarquía de privilegios definida por el sistema operativo
 - Dirección relativa a la sección de código de la tarea en la cual se debe comenzar su ejecución
 - Dirección de inicio de la región de memoria asignada a la tarea (base)
@@ -76,9 +76,9 @@ memoria del TSS, su tamaño y su nivel de privilegios.
             +------------------------+   |      |   +--------------------------+
             |    TSS                 |   |      | 
     TSS_Loc +------------------------+ <-+      |  
-	        |                        |          |  
-	        |                        |          |  
-	        |                        |          |  
+	          |                        |          |  
+	          |                        |          |  
+	          |                        |          |  
           0 +------------------------+ <--------+   
 
 Selectores
@@ -220,7 +220,6 @@ como módulos adicionales junto con el kernel.
 
 Carga de módulos de kernel
 --------------------------
-
 
 La carga de módulos adicionales del kernel es relativamente simple: se debe
 indicar a GRUB en su archivo de configuración la ubicación y los
@@ -389,6 +388,7 @@ ilustran en el siguientes esquema.
     
 Si no se usa memoria virtual, la región de memoria de la tarea debe ser un
 espacio continuo del cual se requiere conocer:
+
 - La Base ( dirección de inicio) y Límite (tamaño de la región asignada a la tarea)
 - Los desplazamientos a partir del inicio de la tarea en los cuales:
 	- Termina su sección de código

@@ -344,8 +344,8 @@ Esto se puede garantizar invocando la instrucción cld (clear direction flag) co
 Por el contrario, la instrucción std (set direction flag) causa que las instrucciones decrementen automáticamente los registros ESI o EDI según sea el caso.
 
  
- Saltos
- =======
+Saltos
+=======
 
 Para evitar la linealidad de la ejecución, el procesador dispone de instrucciones que permiten 'saltar' (cambiar el valor de EIP), para poder continuar la ejecución del programa en otro sitio diferente dentro del código. A continuación se describe de forma resumida las instrucciones más usadas para realizar saltos dentro del código.
 
@@ -440,8 +440,10 @@ Uno de los usos más comunes de las instrucciones de salto condicional es compar
     cmp fuente, destino  /*(AT&T)*/
 
 
-ó 
+ó
+
     cmp destino, fuente  /* (Intel) */
+
 
 Otras instrucciones de salto condicional que también se pueden utilizar para números con signo son:
 - jg label: jump if greater: Saltar a la etiqueta label si la comparación con signo determinó que el operando de destino es mayor que el operando de fuente

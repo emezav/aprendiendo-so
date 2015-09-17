@@ -6,16 +6,17 @@ System Programming" (Codigo 243192), en su sección 8.8.1 Switching to Protected
 Mode, especifica el procedimiento requerido para pasar de modo real a modo
 protegido. Este procedimiento asegura compatibilidad con todos los procesadores
 Intel de arquitectura x86. Los pasos son:
+
 1. Deshabilitar las interrupciones por medio de la instruccion CLI
-	No incluido en el manual de Intel: Por razones históricas, cuando el
-	procesador se encuentra en modo real, su línea de direcciones 20 (A20 Gate)
-	se encuentra deshabilitada, lo cual causa que cualquier dirección de memoria
-	mayor a 2^20 (1MB), sea truncada al limite de 1 MB. Debido a que en modo
-	protegido es necesario usar los 32 bits del bus de direcciones para
-	referenciar hasta 2^32 = 4GB de memoria, es necesario habilitar la linea de
-	direcciones A20. Esto se logra por medio del controlador 8042 (teclado), el
-	cual se puede encontrar fisicamente en la board o integrado dentro de su
-	funcionalidad.
+   No incluido en el manual de Intel: Por razones históricas, cuando el
+   procesador se encuentra en modo real, su línea de direcciones 20 (A20 Gate)
+   se encuentra deshabilitada, lo cual causa que cualquier dirección de memoria
+   mayor a 2^20 (1MB), sea truncada al limite de 1 MB. Debido a que en modo
+   protegido es necesario usar los 32 bits del bus de direcciones para
+   referenciar hasta 2^32 = 4GB de memoria, es necesario habilitar la linea de
+   direcciones A20. Esto se logra por medio del controlador 8042 (teclado), el
+   cual se puede encontrar fisicamente en la board o integrado dentro de su
+   funcionalidad.
 2. Ejecutar LGDT para cargar una tabla global de descriptores (GDT) válida.
 3. Ejecutar una instruccion MOV para establecer el bit 0 del registro de control
    CR0 (PE = Protection Enable).
@@ -38,6 +39,7 @@ Intel de arquitectura x86. Los pasos son:
 
 Cuando se usa un cargador compatible con la Especificación Multiboot para cargar
 el kernel (como GRUB), se cuenta con las siguientes facilidades:
+
 - La línea de direcciones A20 ya se encuentra activada.
 - Ya se ha configurado una GDT temporal. La especificación Multiboot insiste en
 	que se deberá configurar y cargar una GDT propia del kernel tan pronto como
