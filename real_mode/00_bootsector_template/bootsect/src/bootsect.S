@@ -5,7 +5,10 @@
  * @copyright MIT License
  * @brief Sector de Arranque para sistemas x86 con BIOS.
  * @description 
- * Este es un sector de arranque válido.
+ * Este código se compila en un sector de arranque que es cargado
+ * automáticamente por la BIOS en la posición de memoria 0x7C00. La BIOS
+ * transfiere el control de la ejecución a este código, que simplemente entra en
+ * una espera activa para mantener ocupado el procesador.
 */
 
 /** 
