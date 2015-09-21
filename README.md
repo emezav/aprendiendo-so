@@ -71,37 +71,39 @@ siguientes carpetas:
 # Compilación y ejecución de los proyectos
 
 Cada proyecto cuenta con un Makefile que facilita el proceso de compilación,
-ejecución y documentación. Los _targets_ que se usan para compilar o
-ejecutar el proyecto son:
-- __all__: (Regla por defecto). Compila el código fuente y crea la imagen de
-  disco.
-- __clean__: Elimina los archivos resultado de la compilación y la documentación
-  generada.
-- __docs__: Genera la documentación del proyecto.
-- __qemu__: Compila el proyecto y crea la imagen de disco si es necesario, y
-  luego inicia el emulador qemu con la imagen de disco generada.
-- __bochs__: Similar a la regla __qemu__, pero inicia el emulador _bochs_.
-- __bochsdbg__: Igual a la anterior, pero invoca a _bochs_ iniciando el
-  depurador gráfico. _Para usar esta regla, se debe tener el depurador gráfico
-  habilitado en bochs_.
-
-Para ejecutar el código de un proyecto, se usa la utilidad _Make_, la cual lee
-el archivo Makefile correspondiente. El proceso es el siguiente:
+ejecución y documentación. El proceso es el siguiente:
 
 - Abrir un shell (bash). Este se encuentra disponible por defecto en Linux y en
   Windows mediante MinGW/Msys.
 - Navegar al directorio del proyecto que se desea ejecutar
-- Ejecutar uno de los siguientes comandos:
-	+ make: compila el código y crea la imagen de disco
-	+ make doc: genera la documentación HTML a partir del código fuente y
-	  los archivos del directorio dox/. __Se deberá abrir el archivo
-	  docs/html/index.html generado para ver la documentación__.
-	+ make bochs: ejecuta el emulador bochs para que arranque la imagen de
-		disco.
-	+ make bochsdbg: ejecuta el emulador bochs con depurador gráfico.
-	+ make qemu: ejecuta el emulador qemu.
-	+ make clean: borra la imagen de disco y los archivos de compilación
-	  generados.
+- Ejecutar el comando _make_ como se explica a continuación:
+    - __make all__: (Regla por defecto). Compila el código fuente y crea la 
+      imagen de disco.
+    - __make clean__: Elimina los archivos resultado de la compilación y la
+      documentación generada.
+    - __make docs__: Genera la documentación del proyecto.
+    - __make qemu__: Compila el proyecto y crea la imagen de disco si es
+      necesario, y luego inicia el emulador qemu con la imagen de disco
+      generada.
+    - __make bochs__: Similar a la regla __qemu__, pero inicia el emulador
+      _bochs_.
+    - __make bochsdbg__: Igual a la anterior, pero invoca a _bochs_ iniciando
+      el depurador gráfico. Para usar esta regla, se debe contar con una
+      versión de _bochs_ que haya sido compilada con soporte para el depurador
+      gráfico.
+
+En los proyectos de modo protegido el kernel puede ser también ejecutado con
+los siguientes comandos:
+- __make qemu-cd__: Compila el proyecto y crea una imagen de CD que incluye el 
+  kernel, y luego inicia el emulador qemu con la imagen de CD.
+- __make bochs-cd__: Compila el proyecto y crea una imagen de CD que incluye el 
+  kernel, y luego inicia el emulador bochs con la imagen de CD.
+- __make qemu-uefi32__: Compila el proyecto y crea la imagen de disco para
+  sistemas UEFI de 32 bits, y luego inicia el emulador qemu con la imagen de
+  disco.
+- __make qemu-uefi64__: Compila el proyecto y crea la imagen de disco para
+  sistemas UEFI de 64 bits, y luego inicia el emulador qemu con la imagen de
+  disco.
 
 # Requerimientos
 
