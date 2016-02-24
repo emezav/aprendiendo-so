@@ -2,7 +2,7 @@
  * @file
  * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License.
+ * @copyright MIT License.
  * @brief Punto de entrada del kernel
  * Este código recibe el control del sector de arranque.
  * Para verificar que fue cargado correctamente, imprime una cadena

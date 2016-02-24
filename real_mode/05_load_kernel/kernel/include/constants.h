@@ -2,7 +2,7 @@
  * @file
  * @ingroup kernel_code 
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright MIT License.
  *
  * @brief Contiene constantes necesarias para  el kernel */
 
