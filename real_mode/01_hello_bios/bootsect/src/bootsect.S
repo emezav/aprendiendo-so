@@ -22,7 +22,6 @@
   logra una adaptación al lenguaje ensamblador y a las características del modo
   real.
 
-
 */
 
 .intel_syntax noprefix 
@@ -31,7 +30,7 @@
 
 .section .text 
 
-.global start                  
+.global start
 
 /**
 * Símbolo que marca el inicio del código del sector de arranque 
@@ -68,7 +67,6 @@ start:
 	int 0x10
 
 	/* Esperar una pulsación de tecla */
-
 	xor ax, ax /* ax = 0x0000 */
 	int 0x16 /* int 0x16, ah = 0x00 Wait for keystroke and read */
 
@@ -81,14 +79,13 @@ start:
 
 	/* Limpiar la pantalla: Escribir 80 x 25 = 2000 espacios desde la esquina
 	 * superior izquierda hasta la esquina inferior derecha */
-
+	/* cx = 2000 */
 	mov cx, 2000
 cls:
 	mov ax, 0x0E20 /* AH = 0x0E, AL = 0x20 = ' ' */
 	xor bx, bx /* Página 0 */
 	int 0x10
 	loop cls /* Loop: Decrementar cx y saltar a 'cls' mientras cx > 0*/
-
 
 	/* Mover de nuevo el cursor al inicio de la pantalla */
 	mov ah, 0x02 
@@ -121,9 +118,10 @@ cls:
 	/* Fin. */ 
 
 finished:
-	/**
-	* Espera activa para mantener ocupado el procesador
-	*/
+
+	hlt /* Detener el procesador hasta que ocurra una interrupción */
+  
+  /* Detener de nuevo el procesador. */
 
  jmp finished
 

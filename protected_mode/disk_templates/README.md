@@ -19,10 +19,12 @@ diferentes proyectos de programación en Modo Protegido:
   ext2 en la cual se copia el kernel.  Al iniciar el emulador qemu con esta 
   imagen como disco duro, GRUB2 carga automáticamente el kernel.
   Esta plantilla se usa cuando se ejecuta el comando __make qemu-uefi32__.
-- __uefi32_disk_template.gz__: Plantilla de disco duro para sistemas UEFI de 64
+- __uefi64_disk_template.gz__: Plantilla de disco duro para sistemas UEFI de 64
   bits que contiene dos particiones, una partición de sistema UEFI de 32 MB en 
   la cual se encuentra preinstalada la versión UEFI de 64 bits de GRUB, y una
   partición ext2 en la cual se copia el kernel compilado.  Al iniciar el 
   emulador qemu con esta imagen como disco duro, GRUB2 carga automáticamente el 
   kernel. Esta plantilla se usa cuando se ejecuta el comando 
   __make qemu-uefi64__.
+- __grub_efi.tar.gz__: Contiene una imagen de GRUB para crear una USB que puede
+  ser usada como medio de arranque en sistemas UEFI de 32 y 64 bits.

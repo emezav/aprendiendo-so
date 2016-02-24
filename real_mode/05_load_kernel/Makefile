@@ -3,6 +3,7 @@
 #/** @verbatim */
 
 BOOTSECTOR_DIR = bootsect
+KERNEL_DIR = kernel
 
 DOXYGEN=doxygen
 DOCFILES = $(wildcard dox/*.dox) $(wildcard dox/*.md)
@@ -28,8 +29,9 @@ ifeq "$(os)" "Cygwin"
 endif
 
 all: 
-	@cd bootsect;make
-	@cp -f $(BOOTSECTOR_DIR)/build/bootsect build/floppy.img
+	@cd $(BOOTSECTOR_DIR);make
+	@cd $(KERNEL_DIR);make
+	@cat $(BOOTSECTOR_DIR)/build/bootsect $(KERNEL_DIR)/build/kernel > build/floppy.img
 
 bochs: all
 	-bochs -q 'boot:a' \
@@ -48,6 +50,7 @@ docs: $(DOCFILES)
 
 clean:
 	@cd $(BOOTSECTOR_DIR);make clean
+	@cd $(KERNEL_DIR);make clean
 	@rm -f build/floppy.img
 	@-if test -d docs; then \
 	   rm -r -f docs; \

@@ -53,14 +53,13 @@ start:
 
 finished:
 
-	/* Mantener el procesador en un ciclo*/
+   /* Detener el procesador con la instrucción HLT. Si las interrupciones
+   se encuentran habilitadas, la BIOS toma el control, atiende la
+   interrupción y continúa justo después de la instrucción HLT. */
+   
+   hlt
 
-	/* Al llegar a este punto, se entra en una "espera activa", es decir,
-	* mantenemos al procesador ejecutando la misma instrucción hasta que la
-	* máquina sea apagada o reiniciada. */
-
-	/* Aún si ocurre una interrupción, la BIOS la atenderá y luego regresará a
-	 * este mismo punto. */
+	/* LA BIOS regresará a este punto. Detener de nuevo el procesador! */
 
  jmp finished
 
