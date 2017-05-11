@@ -23,10 +23,10 @@ ifneq "$(arch)" "Linux"
 endif
 
 all: $(BOOTSECTOR_OBJS)
-	$(ARCH)$(LD) -T link_bootsector.ld -o $(BUILDDIR)/bootsect $(BOOTSECTOR_OBJS)
+	$(ARCH)$(LD) -m elf_i386 -T link_bootsector.ld -o $(BUILDDIR)/bootsect $(BOOTSECTOR_OBJS)
 
 %.o: %.S $(BOOTSECTOR_SOURCES)
-	$(ARCH)$(GCC) -m16 -nostdinc -nostdlib -fno-builtin -c -I$(INCLUDEDIR) -o $@ $<
+	$(ARCH)$(GCC) -m32 -nostdinc -nostdlib -fno-builtin -c -I$(INCLUDEDIR) -o $@ $<
 
 clean:
 	@rm -f $(BUILDDIR)/bootsect $(BOOTSECTOR_OBJS)
