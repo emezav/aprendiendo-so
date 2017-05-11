@@ -19,4 +19,4 @@ clean:
 
 all-clean:
 	$(BASH) -c "cd real_mode; ./all_projects clean"
-  $(BASH) -c "cd real_mode; ./all_projects clean"
+	$(BASH) -c "cd real_mode; ./all_projects clean"

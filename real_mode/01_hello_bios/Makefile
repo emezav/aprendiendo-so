@@ -14,9 +14,6 @@ x86found := false
 os := $(shell uname -o)
 
 BOCHSDBG := bochsdbg
-ifeq "$(arch)" "Linux"
-    BOCHSDBG := bochs
-endif
 
 BOCHSDISPLAY := x
 ifeq "$(os)" "Msys"

@@ -14,9 +14,6 @@ x86found := false
 os := $(shell uname -o)
 
 BOCHSDBG := bochsdbg
-ifeq "$(arch)" "Linux"
-    BOCHSDBG := bochs
-endif
 
 BOCHSDISPLAY := x
 ifeq "$(os)" "Msys"
@@ -28,7 +25,7 @@ ifeq "$(os)" "Cygwin"
 endif
 
 all: 
-	@cd bootsect;make
+	@cd $(BOOTSECTOR_DIR);make
 	@cp -f $(BOOTSECTOR_DIR)/build/bootsect build/floppy.img
 
 bochs: all
