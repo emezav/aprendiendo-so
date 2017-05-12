@@ -8,4 +8,4 @@ vga: extension=vbe
 
 magic_break: enabled=1
 keyboard: keymap=$BXSHARE/keymaps/x11-pc-us.map
-#keyboard_mapping: enabled=1, map=$BXSHARE/keymaps/x11-pc-es.map
+

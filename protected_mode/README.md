@@ -9,7 +9,7 @@ Este directorio contiene los ejemplos de programación en Modo Protegido:
   Luego el sector de arranque carga los sectores restantes del kernel, usando
   los servicios de disco de la BIOS. Finalmente el código del sector de arranque
   le transfiere el control de la ejecución al kernel.
-- 00_multiboot_template: Plantilla de kernel compatible con la Especificación
+- 00_multiboot_bootstrap: Plantilla de kernel compatible con la Especificación
   Multiboot. En esta plantilla se crea una imagen de disco con el cargador de
   arranque GRUB2 preinstalado, quien es el encargado de establecer un entorno
   básico de modo protegido, cargar el kernel en memoria y pasarle el control de
@@ -18,10 +18,4 @@ Este directorio contiene los ejemplos de programación en Modo Protegido:
   - Una imagen de disco para sistemas con BIOS: Esta imagen puede ser iniciada
     mediante los comandos __make bochs__ o __make qemu__.
   - Una imagen de CD. Esta imagen puede ser iniciada mediante los comandos 
-    __make bochs-cd__ o __make qemu-cd__.
-  - Una imagen de disco para sistemas UEFI de 32 bits: Esta imagen solo puede
-    ser ejecutada por el emulador qemu, ya que bochs no cuenta con soporte para
-    UEFI. El comando para crear y ejecutar la imagen de disco es 
-    __make qemu-uefi32__.  
-  - Una imagen de disco para sistemas UEFI de 64 bits. El comando para crear y 
-    ejecutar la imagen de disco es __make qemu-uefi64__.
+    __make bochs-cd__ o __make qemu-cd__.  

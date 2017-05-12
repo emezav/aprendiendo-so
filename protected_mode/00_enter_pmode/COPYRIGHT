@@ -1,0 +1,63 @@
+
+ACUERDO DE LICENCIA
+
+Los archivos contenidos en este directorio y sus sub-directorios,  si no se
+especifica lo contario, son Copyright (C) 2010 Erwin Meza Vega.
+
+Erwin Meza Vega, quien en adelante se denominara EL AUTOR, proporciona derecho
+personal e intransferible sobre los archivos contenidos en este directorio y sus
+sub-directorios, que en adelante se denominaran LOS MATERIALES, para que puedan
+ser usados, modificados y re-distribuidos siempre y cuando se mantengan el 
+Copyright que EL AUTOR posee sobre LOS MATERIALES y la presente licencia. 
+
+EL AUTOR se reserva el derecho a cesar la distribucion de LOS MATERIALES en 
+cualquier momento. Esto, sin embargo, no implica que el autor cesa sus derechos
+sobre LOS MATERIALES.
+
+LOS MATERIALES son proporcionados por EL AUTOR para ser usados "como una 
+introducción a los aspectos básicos de la programación de procesadores de 
+Arquitectura Intel (IA-32 y compatible), y al aprendizaje de las funcionalidades
+básicas de un Sistema Operativo para esta familia de procesadores". EL AUTOR no
+será bajo ninguna circunstancia responsable por perjuicios causados por el uso 
+de LOS MATERIALES o por trabajos derivados y/o adaptacionesde LOS MATERIALES. 
+Asimismo, EL AUTOR no se hace responsable por omisiones, errores o imprecisiones
+que puedan existir en LOS MATERIALES.
+
+LOS MATERIALES deberan ser distribuidos junto con esta licencia que solo puede
+ser modificada por EL AUTOR. Cualquier omision, modificacion o la 
+eliminacion de esta licencia constituye una violacion de la misma. EL AUTOR 
+podra emprender las acciones legales requeridas para restituir los derechos 
+sobre LOS MATERIALES. 
+
+Los archivos (si existen) filesys/boot/grub/stage1, 
+filesys/boot/grub/e2fs_stage_1_5 y filesys/boot/grub/stage2, asi como los 
+archivos disk_image, y disk_template contienen codigo binario del cargador de 
+arranque GRUB (The GRand Unified Bootloader), Copyright (C) de sus titulares.
+
+Los nombres registrados que se enuncian en el codigo fuente o cualquier archivo
+dentro de LOS MATERIALES son Copyright (C) de sus respectivos titulares.
+
+------------------------------------------------------------------------
+Aprendiendo Sistemas Operativos - OS Learning
+Material de apoyo al aprendizaje de los conceptos relacionados con la 
+programación de procesadores de arquitectura Intel (IA-32 y compatible), y 
+al aprendizaje de las funcionalidades básicas de un Sistema Operativo para esta
+familia de procesadores
+
+    Copyright (C) 2010  Erwin Meza Vega
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>
+    
+ Contact: Erwin Meza Vega <emezav@gmail.com>
+------------------------------------------------------------------------
