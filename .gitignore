@@ -1,5 +1,3 @@
 docs/
-bootsect
-kernel
 *.o
 *.img
