@@ -32,13 +32,13 @@ char * itoa(unsigned int n, char *buf, int base);
 
 /**
  * @brief Convierte un numero sin signo en base 2, 10 0 16 a un string terminado
- * en nulo. Si la base es 10, toma el numero con signo.
+ * en nulo. Si la base es 10, toma el numero sin signo.
  *  @param n Número a transformar en cadena
  *  @param buf Buffer que contiene el número transformado a cadena de caracteres
  *  @param base Base a la cual se desea transformar el número (2, 10 o 16).
  *  @return  Apuntador al buffer en el cual se encuentra el número transformado
  */
-char * itoa(unsigned int n, char *buf, int base);
+char * utoa(unsigned int n, char *buf, int base);
 
 /**
  * @brief Convierte un string a un entero, en la base especificada
@@ -47,6 +47,5 @@ char * itoa(unsigned int n, char *buf, int base);
  *  @return Número en la base especificada.
  */
 int atoi(char * buf, int base);
-
 
 #endif /* STDLIB_H_ */

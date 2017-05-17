@@ -9,6 +9,7 @@
 
 #include <pm.h>
 #include <asm.h>
+#include <stdlib.h>
 #include <console.h>
 
 /** @brief Apuntador al inicio de la memoria de video.

@@ -8,11 +8,12 @@
  *
  * Este codigo recibe el control de start.S y continúa con la ejecución.
 */
- #include <stdlib.h>
- #include <console.h>
+#include <asm.h>
+#include <stdlib.h>
+#include <console.h>
 
 void cmain(){
-    __asm__ __volatile__("xchg %bx, %bx");
+    bochs_break();
     console_clear();
     console_printf("Hello, world!\n");
 }
