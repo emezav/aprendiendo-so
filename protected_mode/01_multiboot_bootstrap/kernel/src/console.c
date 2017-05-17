@@ -132,51 +132,13 @@ void console_puts(char * s ) {
 	int is_printable;
 	unsigned int offset;
 
-
 	aux = s;
 
 	if (aux == 0) {return;}
 
 	while ((c = *aux++) != '\0'){
-
-		/* El caracter es imprimible? */
-			if (c >= ' ') {
-				is_printable = 1;
-			}else {
-				is_printable = 0;
-			}
-            /* Retroceder el apuntador de la memoria de video */
-			if (c == BACKSPACE) { 
-				if (current_column != 0) { //Ultima columna?
-					current_column--;
-				}
-			}else if (c == TAB) { /* Mover TABSIZE caracteres */
-				current_column = (current_column + TABSIZE) & ~(TABSIZE-1);
-			}else if (c ==LF) { /* Avanzar a la siguiente linea */
-				current_column = 0;
-				current_line++;
-			}else if(c == CR) {
-				current_column = 0;
-			}
-
-			if (is_printable) { /* Caracter imprimible?*/
-				/* Verificar que no se haya llegado al final de la pantalla */
-				if (current_column == SCREEN_COLUMNS) {
-					current_column = 0;
-					current_line ++;
-					if (current_line == SCREEN_LINES) {
-						console_scroll();
-					}
-				}
-				/* Escribir el caracter en la memoria de video*/
-				videoptr = (unsigned short *)VIDEO_START_ADDR +
-							((current_line * SCREEN_COLUMNS) +
-											current_column);
-				current_column++;
-				*videoptr = (text_attributes << 8 | c);
-			 }
+        console_putchar(c);
 	}
-	console_update_cursor();
 }
 
 /**
