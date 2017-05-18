@@ -128,35 +128,34 @@ parte baja de la memoria como en la parte alta, como se muestra en la siguiente
 figura:
 
 
-   Espacio lineal (virtual)
-   +-----------------------+
-   |                       |
-   |Tablas de página       | 
-   |Dir. tablas de página  | 
-   |Mapa de bits de memoria|         
-   |Kernel (Codigo y datos)|
-   |-----------------------|<= 0xC0100000: inicio del kernel
-   | (1 MB)                |
-   |-----------------------|<= 0xC0000000 (3 GB)
-   |                       |
-   |                       |
-   |                       |
-   |                       |
-   |                       |
-   |                       |             Espacio físico (RAM)
-   |                       |     +------------------------+
-   |                       |     |                        |
-   |                       |     | RAM DISPONIBLE         |
-   |                       |     |                        |
-   |-----------------------|     |------------------------|
-   |Tablas de página       |     |Tablas de página        |
-   |Dir. tablas de página  |     |Dir. tablas de página   |
-   |Mapa de bits de memoria|     |Mapa de bits de memoria |
-   |Kernel(codigo y datos) |     |Kernel (codigo y datos) |
-   |-----------------------|     |------------------------| <= 0x100000
-   | (1 MB)                |     |  (1 MB)                |
-   +-----------------------+ 0   +------------------------+
-
+    Espacio lineal (virtual)
+    +-----------------------+
+    |                       |
+    |Tablas de página       | 
+    |Dir. tablas de página  | 
+    |Mapa de bits de memoria|         
+    |Kernel (Codigo y datos)|
+    |-----------------------|<= 0xC0100000: inicio del kernel
+    | (1 MB)                |
+    |-----------------------|<= 0xC0000000 (3 GB)
+    |                       |
+    |                       |
+    |                       |
+    |                       |
+    |                       |
+    |                       |             Espacio físico (RAM)
+    |                       |     +------------------------+
+    |                       |     |                        |
+    |                       |     | RAM DISPONIBLE         |
+    |                       |     |                        |
+    |-----------------------|     |------------------------|
+    |Tablas de página       |     |Tablas de página        |
+    |Dir. tablas de página  |     |Dir. tablas de página   |
+    |Mapa de bits de memoria|     |Mapa de bits de memoria |
+    |Kernel(codigo y datos) |     |Kernel (codigo y datos) |
+    |-----------------------|     |------------------------| <= 0x100000
+    | (1 MB)                |     |  (1 MB)                |
+    +-----------------------+ 0   +------------------------+
 
 Este doble mapeo es necesario, dado que según el Manual de Intel 
 (IA-32 Volumen 3A, sección 17.29.3), es necesario que la secuencia de
