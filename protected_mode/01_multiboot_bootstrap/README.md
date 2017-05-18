@@ -24,44 +24,45 @@ necesarios para iniciar GRUB, y el código del kernel compilado.
 La partición se encuentra formateada con el sistema de archivos ext2 (linux), 
 y su contenido se muestra en el siguiente esquema:
 
-/ -+    <-- Directorio raíz de la única partición en la imagen de disco
-   |
-   boot <-- Almacena los archivos de GRUB y el kernel compilado
-       |  
-       |  
-       grub  <-- Almacena los archivos de GRUB
-       |   |
-       |   |
-       | e2fs_stage_1_5  <-- Etapa 1.5 de GRUB. cargado por la etapa 1 de GRUB
-       |   |                 Contiene el código para manejar el sistema de 
-       |   |                 archivos de la partición (ext2). Este archivo
-       |   |                 es opcional, ya que al instalar GRUB este archivo
-       |   |                 se copió en el sector adyacente al sector de
-       |   |                 arranque.
-       |   |
-       | menu.lst    <-- Archivo de configuración leido por GRUB al arranque.
-       |   |             especifica la configuración del menú que despliega
-       |   |             GRUB al arranque y ubicación del kernel en 
-       |   |             (la imagen de) disco.
-       | stage1      <-- Etapa 1 de GRUB. Este archivo es opcional, ya que se
-       |   |             copió en el sector de arranque del disco al instalar 
-       |   |             GRUB.
-       |   |             Carga la etapa 1.5 de GRUB. Después carga la
-       |   |             etapa 2 de GRUB desde el disco y le pasa el control.
-       |   |             Este archivo es opcional.
-       |   |
-       | stage2      <-- Etapa 2 de GRUB. Cargada por la etapa 1 de GRUB.
-       |                 Configura el sistema y presenta el menú que
-       |                 permite cargar el kernel.
-       |                 Este archivo es obligatorio.
-       |                 Cuando el usuario selecciona la única opción 
-       |                 disponible: cargar y pasar el control el archivo kernel
-       |                 que se encuentra en el directorio /boot de la imagen
-       |                 de disco
-       |                 El kernel se carga a la dirección de memoria 0x100000
-       |                 (1 MB)
-       |                  
-       kernel   <-- Archivo que contiene el código compilado del kernel.
+    / -+    <-- Directorio raíz de la única partición en la imagen de disco
+       |
+       boot <-- Almacena los archivos de GRUB y el kernel compilado
+           |  
+           |  
+           grub  <-- Almacena los archivos de GRUB
+           |   |
+           |   |
+           | e2fs_stage_1_5  <-- Etapa 1.5 de GRUB. cargado por la etapa 1 de 
+           |   |                 GRUB.
+           |   |                 Contiene el código para manejar el sistema de 
+           |   |                 archivos de la partición (ext2). Este archivo
+           |   |                 es opcional, ya que al instalar GRUB este
+           |   |                 archivo se copió en el sector adyacente al
+           |   |                 sector de arranque.
+           |   |
+           | menu.lst  <-- Archivo de configuración leido por GRUB al arranque.
+           |   |             especifica la configuración del menú que despliega
+           |   |             GRUB al arranque y ubicación del kernel en 
+           |   |             (la imagen de) disco.
+           | stage1    <-- Etapa 1 de GRUB. Este archivo es opcional, ya que se
+           |   |           copió en el sector de arranque del disco al instalar 
+           |   |           GRUB.
+           |   |           Carga la etapa 1.5 de GRUB. Después carga la
+           |   |           etapa 2 de GRUB desde el disco y le pasa el control.
+           |   |           Este archivo es opcional.
+           |   |
+           | stage2    <-- Etapa 2 de GRUB. Cargada por la etapa 1 de GRUB.
+           |               Configura el sistema y presenta el menú que
+           |               permite cargar el kernel.
+           |               Este archivo es obligatorio.
+           |               Cuando el usuario selecciona la única opción 
+           |               disponible: cargar y pasar el control al kernel
+           |               que se encuentra en el directorio /boot de la imagen
+           |               de disco
+           |               El kernel se carga a la dirección de memoria 0x100000
+           |               (1 MB)
+           |                  
+           kernel   <-- Archivo que contiene el código compilado del kernel.
 
 
 Papel de GRUB en la carga del Kernel
@@ -87,14 +88,14 @@ las diferentes opciones de sistemas operativos a cargar. El contenido
 de este archivo se reproduce a continuación:
 
 
-default 0
-timeout 10
-color cyan/blue white/blue
-
-title Aprendiendo Sistemas Operativos
-root (hd0,0)
-kernel /boot/kernel
-
+    default 0
+    timeout 10
+    color cyan/blue white/blue
+    
+    title Aprendiendo Sistemas Operativos
+    root (hd0,0)
+    kernel /boot/kernel
+    
 
 Básicamente se establece un menú en el cual la primera (y única) opción de 
 arranque se define como opción por defecto. El parámetro @b timeout permite
@@ -185,42 +186,42 @@ el registro EAX es definida por la Especificación Multiboot con el formato
 que se presenta a continuación. El desplazamiento se encuentra 
 definido en bytes, es decir que cada campo ocupa 4 bytes (32 bits).
 
-         +-------------------+
-       0 | flags             | (required)| Permite identificar cuales de los  
-         |                   | siguientes campos se encuentran definidos:
-         +-------------------+
-       4 | mem_lower         | (presente si flags[0] = 1)
-       8 | mem_upper         | (presente si flags[0] = 1)
-         +-------------------+
-      12 | boot_device       | (presente si flags[1] = 1)
-         +-------------------+
-      16 | cmdline           | (presente si flags[2] = 1)
-         +-------------------+
-      20 | mods_count        | (presente si flags[3] = 1)
-      24 | mods_addr         | (presente si flags[3] = 1)
-         +-------------------+
- 28 - 40 | syms              | (presente si flags[4] or
-         |                   | flags[5] = 1)
-         +-------------------+
-      44 | mmap_length       | (presente si flags[6] = 1)
-      48 | mmap_addr         | (presente si flags[6] = 1)
-         +-------------------+
-      52 | drives_length     | (presente si flags[7] = 1)
-      56 | drives_addr       | (presente si flags[7] = 1)
-         +-------------------+
-      60 | config_table      | (presente si flags[8] = 1)
-         +-------------------+
-      64 | boot_loader_name  | (presente si flags[9] = 1)
-         +-------------------+
-      68 | apm_table         | (presente si flags[10] = 1)
-         +-------------------+
-      72 | vbe_control_info  | (presente si flags[11] = 1)
-      76 | vbe_mode_info     |
-      80 | vbe_mode          |
-      82 | vbe_interface_seg |
-      84 | vbe_interface_off |
-      86 | vbe_interface_len |
-         +-------------------+
+             +-------------------+
+           0 | flags             | (required)| Permite identificar cuales de los
+             |                   | siguientes campos se encuentran definidos:
+             +-------------------+
+           4 | mem_lower         | (presente si flags[0] = 1)
+           8 | mem_upper         | (presente si flags[0] = 1)
+             +-------------------+
+          12 | boot_device       | (presente si flags[1] = 1)
+             +-------------------+
+          16     | cmdline           | (presente si flags[2] = 1)
+             +-------------------+
+          20 | mods_count        | (presente si flags[3] = 1)
+          24 | mods_addr         | (presente si flags[3] = 1)
+             +-------------------+
+     28 - 40 | syms              | (presente si flags[4] or
+             |                   | flags[5] = 1)
+             +-------------------+
+          44 | mmap_length       | (presente si flags[6] = 1)
+          48 | mmap_addr         | (presente si flags[6] = 1)
+             +-------------------+
+          52 | drives_length     | (presente si flags[7] = 1)
+          56 | drives_addr       | (presente si flags[7] = 1)
+             +-------------------+
+          60 | config_table      | (presente si flags[8] = 1)
+             +-------------------+
+          64 | boot_loader_name  | (presente si flags[9] = 1)
+             +-------------------+
+          68 | apm_table         | (presente si flags[10] = 1)
+             +-------------------+
+          72 | vbe_control_info  | (presente si flags[11] = 1)
+          76 | vbe_mode_info     |
+          80 | vbe_mode          |
+          82 | vbe_interface_seg |
+          84 | vbe_interface_off |
+          86 | vbe_interface_len |
+             +-------------------+
 
 Consulte la Especificación Multiboot para obtener más detalles acerca de esta
 estructura.
@@ -259,7 +260,7 @@ Finalmente se pasa el control a la rutina cmain, definida en el archivo
 kernel.c.
 
 
-  call cmain /* Pasar el control a la rutina 'cmain' en el archivo kernel.c */
+    call cmain /* Pasar el control a la rutina 'cmain' en el archivo kernel.c */
 
 
 Ejecución del código en C del Kernel 
@@ -278,14 +279,14 @@ Cuando la función cmain() termina, el control se cede de nuevo al código del
 archivo start.S. Este código retira los parámetros almacenados en la pila, y
 entra en un ciclo infinito para mantener ocupado el procesador y evitar que 
 éste se reinicie:
-
-
-  /* La función cmain() retorna a este punto. Se debe entrar en un ciclo
-  infinito, para que el procesador no siga ejecutando instrucciones al finalizar
-  la ejecución del kernel. */
-
-loop:	hlt
-	jmp loop /* Ciclo infinito */
+    
+    
+      /* La función cmain() retorna a este punto. Se debe entrar en un ciclo
+      infinito, para que el procesador no siga ejecutando instrucciones al 
+      finalizar la ejecución del kernel. */
+    
+    loop:	hlt
+    	jmp loop /* Ciclo infinito */
 
 
 Compilación y ejecución del proyecto
