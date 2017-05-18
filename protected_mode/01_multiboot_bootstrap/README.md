@@ -232,7 +232,8 @@ Ejecución del Kernel
 La ejecución del kernel se divide en dos partes: ejecución del código
 inicial (programado en lenguaje ensamblador) y ejecución del código en C.
 
-@par Ejecución del código inicial del Kernel
+Ejecución del código inicial del Kernel
+---------------------------------------
 
 El código del kernel se encuentra organizado de forma que primero se ejecuta
 el código del archivo start.S. Esta organización del archivo ejecutable se
