@@ -26,12 +26,20 @@ int is_transmit_empty();
 /**
  * Escribe un caracter en el puerto serial
 */
-void write_serial(char a);
+void serial_putchar(char a);
 
 /**
  * Escribe una cadena de caracteres en el puerto serial
  */
 void serial_puts(char * s);
 
+/**
+ * @brief  Esa funcion implementa en forma basica el comportamiento de
+ * 'printf' en C.
+ * @param format Formato de la cadena de salida
+ * @param ...  Lista de referencias a memoria de las variables a imprimir
+ *
+*/
+void serial_printf(char * ,...);
 
 #endif /* SERIAL_H_ */

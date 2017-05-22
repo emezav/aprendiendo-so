@@ -550,7 +550,7 @@ map_kernel_in_high_memory:
    mov cr0, eax
 
   /* La especificación Multiboot recomienda cargar una nueva tabla global de
-   * descriptores tan pronto como sea neceario. Como se habilitó la paginación,
+   * descriptores tan pronto como sea necesario. Como se habilitó la paginación,
    * es necesario cargar el registro GDTR con la dirección LINEAL (en memoria
    * virtual en este momento) en la cual se encuentra la GDT */
 
