@@ -17,10 +17,9 @@
 #include <pm.h>
 #include <physmem.h>
 #include <stdlib.h>
+#include <string.h>
 
 void cmain(){
-    /* Llamar a la función setup_paging definida en paging.c*/
-    setup_paging();
 
     /* Inicializar y limpiar la consola console.c*/
     console_clear();
@@ -32,6 +31,11 @@ void cmain(){
     /* Configura las rutinas de manejo de interrupción y carga la IDT
     interrupt.c */
     setup_interrupts();
+    
+    /* Llamar a la función setup_paging definida en paging.c*/
+    setup_paging();
+    
+
     
     console_printf("Kernel started!\n");
 

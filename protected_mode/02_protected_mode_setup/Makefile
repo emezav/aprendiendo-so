@@ -82,7 +82,7 @@ iso: all
 	mkisofs -J -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o build/cd_image.iso build/filesys
 	
 docs: $(DOCFILES)
-	$(DOXYGEN) dox/project.doxyfile
+	$(DOXYGEN) dox/Doxyfile
 
 clean:
 	@cd kernel;make clean

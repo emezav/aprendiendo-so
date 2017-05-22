@@ -19,7 +19,7 @@
 exception_handler exception_handlers[MAX_EXCEPTIONS];
 
 /**
- * @brief Esta rutina recibe el control de la interrupt_dispatcher.
+ * @brief Recibe el control de la rutina interrupt_dispatcher.
  * Su trabajo consiste en determinar el vector de interrupcion a partir del
  * estado que recibe como parametro, y de invocar la rutina de manejo de
  * excepcion adecuada, si existe.
@@ -63,7 +63,7 @@ unsigned char *exceptions[] = {
 };
 
 /**
- * @brief Esta rutina crea un manejador de interrupción para las
+ * @brief Crea un manejador de interrupción para las
  * 32 excepciones de IA-32 e inicializa la tabla de manejadores de excepción.
  * Para todas las excepciones se establece la rutina 'exception_dispatcher'
  * como la rutina de manejo de interrupción.
@@ -88,7 +88,7 @@ void setup_exceptions(void) {
 
 
 /**
- * @brief Esta rutina recibe el control de la interrupt_dispatcher.
+ * @brief Recibe el control de la interrupt_dispatcher.
  * Su trabajo consiste en determinar el vector de interrupcion a partir del
  * contexto actual de interrupcion, y de invocar la rutina de manejo de
  * excepcion adecuada, si existe.
@@ -150,7 +150,7 @@ int install_exception_handler(unsigned char index, exception_handler handler) {
 }
 
 /**
- * @brief Esta rutina permite quitar un  manejador de excepcion
+ * @brief Permite quitar un  manejador de excepcion
  * @param index Número de la excepción a la cual se desea desinstalar
  * su manejador
  */

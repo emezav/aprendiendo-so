@@ -21,8 +21,8 @@
 irq_handler irq_handlers[MAX_IRQ_ROUTINES];
 
 /**
- * @brief Esta rutina recibe el control de la rutina de manejo de
- * interrupcion y canaliza esta solicitud a la rutina de manejo de IRQ
+ * @brief Recibe el control de la rutina de manejo de
+ * interrupcion y re-envia esta solicitud a la rutina de manejo de IRQ
  * correspondiente, si se encuentra definida.
  * Dentro de la estructura de datos que recibe, se puede obtener el numero
  * de la interrupcion que ocurrio, asi como el estado del procesador.
@@ -117,9 +117,9 @@ void irq_remap(void) {
 }
 
 /**
- * @brief Esta rutina se encarga de crear los manejadores de
- * interrupcion para las 16 IRQ en los procesadores x86. Estas IRQ
- * se re-mapean a las interrupciones con vector 32 .. 47.
+ * @brief Crea los manejadores de interrupcion para las 16 IRQ en los
+ * procesadores x86. Estas IRQ  se re-mapean a las interrupciones con
+ * vector 32 .. 47.
  * Todas ellas son manejadas por la rutina 'irq_dispacther', que se encarga
  * de invocar la rutina de manejo de IRQ correspondiente, si se encuentra
  * definida.
@@ -144,7 +144,7 @@ void setup_irq(void) {
 }
 
 /**
- * @brief Esta rutina permite definir un nuevo manejador de IRQ
+ * @brief Permite definir un nuevo manejador de IRQ
  * @param number numero de irq a configurar
  * @param handler Función a manejar la irq
  */
@@ -158,7 +158,7 @@ void install_irq_handler(int number, irq_handler handler){
 }
 
 /**
- * @brief Esta rutina permite quitar un  manejador de IRQ.
+ * @brief Permite quitar un  manejador de IRQ.
  *
  * 	@param number numero de irq a quitar
  * 	@return void*/
@@ -170,8 +170,8 @@ void uninstall_irq_handler(int number) {
 }
 
 /**
- * @brief Esta rutina recibe el control de la rutina de manejo de
- * interrupcion y canaliza esta solicitud a la rutina de manejo de IRQ
+ * @brief Recibe el control de la rutina de manejo de
+ * interrupcion y re-envia esta solicitud a la rutina de manejo de IRQ
  * correspondiente, si se encuentra definida.
  * Dentro de la estructura de datos que recibe, se puede obtener el numero
  * de la interrupcion que ocurrio, asi como el estado del procesador.

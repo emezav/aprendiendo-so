@@ -83,7 +83,7 @@ typedef interrupt_handler irq_handler;
 #define MAX_IRQ_ROUTINES 16
 
 /**
- * @brief Esta rutina se encarga de crear las entradas en la IDT para
+ * @brief Crear las entradas en la IDT para
  * las interrupciones que se desean manejar. Por defecto configura las
  * interrupciones correspondientes a las IRQ de los dispositivos de entradda/
  * salida, que han sido mapeadas a los numeros 32..47.
@@ -91,14 +91,14 @@ typedef interrupt_handler irq_handler;
 void setup_irq(void);
 
 /**
- * @brief Esta rutina permite definir un nuevo manejador de IRQ
+ * @brief Permite definir un nuevo manejador de IRQ
  * @param number numero de irq a configurar
  * @param handler Función a manejar la irq
  */
 void install_irq_handler(int number, irq_handler handler);
 
 /**
- * @brief Esta rutina permite quitar un  manejador de IRQ.
+ * @brief Permite quitar un  manejador de IRQ.
  *
  * 	@param number numero de irq a quitar
  * 	@return void*/

@@ -20,7 +20,7 @@
 typedef interrupt_handler exception_handler;
 
 /**
- * @brief Esta rutina crea un manejador de interrupcion para las
+ * @brief Crea un manejador de interrupcion para las
  * 32 excepciones x86 e inicializa la tabla de manejadores de excepcion.
  */
 void setup_exceptions(void);

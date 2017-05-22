@@ -63,7 +63,7 @@ void console_update_cursor(void);
 /**
  * @brief Función para imprimir un caracter
  *
- * Esta rutina imprime directamente en la memoria de video. Valida
+ * Imprime directamente en la memoria de video. Valida
  * caracteres especiales, como fin de línea, tabulador y backspace.
  * @param c caracter ascii a imprimir
  */
@@ -178,7 +178,7 @@ void console_update_cursor(void) {
 	int column;
 
 	unsigned int tmp;
-	/** Esta rutina posiciona el cursor de hardware en la pantalla, con la
+	/** Posiciona el cursor de hardware en la pantalla, con la
 	 * posicion actual de escritura en la memoria de video.
 	 * Para ello, utiliza el microcontrolador CRT, el cual posee dos registros:
 	 * - 0x3D4 = registro de indice

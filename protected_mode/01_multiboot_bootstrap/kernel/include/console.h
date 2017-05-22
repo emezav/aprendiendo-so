@@ -117,7 +117,7 @@ void console_clear(void);
 /**
  * @brief Función para imprimir un caracter
  *
- * Esta rutina imprime directamente en la memoria de video. No valida
+ * Imprime directamente en la memoria de video. No valida
  * caracteres especiales.
  * @param c caracter ascii a imprimir
  */

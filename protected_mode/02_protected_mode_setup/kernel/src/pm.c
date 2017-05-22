@@ -67,7 +67,7 @@ gdt_descriptor * get_gdt_descriptor(unsigned short selector) {
 }
 
 /**
- * @brief Esta rutina permite obtener un descriptor de segmento
+ * @brief Permite obtener un descriptor de segmento
  *  disponible en la GDT.
  *  @return Referencia al próximo descriptor de segmento dentro de la GDT que se
  *  encuentra disponible, nulo en caso que no exista una entrada disponible
@@ -107,7 +107,7 @@ unsigned short allocate_gdt_selector(void) {
 }
 
 /**
- * @brief Esta rutina permite liberar un descriptor de segmento en la GDT.
+ * @brief Permite liberar un descriptor de segmento en la GDT.
  * @param desc Apuntador al descriptor que se desa liberar
  * */
 void free_gdt_descriptor(gdt_descriptor *desc) {

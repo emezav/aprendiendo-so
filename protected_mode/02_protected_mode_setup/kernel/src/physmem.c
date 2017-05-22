@@ -61,8 +61,8 @@ unsigned int allowed_free_start;
 extern unsigned int multiboot_info_location;
 
 /**
- * @brief Esta rutina inicializa el mapa de bits de memoria,
- * a partir de la informacion obtenida del GRUB.
+ * @brief Inicializa el mapa de bits de memoria, a partir de la informacion
+ * proporcionada por GRUB.
  */
 void setup_physical_memory(void){
 

@@ -207,7 +207,7 @@ jmp loop /* Ciclo infinito */
 
 /*
    TABLA GLOBAL DE DESCRIPTORES (gdt)
-   Esta es la tabla de descriptores que utiliza el procesador en modo protegido de
+   Tabla de descriptores que utiliza el procesador en modo protegido de
    32 bits.
    En este caso se va a utilizar el Modelo Flat Basico, en el cual el kernel
    accede a un espacio de direcciones continuo, no segmentado. Para este modo

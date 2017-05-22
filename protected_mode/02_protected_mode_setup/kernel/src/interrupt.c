@@ -23,7 +23,7 @@
 interrupt_handler interrupt_handlers[MAX_IDT_ENTRIES];
 
 /**
- * @brief Esta rutina permite determinar si dos selectores
+ * @brief Permite determinar si dos selectores
  * se encuentran en el mismo nivel de privilegios.
  * @param sel1	Selector 1
  * @param sel2	Selector 2
@@ -131,7 +131,7 @@ void uninstall_interrupt_handler(unsigned char index) {
 }
 
 /**
- * @brief Esta rutina recibe el control de la Rutina de Servicio
+ * @brief Recibe el control de la Rutina de Servicio
  * de Interrupción (ISR) isr0, isr1.. etc. correspondiente.
  * Su trabajo consiste en determinar el vector de interrupción a partir del
  * estado del procesador almacenado en * current_esp e invocar la rutina de

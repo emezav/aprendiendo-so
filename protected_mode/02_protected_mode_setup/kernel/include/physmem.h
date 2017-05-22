@@ -25,7 +25,7 @@
 	(addr / PAGE_SIZE) % ( BITS_PER_ENTRY )
 
 /**
- * @brief Esta rutina inicializa el mapa de bits de memoria,
+ * @brief Inicializa el mapa de bits de memoria,
  * a partir de la informacion obtenida del GRUB.
  */
 void setup_physical_memory(void);

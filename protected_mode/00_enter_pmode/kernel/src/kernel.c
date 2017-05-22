@@ -11,7 +11,7 @@
  * */
 
 /**
- * @brief Esta rutina recibe el control de start.S,
+ * @brief Recibe el control de start.S,
  * @param numsectors  número de bytes que ocupa el kernel
  * @param message mensaje de bienvenida del archivo start.S
  * */

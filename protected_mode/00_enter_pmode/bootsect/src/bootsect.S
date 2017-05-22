@@ -273,7 +273,7 @@ memory_map_length:
 /*
 Rutina: read_lba_from_floppy
 
-Descripcion: Esta rutina lee un sector de un disco floppy,
+Descripcion: Lee un sector de un disco floppy,
 por medio de interrupciones de la BIOS.
 Entrada: 4(bp) : sector lba a leer (i).
          6(bp) : segmento en el cual se desea leer el sector (segmento)

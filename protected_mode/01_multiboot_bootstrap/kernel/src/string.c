@@ -11,7 +11,7 @@
 #include <string.h>
 
 /**
- * @brief Esta rutina permite copiar un numero determinado de bytes
+ * @brief Copia un numero determinado de bytes
  * de una posicion de memoria a otra.
  * @param dst Dirección de memoria de destino de los datos
  * @param src Dirección de memoria de fuente de los datos
@@ -47,7 +47,7 @@ void *memset(void *dst, char val, int count) {
 }
 
 /**
- * @brief Esta rutina permite determinar la longitud de una cadena
+ * @brief Calcula la longitud de una cadena
  * terminada en el caracter nulo.
  * @param str Apuntador al inicio de la cadena de caracteres
  * @return Longitud de la cadena. No incluye en la longitud el caracter nulo
@@ -60,7 +60,7 @@ int strlen(const char *str){
 }
 
 /**
- * @brief Esta rutina permite copiar una cadena a otra.
+ * @brief Copia los bytes de una cadena a otra.
  * @param dst Apuntador a la cadena destino
  * @param src Apuntador a la cadena fuente
  * @return Apuntador a la cadena destino
@@ -86,7 +86,6 @@ char * strcpy(char *dst, const char *src) {
 char * strcat(char *dst, const char *src) {
 	const char * x;
 	char *y;
-	int count;
 
 	/* Ir al final de la cadena de destino*/
 	for (y=dst; *y != 0;y++);
@@ -102,13 +101,12 @@ char * strcat(char *dst, const char *src) {
 }
 
 /**
- * @brief Esta rutina permite comparar dos cadenas de caracteres.
+ * @brief Compara dos cadenas de caracteres.
  * @param a Apuntador a la cadena de destinno
  * @param b Apuntador a la cadena fuente
  * @return Resultado de la comparacion ( 0 :  cadenas iguales,
  *  		!= 0 : cadenas diferentes)
  */
-
 int strcmp(const char *a, const char *b) {
 	const char *x = a;
 	const char *y = b;
@@ -128,6 +126,24 @@ int strcmp(const char *a, const char *b) {
 		}
 		return *y - *x;
 	}
+}
+
+/**
+ * @brief Compara los primeros n bytes de dos cadenas
+ * @param a Apuntador a la cadena de destinno
+ * @param b Apuntador a la cadena fuente
+ * @param n Apuntador a la cadena fuente
+ * @return Resultado de la comparacion ( 0 :  cadenas iguales,
+ *  		!= 0 : cadenas diferentes)
+ */
+int strncmp(const char *a, const char *b, int n) {
+    for (; n > 0 && *a != 0 && *b != 0 && *a == *b; a++, b++, n--);
+
+    if (n == 0) { 
+        return 0;
+    }else {
+        return *b - *a;
+    }
 }
 
 /**
