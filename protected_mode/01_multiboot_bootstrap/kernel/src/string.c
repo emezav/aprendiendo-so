@@ -153,7 +153,7 @@ int strncmp(const char *a, const char *b, int n) {
  * @param offset Desplazamiento inicial en la cadena de entrada
  * @return Numero de caracteres consumidos de la cadena de entrada
  * */
-int nexttok(char * source, char * destination, int offset) {
+int nexttok(char * source, char * destination, char delim, int offset) {
     char * src =  source;
     char * dst = destination;
     char c;
@@ -170,7 +170,7 @@ int nexttok(char * source, char * destination, int offset) {
              return 0;
     }
 
-    while ( (c=src[offset++]) !=0 && c == ' '){ //Ignorar espacios antes
+    while ( (c=src[offset++]) !=0 && c == delim){ //Ignorar espacios antes
        nchars++;
     }
 
@@ -180,7 +180,7 @@ int nexttok(char * source, char * destination, int offset) {
           offset--;
     }
 
-    while ( (c=src[offset++]) != 0 && c != ' ') { //Sacar el valor
+    while ( (c=src[offset++]) != 0 && c != delim) { //Sacar el valor
           *dst++ = c;
           nchars++;
     }    

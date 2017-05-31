@@ -79,9 +79,11 @@ int strncmp(const char *a, const char *b, int n);
  * @brief Permite obtener una 'palabra' de una cadena de entrada.
  * @param source Cadena de entrada
  * @param destination Cadena en la cual se almacena la palabra obtenida
+ * @param delim Caracter delimitador de palabras.
  * @param offset Desplazamiento inicial en la cadena de entrada
  * @return Numero de caracteres consumidos de la cadena de entrada
  * */
-int nexttok(char * source, char * destination, int offset);
+int nexttok(char * source, char * destination, char delim, int offset);
 
 #endif /* STRING_H_ */
+
