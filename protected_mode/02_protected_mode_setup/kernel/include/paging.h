@@ -9,6 +9,8 @@
 #ifndef PAGING_H_
 #define PAGING_H_
 
+#include <pm.h>
+
 /** @brief Bit para activar la paginación en el registro CR0 */
 #define ENABLE_PAGING 0x80000000
 
