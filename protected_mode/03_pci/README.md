@@ -63,41 +63,41 @@ dispositivos con *Header Type* 0x00 deben implementar los primeros bytes
 del espacio de configuración con el siguiente formato:
 
           31               15         7            0
-   offset +----------------------------------------+
-      0x00|   Device ID    |   Vendor ID           |
-          |                |                       | 
-      0x04|   Status       |   Command             |
-          |                |                       | 
-      0x08|   Class Code              | Revision   |
-          |                           |   ID       | 
-      0x0C|BIST   |Header  |Latency   | Cacheline  |
-          |       | Type   | Timer    |   Size     |
-      0x10|Base Address Register #0 (Bar0)         |
-          |                                        | 
-      0x14|Base Address Register #1 (Bar1)         |
-          |                                        | 
-      0x18|Base Address Register #2 (Bar2)         |
-          |                                        | 
-      0x1C|Base Address Register #3 (Bar3)         |
-          |                                        | 
-      0x20|Base Address Register #4 (Bar4)         |
-          |                                        | 
-      0x24|Base Address Register #5 (Bar5)         |
-          |                                        | 
-      0x28|      Cardbus CIS Pointer               |
-          |                                        | 
-      0x2C|Subsystem ID    | Subsystem Version     |
-          |                |        ID             | 
-      0x30|Expansion ROM Base Address              |
-          |                                        | 
-      0x34|Reserved                   |Capabilities|
-          |                            Pointer     | 
-      0x38|Reserved                                |
-          |                                        | 
-      0x3C|Max_Lat|Min_Gnt |Interrupt | Interrupt  |
-          |                | Pin      |  Line      | 
-          +----------------------------------------+
-     
+    offset +----------------------------------------+
+       0x00|   Device ID    |   Vendor ID           |
+           |                |                       | 
+       0x04|   Status       |   Command             |
+           |                |                       | 
+       0x08|   Class Code              | Revision   |
+           |                           |   ID       | 
+       0x0C|BIST   |Header  |Latency   | Cacheline  |
+           |       | Type   | Timer    |   Size     |
+       0x10|Base Address Register #0 (Bar0)         |
+           |                                        | 
+       0x14|Base Address Register #1 (Bar1)         |
+           |                                        | 
+       0x18|Base Address Register #2 (Bar2)         |
+           |                                        | 
+       0x1C|Base Address Register #3 (Bar3)         |
+           |                                        | 
+       0x20|Base Address Register #4 (Bar4)         |
+           |                                        | 
+       0x24|Base Address Register #5 (Bar5)         |
+           |                                        | 
+       0x28|      Cardbus CIS Pointer               |
+           |                                        | 
+       0x2C|Subsystem ID    | Subsystem Version     |
+           |                |        ID             | 
+       0x30|Expansion ROM Base Address              |
+           |                                        | 
+       0x34|Reserved                   |Capabilities|
+           |                            Pointer     | 
+       0x38|Reserved                                |
+           |                                        | 
+       0x3C|Max_Lat|Min_Gnt |Interrupt | Interrupt  |
+           |                | Pin      |  Line      | 
+           +----------------------------------------+
+      
 El campo *Header type* también permite identificar la configuración de la
 segunda parte del encabezado (a partir del byte 0x10).
 
