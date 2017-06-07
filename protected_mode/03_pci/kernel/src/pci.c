@@ -31,7 +31,7 @@ unsigned int read_pci_register(unsigned char bus, unsigned char slot, unsigned
     unsigned int data;
 
     //Last bit of address must be set.
-    address = (unsigned int)(0x80000000 | (bus << 16 ) | (slot << 11) 
+    address = (unsigned int)( (1 << 31) | (bus << 16 ) | (slot << 11) 
             | (function << 8) | (offset << 2));
     outl(0xCF8, address);
     data = inl(0xCFC);

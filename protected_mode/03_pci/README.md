@@ -110,7 +110,7 @@ la interfaz de programación del dispositivo.
 Las clases de dispositivo de acuerdo con la especificacion PCI 2.3 son:
 
     Clase     Descripción 
-		-----     ---------------------------------------------------
+    -----     ---------------------------------------------------
     0x00      Devices built before class codes (i.e. pre PCI 2.0)
     0x01      Mass storage controller
     0x02      Network controller
@@ -191,10 +191,10 @@ el bus, el slot y la función a consultar. El formato del valor a escribir
 en el registro de configuración es el siguiente:
 
     31 30          2423            1615      1110   8 7         2 1 0
-         +---------------------------------------------------------------+
+     +---------------------------------------------------------------+
      |1| Reservado   |      # del    | # del   |# de | # del     |0|0|
      | |             |       Bus     |Disposit.|Func.| Registro  | | |
-         +---------------------------------------------------------------+
+     +---------------------------------------------------------------+
 
 Dado que se usan 5 bits para referenciar  el número del registro, con este
 mecanismo se pueden acceder los primeros 64 registros de 4 bytes cada uno.
@@ -207,9 +207,9 @@ del dispositivo conectado en el bus 0, slot 0, función 0, se deberá
 escribir el siguiente valor en el registro de configuración:
 
     31 30          2423            1615      1110   8 7         2 1 0
-         +---------------------------------------------------------------+
+     +---------------------------------------------------------------+
      |1|  00000000   |   00000000    | 00000   | 000 |  00000    |0|0|
-         +---------------------------------------------------------------+
+     +---------------------------------------------------------------+
 
 Acceso al espacio de configuración en memoria
 --------------------------------------
@@ -222,7 +222,7 @@ inicio de este espacio se encontrará el espacio de configuración de la
 función 0 del slot 0 del bus 0, luego la función 1 del slot 0 del bus 0, y
 así sucesivamente.
 
-Detección de la interfaz PCI en sistemas con PCI
+Detección de la interfaz en sistemas con PCI
 ------------------------------
 En sistemas con PCI, se puede usar los servicios de la BIOS mientras se
 está operando en modo real para obtener la información PCI. La función a
@@ -236,7 +236,7 @@ correspondiente al Registro de Configuración PCI (0xCF8), el cual contendrá
 la última transacción realizada posiblemente por el Firmware. En caso de no
 existir la interfaz PCI, se obtendrá como resultado el valor 0xFFFFFFFF.
 
-Detección de la interfaz PCI en sistemas con PCI Express
+Detección de la interfaz en sistemas con PCI Express
 ------------------------------
 En sistemas con PCI Express, se debe usar la configuración proporcionada
 por el subsistema ACPI. El proceso básico es el siguiente:
