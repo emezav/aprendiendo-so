@@ -17,7 +17,7 @@
 
 /**
  * @brief Arreglo que almacena las referencias a las rutinas de manejo de
- * interrupci髇.
+ * interrupci贸n.
  * La rutina install_interrupt_handler almacena las referencias a las rutinas
  * en este arreglo. */
 interrupt_handler interrupt_handlers[MAX_IDT_ENTRIES];
@@ -44,8 +44,8 @@ int same_dpl(unsigned short sel1, unsigned short sel2) {
 }
 /**
  * @brief Muestra el estado en el cual
- * se encuentra el procesador cuando ocurrio una interrupci髇.
- * @param state Apuntador al marco de pila de interrupci髇.
+ * se encuentra el procesador cuando ocurrio una interrupci贸n.
+ * @param state Apuntador al marco de pila de interrupci贸n.
  */
 void dump_interrupt_state(interrupt_state * state) {
     unsigned int current_cs;
@@ -83,14 +83,14 @@ void setup_interrupts(void) {
 
 	int i;
     
-    /* Configurar la IDT para que la interrupci髇 N sea atendida por la rutina
+    /* Configurar la IDT para que la interrupci贸n N sea atendida por la rutina
      * isrN. Estas rutinas se definen mediante un macro en el archivo start.S.*/
 	for (i = 0; i < MAX_IDT_ENTRIES; i++) {
 		setup_idt_descriptor(i, KERNEL_CODE_SELECTOR , isr_table[i],
 				RING0_DPL, INTERRUPT_GATE_TYPE);
         interrupt_handlers[i] = NULL_INTERRUPT_HANDLER;
 	}
-    /* Cargar la IDT mediante la instrucci髇 LIDT */
+    /* Cargar la IDT mediante la instrucci贸n LIDT */
 	inline_assembly("lidt (%0)" : :"a"(&kernel_idt_pointer));
 
     /* Invocar la rutina setup_exceptions de exception.c */
@@ -104,11 +104,11 @@ void setup_interrupts(void) {
 }
 
 /**
- * @brief Instala un nuevo manejador de interrupci髇 para un n鷐ero de
- * interrupci髇 determinado.
- * @param index N鷐ero de interrupci髇 para la cual se desea instalar el
+ * @brief Instala un nuevo manejador de interrupci贸n para un n煤mero de
+ * interrupci贸n determinado.
+ * @param index N煤mero de interrupci贸n para la cual se desea instalar el
  * manejador
- * @param handler Funci髇 para el manejo de la interrupci髇.
+ * @param handler Funci贸n para el manejo de la interrupci贸n.
  */
 void install_interrupt_handler(unsigned char index, interrupt_handler handler) {
 	if (interrupt_handlers[index] != NULL_INTERRUPT_HANDLER) {
@@ -119,12 +119,12 @@ void install_interrupt_handler(unsigned char index, interrupt_handler handler) {
 }
 
 /**
- * @brief Desinstala un manejador de interrupci髇
- * @param index N鷐ero de la interrupci髇 para la cual se va a desinstalar
+ * @brief Desinstala un manejador de interrupci贸n
+ * @param index N煤mero de la interrupci贸n para la cual se va a desinstalar
  * el manejador
  */
 void uninstall_interrupt_handler(unsigned char index) {
-	/* Simplemente quitar la referencia a la rutina de manejo de interrupci髇.*/
+	/* Simplemente quitar la referencia a la rutina de manejo de interrupci贸n.*/
 	if (index < MAX_IDT_ENTRIES) {
 		interrupt_handlers[index] = NULL_INTERRUPT_HANDLER;
 	}
@@ -132,10 +132,10 @@ void uninstall_interrupt_handler(unsigned char index) {
 
 /**
  * @brief Recibe el control de la Rutina de Servicio
- * de Interrupci髇 (ISR) isr0, isr1.. etc. correspondiente.
- * Su trabajo consiste en determinar el vector de interrupci髇 a partir del
+ * de Interrupci贸n (ISR) isr0, isr1.. etc. correspondiente.
+ * Su trabajo consiste en determinar el vector de interrupci贸n a partir del
  * estado del procesador almacenado en * current_esp e invocar la rutina de
- * manejo de interrupci髇 adecuada, si existe.
+ * manejo de interrupci贸n adecuada, si existe.
  */
 void interrupt_dispatcher() {
     	/* Recuperar el marco de pila de la interrupcion. */

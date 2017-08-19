@@ -5,9 +5,9 @@
  * @copyright GNU Public License.
  * @brief Punto de entrada del kernel
  * @details
- * El kernel se carga en la direcciÛn de memoria 0x100000 (1 MB) y empieza su
- * ejecuciÛn en la etiqueta start.
- * Este kernel cumple con la especificaciÛn multiboot, por lo cual debe
+ * El kernel se carga en la direcci√≥n de memoria 0x100000 (1 MB) y empieza su
+ * ejecuci√≥n en la etiqueta start.
+ * Este kernel cumple con la especificaci√≥n multiboot, por lo cual debe
  * contener un encabezado (estructura de datos) que le indica al cargador
  * de arranque los parametros necesarios para que cargue el kernel.
  * El kernel se almacena en una imagen de disco
@@ -15,13 +15,13 @@
  * Para cargarlo, se recurre a  un cargador de arranque (bootloader) llamado
  * GRUB.
  * GRUB es un bootloader que cumple con la Especificacion Multiboot. Puede
- * cargar cualquier kernel que cumpla con esta especificaciÛn.
- * @see http://www.gnu.org/software/grub/manual/multiboot/multiboot.html * EspecificaciÛn Multiboot
+ * cargar cualquier kernel que cumpla con esta especificaci√≥n.
+ * @see http://www.gnu.org/software/grub/manual/multiboot/multiboot.html * Especificaci√≥n Multiboot
 */
 
 /** @verbatim */
 
-/* La EspecificaciÛn Multiboot requiere que el Encabezado Multiboot se encuentre
+/* La Especificaci√≥n Multiboot requiere que el Encabezado Multiboot se encuentre
  * en los primeros 8192 bytes del archivo ejecutable, por lo cual es necesario
  * que las secciones de este archivo (start.S) se almacenen al inicio del
  * archivo ejecutable. Ver archivi link.ld */
@@ -30,10 +30,10 @@
 .intel_syntax noprefix 
 
 /* Macro para generar una entrada de la Tabla de Descriptores Globales - GDT. */
-/* Cada entrada ocupa exactamente 8 bytes (64 bits). Consulte la secciÛn 3.4.5
+/* Cada entrada ocupa exactamente 8 bytes (64 bits). Consulte la secci√≥n 3.4.5
  * Segment Descriptos del Intel Software Developers's Manual, Volumen 3A.
  *
-/* gdt_entry present, base, lÌmite, tipo, dpl, codigo_o_datos, DB (16/32 bits),
+/* gdt_entry present, base, l√≠mite, tipo, dpl, codigo_o_datos, DB (16/32 bits),
  * G (incrementos de bytes o de 4096 bytes) */
 .macro gdt_entry present=0,base=0,limit=0,type=0,dpl=0,code_or_data=0,DB=0,G=0
 	/* Limite 0..15 */
@@ -77,7 +77,7 @@
 	/* # de excepcion generada */
 	push \id
 
-	/* Saltar al cÛdigo com˙n de manejo de la interrupciÛn */
+	/* Saltar al c√≥digo com√∫n de manejo de la interrupci√≥n */
 	jmp handle_isr
 .endm
 
@@ -100,12 +100,12 @@
 	/* # de excepcion generada */
 	push \id
 
-	/* Saltar al cÛdigo com˙n de manejo de la interrupciÛn */
+	/* Saltar al c√≥digo com√∫n de manejo de la interrupci√≥n */
 	jmp handle_isr
 .endm
 
 
-/* Esta secciÛn se incluye primero en el archivo compilado (ver link.ld) */
+/* Esta secci√≥n se incluye primero en el archivo compilado (ver link.ld) */
 .section .startcode
 .code32				/* 32 bits - Modo protegido */
 
@@ -122,12 +122,12 @@
 #include <paging.h>
 
 .global multiboot_header
-/** Encabezado multiboot. Ver secciÛn The layout of Multiboot Header  de la
- * especificaciÛn Multiboot*/
+/** Encabezado multiboot. Ver secci√≥n The layout of Multiboot Header  de la
+ * especificaci√≥n Multiboot*/
  /* El encabezado multiboot debe estar alineado a 4 bytes */
 .align 4
 multiboot_header:		
- /* N˙mero m·gico. Requerido. */
+ /* N√∫mero m√°gico. Requerido. */
 .long MULTIBOOT_HEADER_MAGIC
  /* Flags. Requerido. */
 .long MULTIBOOT_HEADER_FLAGS
@@ -136,27 +136,27 @@ multiboot_header:
 
 .global start
 start:
-/* CÛdigo inicial que se encarga de mapear la ubicaciÛn fÌsica del kernel a la
-* posiciÛn KERNEL_VIRT_ADDR  = KERNEL_PHYS_ADDR + KERNEL_VIRT_OFFSET 
+/* C√≥digo inicial que se encarga de mapear la ubicaci√≥n f√≠sica del kernel a la
+* posici√≥n KERNEL_VIRT_ADDR  = KERNEL_PHYS_ADDR + KERNEL_VIRT_OFFSET 
 *
 * IMPORTANTE: Dado que el kernel se compila para estar ubicado en la parte alta
-* de la memoria virtual (en la ubicaciÛn definida por la variable
+* de la memoria virtual (en la ubicaci√≥n definida por la variable
 * KERNEL_VIRT_ADDR, todas las referencias a variables son relativas a esta
-* direcciÛn. Por lo tanto en este cÛdigo inicial se debe  restar
-* KERNEL_VIRT_OFFSET a cualquier direcciÛn de variable (cualquier OFFSET)
-* Luego de mapear el kernel en la posiciÛn KERNEL_VIRT_ADDR y habilitar la
-* memoria virtual (la paginaciÛn), todas las referencias ser·n
-* virtuales y v·lidas, y podremos usarlas sin  necesidad de restarles
+* direcci√≥n. Por lo tanto en este c√≥digo inicial se debe  restar
+* KERNEL_VIRT_OFFSET a cualquier direcci√≥n de variable (cualquier OFFSET)
+* Luego de mapear el kernel en la posici√≥n KERNEL_VIRT_ADDR y habilitar la
+* memoria virtual (la paginaci√≥n), todas las referencias ser√°n
+* virtuales y v√°lidas, y podremos usarlas sin  necesidad de restarles
 * KERNEL_VIRT_OFFSET.
 */
 
   /* Deshabilitar las interrupciones*/
   cli
 
-  /* Guardar la ubicaciÛn de la Estructura de InformaciÛn Multiboot almacenada
+  /* Guardar la ubicaci√≥n de la Estructura de Informaci√≥n Multiboot almacenada
    * por GRUB en el registro EBX dentro de la variable multiboot_info_location */
 
-  /* EBX = DirecciÛn fÌsica de la Estructura de InformaciÛn Multiboot */
+  /* EBX = Direcci√≥n f√≠sica de la Estructura de Informaci√≥n Multiboot */
 
   mov [ multiboot_info_location - KERNEL_VIRT_OFFSET ], ebx
   
@@ -168,12 +168,12 @@ start:
   popf
 
    /* Este kernel solo puede ser cargado por un cargador de arranque compatible
-   * con la especificaciÛn multiboot, por lo tanto primero se debe verificar
-   * si el registro EAX contiene el n˙mero m·gico almacenado por el cargador. */
+   * con la especificaci√≥n multiboot, por lo tanto primero se debe verificar
+   * si el registro EAX contiene el n√∫mero m√°gico almacenado por el cargador. */
 
    cmp eax, MULTIBOOT_BOOTLOADER_MAGIC
 
-   /* Continuar si EAX almacena un n˙mero igual al MULTIBOOT_BOOTLOADER_MAGIC */
+   /* Continuar si EAX almacena un n√∫mero igual al MULTIBOOT_BOOTLOADER_MAGIC */
    je loader_is_multiboot
 
    /* Si se llega a este punto, no se puede continuar ya que el kernel no fue
@@ -182,8 +182,8 @@ start:
    push OFFSET no_multiboot_loader - KERNEL_VIRT_OFFSET
    call kdebug
 	
-  /* La rutina kdebug no deberÌa retornar, no obstante se se saca el
-  * par·metro de la pila como si se hubiera retornado correctamente  y se salta
+  /* La rutina kdebug no deber√≠a retornar, no obstante se se saca el
+  * par√°metro de la pila como si se hubiera retornado correctamente  y se salta
   * a kernel_kernel_finished para "bloquear" el kernel. */
 
    add esp, 4
@@ -192,100 +192,100 @@ start:
 loader_is_multiboot:
 
  
-  /* Ahora debemos usar la informaciÛn pasada por el cargador de arranque para
+  /* Ahora debemos usar la informaci√≥n pasada por el cargador de arranque para
    * configurar las estructuras de datos requeridas para habilitar la memoria
-   * virtual (paginaciÛn). */
+   * virtual (paginaci√≥n). */
 
-  /* Para activar la paginaciÛn, es necesario conocer la informaciÛn memoria
-   * fÌsica disponible que debe haber sido recopilada por el cargador de
+  /* Para activar la paginaci√≥n, es necesario conocer la informaci√≥n memoria
+   * f√≠sica disponible que debe haber sido recopilada por el cargador de
    * arranque. */
 
-/* La primera palabra de 32 bits de la Estructura de InformaciÛn Multiboot
- * contiene el campo FLAGS (Ver EspecificaciÛn Multiboot, SecciÛn Boot
+/* La primera palabra de 32 bits de la Estructura de Informaci√≥n Multiboot
+ * contiene el campo FLAGS (Ver Especificaci√≥n Multiboot, Secci√≥n Boot
  * Information Format). En este campo se puede verificar si el cargador de
- * arranque proporciona el mapa de la memoria fÌsica del computador. */
+ * arranque proporciona el mapa de la memoria f√≠sica del computador. */
   
-  /* EBX = DirecciÛn fÌsica de la Estructura de InformaciÛn Multiboot */
+  /* EBX = Direcci√≥n f√≠sica de la Estructura de Informaci√≥n Multiboot */
   mov ebx, [ multiboot_info_location - KERNEL_VIRT_OFFSET ]
 
-  /* Tomar el primer de 4 bytes (32 bits) de esa posiciÛn de memoria (FLAGS) y
+  /* Tomar el primer de 4 bytes (32 bits) de esa posici√≥n de memoria (FLAGS) y
    * almacenarla en eax */
   mov eax, [ebx]
 
   /* Verificar si el bit 6 de flags es 1, en cuyo caso el cargador proporciona
-   * el mapa de la memoria fÌsica del computador. */
+   * el mapa de la memoria f√≠sica del computador. */
 
   /* MEMORY_MAP_PRESENT = 0x40 = 0x01000000*/
   test eax, MEMORY_MAP_PRESENT
   jnz memory_map_is_present
 
-  /* Si el bit 6 de flags es cero, no se cuenta con el mapa de memoria fÌsica
+  /* Si el bit 6 de flags es cero, no se cuenta con el mapa de memoria f√≠sica
    * por tanto no se puede continuar. */
 
   push OFFSET no_memory_info - KERNEL_VIRT_OFFSET
   call kdebug
 
-  /* La rutina kdebug no deberÌa retornar, no obstante se se saca el
-  * par·metro de la pila como si se hubiera retornado correctamente  y se salta
+  /* La rutina kdebug no deber√≠a retornar, no obstante se se saca el
+  * par√°metro de la pila como si se hubiera retornado correctamente  y se salta
   * a kernel_kernel_finished para "bloquear" el kernel. */
   add esp, 4
   jmp kernel_finished
 
 memory_map_is_present:
 
-  /* EBX = direcciÛn fÌsica de la a Estructura de InformaciÛn Multiboot. */
+  /* EBX = direcci√≥n f√≠sica de la a Estructura de Informaci√≥n Multiboot. */
   mov ebx, [ multiboot_info_location - KERNEL_VIRT_OFFSET ]
 
-  /* EAX = primer word (32 bits) de la Estructura de InformaciÛn Multiboot
+  /* EAX = primer word (32 bits) de la Estructura de Informaci√≥n Multiboot
    * (FLAGS) */
   mov eax, [ebx]
 
- /* Si junto al kernel se cargaron mÛdulos, estos se han copiado en la memoria
-  * fÌsica justo despuÈs de la ubicaciÛn en la cual termina el cÛdigo, los
-  * datos y el BSS del kernel. Por lo tanto, es necesario calcular el n˙mero de
-  * p·ginas adicionales que ocupan los mÛdulos, para determinar el n˙mero de
-  * entradas de tablas de p·gina y tablas de p·gina necesarias para mapear en
-  * memoria virtual el primer MB de memoria, el kernel y los mÛdulos
+ /* Si junto al kernel se cargaron m√≥dulos, estos se han copiado en la memoria
+  * f√≠sica justo despu√©s de la ubicaci√≥n en la cual termina el c√≥digo, los
+  * datos y el BSS del kernel. Por lo tanto, es necesario calcular el n√∫mero de
+  * p√°ginas adicionales que ocupan los m√≥dulos, para determinar el n√∫mero de
+  * entradas de tablas de p√°gina y tablas de p√°gina necesarias para mapear en
+  * memoria virtual el primer MB de memoria, el kernel y los m√≥dulos
   * adicionales. */
 
-  /* En este caso no se puede recurrir al linker, ya que los mÛdulos son
-   * compilados de forma independiente al kernel. Por tal razÛn, es necesario
-   * usar la informaciÛn de los mÛdulos de la Estructura de InformaciÛn
-   * Multiboot para determinar manualmente la memoria que ocupan estos mÛdulos
+  /* En este caso no se puede recurrir al linker, ya que los m√≥dulos son
+   * compilados de forma independiente al kernel. Por tal raz√≥n, es necesario
+   * usar la informaci√≥n de los m√≥dulos de la Estructura de Informaci√≥n
+   * Multiboot para determinar manualmente la memoria que ocupan estos m√≥dulos
    * en memoria. */
 
-  /* Verificar si la Estructura de InformaciÛn Multiboot contiene informaciÛn
-   * de mÛdulos adicionales cargados despuÈs del kernel. */
+  /* Verificar si la Estructura de Informaci√≥n Multiboot contiene informaci√≥n
+   * de m√≥dulos adicionales cargados despu√©s del kernel. */
 
-  /* Verificar si el bit 3 de flags es 1, en cuyo caso se especificaron mÛdulos
+  /* Verificar si el bit 3 de flags es 1, en cuyo caso se especificaron m√≥dulos
    * que son cargados junto con el kernel. */
 
   /* MODULES_LOADED = 0x08 = 0x00001000*/
   test eax, MODULES_LOADED
 
-  /* Si no se especificaron mÛdulos, pasar directamente a calcular el n˙mero de
-   * tablas de p·gina necesarias para mapear el primer MB de memoria y el
+  /* Si no se especificaron m√≥dulos, pasar directamente a calcular el n√∫mero de
+   * tablas de p√°gina necesarias para mapear el primer MB de memoria y el
    * kernel. */
   jz calculate_page_tables
 
-  /* Se especificaron mÛdulos! Calcular el tamano que ocupan y adicionarlo al
-   * n˙mero de m·ginas que ocupa el kernel, calculado por el linker y almacenado
+  /* Se especificaron m√≥dulos! Calcular el tamano que ocupan y adicionarlo al
+   * n√∫mero de m√°ginas que ocupa el kernel, calculado por el linker y almacenado
    * en la variable total_kernel_pages. */
 
-  /* N˙mero de mÛdulos cargados, 20 bytes a partir del inicio de la Estructura
-   * de InformaciÛn Multiboot. */
+  /* N√∫mero de m√≥dulos cargados, 20 bytes a partir del inicio de la Estructura
+   * de Informaci√≥n Multiboot. */
   mov ecx, [esi + 20]
   
   /* Verificar si el conteo es cero. */
   or ecx, ecx
   jz calculate_page_tables
 
-  /* UbicaciÛn de la tabla de mÛdulos, 24 bytes a partir del inicio de la
-   * Estructura de InformaciÛn Multibot.*/
+  /* Ubicaci√≥n de la tabla de m√≥dulos, 24 bytes a partir del inicio de la
+   * Estructura de Informaci√≥n Multibot.*/
   mov ebx, [esi + 24] 
 
-  /* Iterar por las entradas, buscando el elemento mod_end de cada mÛdulo (ver
-   * EspecificaciÛn Multiboot). Almacenar el mayor mod_end en EDX */
+  /* Iterar por las entradas, buscando el elemento mod_end de cada m√≥dulo (ver
+   * Especificaci√≥n Multiboot). Almacenar el mayor mod_end en EDX */
 
    /* EDX = 0 */
    xor edx, edx
@@ -300,36 +300,36 @@ read_module_info:
   /* Almacenar el nuevo mayor en EDX */
   mov edx, eax
 next_module_entry:
-  /* Avanzar 16 bytes para leer la informaciÛn del siguiente mÛdulo */
+  /* Avanzar 16 bytes para leer la informaci√≥n del siguiente m√≥dulo */
   add ebx, 16
 
   loop read_module_info
 
-  /* Verificar si EDX = 0, en caso afirmativo no se encontraron mÛdulos */
+  /* Verificar si EDX = 0, en caso afirmativo no se encontraron m√≥dulos */
   or edx, edx
   jz calculate_page_tables
 
-  /* La direcciÛn de fin del mÛdulo es fÌsica, convertirla en desplazamiento
+  /* La direcci√≥n de fin del m√≥dulo es f√≠sica, convertirla en desplazamiento
    * relativo con respecto al inicio del kernel. */
   sub edx, KERNEL_PHYS_ADDR
 
-  /* Se cargaron mÛdulos. Redondear el mayor mod_end al sigiente lÌmite de
-   * p·gina, si es necesario */
+  /* Se cargaron m√≥dulos. Redondear el mayor mod_end al sigiente l√≠mite de
+   * p√°gina, si es necesario */
   or edx, 0xFFF
   jz no_need_to_round
 
-  /* Los 12 bits inferiores de la direcciÛn son diferentes de cero, hay residuo
-   * al dividir entre 4096. Redondear a la siguiente p·gina. */
+  /* Los 12 bits inferiores de la direcci√≥n son diferentes de cero, hay residuo
+   * al dividir entre 4096. Redondear a la siguiente p√°gina. */
 
   /* Borrar los 12 bits menos significativos, desplazando 12 bits a la derecha y
    * luego a la izquierda. */
   shr edx, 12
   shl edx, 12
 
-  /* Redondear a la siguiente p·gina */
+  /* Redondear a la siguiente p√°gina */
   add edx, 0x1000
 
-  /* Actualizar la posiciÛn del directorio de tablas de p·gina almacenado en la
+  /* Actualizar la posici√≥n del directorio de tablas de p√°gina almacenado en la
    * variable kernel_pd_addr */
    mov ebx, edx
 
@@ -339,11 +339,11 @@ next_module_entry:
 
 no_need_to_round:
 
-  /* Dividir por 1024 el n˙mero obtenido, para convertirlo en p·ginas, y sumarlo
-   * al n˙mero de p·ginas del kernel. */
+  /* Dividir por 1024 el n√∫mero obtenido, para convertirlo en p√°ginas, y sumarlo
+   * al n√∫mero de p√°ginas del kernel. */
   shr edx, 12
 
-  /* Adicionar el n˙mero obtenido al n˙mero de p·ginas reportadas por link.ld */
+  /* Adicionar el n√∫mero obtenido al n√∫mero de p√°ginas reportadas por link.ld */
   mov eax, [total_kernel_pages - KERNEL_VIRT_OFFSET]
 
   add eax, edx
@@ -353,107 +353,107 @@ no_need_to_round:
 
 calculate_page_tables:
  /*
-   Asignar el n˙mero de tablas de p·ginas necesario para mapear el primer MB de
-   memoria y la imagen del kernel, junto con los mÛdulos cargados,  en la parte
+   Asignar el n√∫mero de tablas de p√°ginas necesario para mapear el primer MB de
+   memoria y la imagen del kernel, junto con los m√≥dulos cargados,  en la parte
    baja y en la parte alta de la memoria.
   */
 
-  /* Obtener el n˙mero de p·ginas reportadas por link.ld y posiblemente
-   * actualizada por el cÛdigo anterior, si se cargaron mÛdulos adicionales */
+  /* Obtener el n√∫mero de p√°ginas reportadas por link.ld y posiblemente
+   * actualizada por el c√≥digo anterior, si se cargaron m√≥dulos adicionales */
   mov eax, [total_kernel_pages - KERNEL_VIRT_OFFSET]
 
-  /* A este n˙mero de p·ginas se debe adicionar las p·ginas necesarias para
-   * almacenar el directorio de tablas de p·gina (1 p·gina) y tambiÈn las tablas
-   * de p·gina (1 p·gina por cada tabla). */
+  /* A este n√∫mero de p√°ginas se debe adicionar las p√°ginas necesarias para
+   * almacenar el directorio de tablas de p√°gina (1 p√°gina) y tambi√©n las tablas
+   * de p√°gina (1 p√°gina por cada tabla). */
 
-  /* Adicionar una p·gina para el directorio de tablas de p·gina */
+  /* Adicionar una p√°gina para el directorio de tablas de p√°gina */
   add eax, 1
 
-  /* Calcular el n˙mero de tablas de p·gina*/
+  /* Calcular el n√∫mero de tablas de p√°gina*/
 
-  /* EDX = EAX = n˙mero de p·ginas*/
+  /* EDX = EAX = n√∫mero de p√°ginas*/
   mov edx, eax
-  /* Cada tabla de p·ginas puede referenciar hasta 1024 p·ginas, dividir el
-   * n˙mero de p·ginas por 1024 para calcular cuantas p·ginas se necesita */
+  /* Cada tabla de p√°ginas puede referenciar hasta 1024 p√°ginas, dividir el
+   * n√∫mero de p√°ginas por 1024 para calcular cuantas p√°ginas se necesita */
   shr edx, 10
-  add edx, 1 /* Se necesita por lo menos una tabla de p·ginas */
+  add edx, 1 /* Se necesita por lo menos una tabla de p√°ginas */
 
-  /* Y adicionar este total al n˙mero de p·ginas */
+  /* Y adicionar este total al n√∫mero de p√°ginas */
   add eax, edx
 
   /* Almacenar el valor actualizado en la variable del kernel */
   mov [total_kernel_pages - KERNEL_VIRT_OFFSET ], eax
   
-  /* Ya se conoce cuantas p·ginas ocupa el kernel (y posiblemente los mÛdulos),
-   * y el n˙mero de p·ginas necesarias para mapear el primer MB de memoria, el
-   * kernel, los mÛdulos, el directorio de tablas de p·gina y las tablas de
-   * p·gina. */
+  /* Ya se conoce cuantas p√°ginas ocupa el kernel (y posiblemente los m√≥dulos),
+   * y el n√∫mero de p√°ginas necesarias para mapear el primer MB de memoria, el
+   * kernel, los m√≥dulos, el directorio de tablas de p√°gina y las tablas de
+   * p√°gina. */
 
-  /* Con este nuevo valor se debe calcular el n˙mero completo de tablas de
-   * p·gina necesarias para mapear las p·ginas calculadas. */
+  /* Con este nuevo valor se debe calcular el n√∫mero completo de tablas de
+   * p√°gina necesarias para mapear las p√°ginas calculadas. */
 
-  /* Dividir por 1024 el n˙mero de p·ginas para obtener el n˙mero total de
-   * tablas de p·gina requeridas */
+  /* Dividir por 1024 el n√∫mero de p√°ginas para obtener el n√∫mero total de
+   * tablas de p√°gina requeridas */
   shr eax, 10
 
-  /* Se necesita por lo menos una tabla de p·ginas.*/
+  /* Se necesita por lo menos una tabla de p√°ginas.*/
   add eax, 1
 
   mov [kernel_page_tables - KERNEL_VIRT_OFFSET], eax
 
-  /* Ya se conoce el n˙mero de p·ginas y el n˙mero de tablas de p·gina, podemos
-   * mapear la memoria en el directorio y las tablas de p·gina correspondientes
+  /* Ya se conoce el n√∫mero de p√°ginas y el n√∫mero de tablas de p√°gina, podemos
+   * mapear la memoria en el directorio y las tablas de p√°gina correspondientes
    */
 
   /* Primero limpiar el espacio de memoria para el directorio de tablas de
-   * p·gina*/
+   * p√°gina*/
 
-  /* EAX = UbicaciÛn fÌsica del directorio de tablas de p·gina */
+  /* EAX = Ubicaci√≥n f√≠sica del directorio de tablas de p√°gina */
   mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
 
-  /* Limpiar el directorio de tablas de p·ginas. */
+  /* Limpiar el directorio de tablas de p√°ginas. */
   push eax
   call flush_page_table
   add esp, 4
 
-  /* ECX = n˙mero de tablas de p·gina necesarias para mapear el primer MB de
-   * memoria, el kernel, los mÛdulos adicionales, el directorio de tablas de
-   * p·gina y las tablas de p·gina. */ 
+  /* ECX = n√∫mero de tablas de p√°gina necesarias para mapear el primer MB de
+   * memoria, el kernel, los m√≥dulos adicionales, el directorio de tablas de
+   * p√°gina y las tablas de p√°gina. */ 
   mov ecx, DWORD PTR [kernel_page_tables - KERNEL_VIRT_OFFSET]
 
  /*
-   Limpiar el espacio de las tablas de p·gina kernel.
-   Las tablas de p·gina comienzan en kernel_pd_addr + 0x1000
+   Limpiar el espacio de las tablas de p√°gina kernel.
+   Las tablas de p√°gina comienzan en kernel_pd_addr + 0x1000
   */
   
- /* Obtener la ubicaciÛn del directorio de tablas de p·gina en EAX y sumar
-  * 4096 (0x1000) para ubicarnos en la siguiente p·gina. */
+ /* Obtener la ubicaci√≥n del directorio de tablas de p√°gina en EAX y sumar
+  * 4096 (0x1000) para ubicarnos en la siguiente p√°gina. */
   mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
   add eax, 0x1000
   
 flush_page_tables:
-  /* Limpiar la tabla de p·ginas*/
+  /* Limpiar la tabla de p√°ginas*/
   push eax
   call flush_page_table
   add esp, 4
-  /* Avanzar a la siguiente tabla de p·ginas */
+  /* Avanzar a la siguiente tabla de p√°ginas */
   add eax, 0x1000
   loop flush_page_tables
 
-   /* EAX contiene la direcciÛn fÌsica en donde termina la ˙ltima tabla de
-   * p·ginas */
+   /* EAX contiene la direcci√≥n f√≠sica en donde termina la √∫ltima tabla de
+   * p√°ginas */
    mov [kernel_initial_pagetables_end - KERNEL_VIRT_OFFSET], eax
 
-  /* Inicializar las tablas de p·ginas para el primer MB y el kernel */
+  /* Inicializar las tablas de p√°ginas para el primer MB y el kernel */
 
-  /* ECX = numero de p·ginas del primer MB de memoria y el kernel */
+  /* ECX = numero de p√°ginas del primer MB de memoria y el kernel */
    mov ecx, DWORD PTR [total_kernel_pages - KERNEL_VIRT_OFFSET]
 
    mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
    mov edi, eax
    add edi, 0x1000
 
-   /* Se mapean las direcciones fÌsicas a partir de 0x000000 */
+   /* Se mapean las direcciones f√≠sicas a partir de 0x000000 */
    xor eax, eax
    /* Adicionar flags 00000000000000000011 = R/W = 1, P = 1*/
    or eax, 3 
@@ -463,25 +463,25 @@ init_pagetables:
   add eax, 0x1000
   loop init_pagetables
 
-  /* Configurar las entradas en el directorio de tablas de p·gina, de acuerdo
-   * con el n˙mero de tablas de p·gina necesarias */
+  /* Configurar las entradas en el directorio de tablas de p√°gina, de acuerdo
+   * con el n√∫mero de tablas de p√°gina necesarias */
 
-  /* Al activar la paginaciÛn, se requiere que la p·gina que se est· ejecutando
-   * actualmente (la que activa la paginaciÛn) se encuentre mapeada 1:1. Para
+  /* Al activar la paginaci√≥n, se requiere que la p√°gina que se est√° ejecutando
+   * actualmente (la que activa la paginaci√≥n) se encuentre mapeada 1:1. Para
    * simplificar el proceso, se mapea 1:1 el primer MB de memoria y el kernel.*/
 
-  /* ECX = n˙mero de tablas de p·gina necesarias para mapear el primer MB de
-   * memoria, el kernel, los mÛdulos adicionales el directorio de tablas de
-   * p·gina y las tablas de p·gina. */
+  /* ECX = n√∫mero de tablas de p√°gina necesarias para mapear el primer MB de
+   * memoria, el kernel, los m√≥dulos adicionales el directorio de tablas de
+   * p√°gina y las tablas de p√°gina. */
   mov ecx, DWORD PTR [kernel_page_tables - KERNEL_VIRT_OFFSET ]
    
-  /* EAX = DirecciÛn fÌsica del directorio de tablas de p·gina */
+  /* EAX = Direcci√≥n f√≠sica del directorio de tablas de p√°gina */
   mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
 
   /* EDI = EAX */
   mov edi, eax
 
-  /* EAX = UbicaciÛn de la primera tabla de p·gina: EAX + 4096 (0x1000) */
+  /* EAX = Ubicaci√≥n de la primera tabla de p√°gina: EAX + 4096 (0x1000) */
   add eax, 0x1000
   /* Adicionar flags 00000000000000000011 = R/W = 1, P = 1*/
   or eax, 3 
@@ -491,41 +491,41 @@ map_kernel_in_low_memory:
    add eax, 0x1000
    loop map_kernel_in_low_memory
 
-  /* ECX = n˙mero de tablas de p·gina necesarias para mapear el primer MB de
-   * memoria, el kernel, los mÛdulos adicionales el directorio de tablas de
-   * p·gina y las tablas de p·gina. */
+  /* ECX = n√∫mero de tablas de p√°gina necesarias para mapear el primer MB de
+   * memoria, el kernel, los m√≥dulos adicionales el directorio de tablas de
+   * p√°gina y las tablas de p√°gina. */
   mov ecx, DWORD PTR [kernel_page_tables - KERNEL_VIRT_OFFSET ]
    
-  /* EAX = DirecciÛn fÌsica del directorio de tablas de p·gina */
+  /* EAX = Direcci√≥n f√≠sica del directorio de tablas de p√°gina */
   mov edi, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
 
   /* Configurar las entradas correspondientes del directorio a las tablas
-   * de p·gina que apuntan a la posiciÛn del kernel en memoria virtual */ 
+   * de p√°gina que apuntan a la posici√≥n del kernel en memoria virtual */ 
 
    /* EBX = Desplazamiento en el espacio virtual de direcciones en el cual se
-	* mapear· el primer MB de memoria, el kernel y las tablas de p·gina. */
+	* mapear√° el primer MB de memoria, el kernel y las tablas de p√°gina. */
    mov ebx, KERNEL_VIRT_OFFSET
 
-   /* Obtener el n˙mero de entrada correspondiente en el directorio para la
-	* direcciÛn virtual en la cual se mapear· el primer MB y el kernel */
+   /* Obtener el n√∫mero de entrada correspondiente en el directorio para la
+	* direcci√≥n virtual en la cual se mapear√° el primer MB y el kernel */
    shr ebx, 22
 
    /* Y multiplicar por 4 (bytes por entrada) para encontrar el desplazamiento a
 	* partir del inicio del directorio */
    shl ebx, 2
 
-   /*Ubicar la entrada correspondiente en el directorio de tablas de p·gina */
+   /*Ubicar la entrada correspondiente en el directorio de tablas de p√°gina */
 
    /* Adicionar los bytes calculados en EBX para avanzar a la entrada
-	* correspondiente en el directorio para la ubicaciÛn del kernel en la
+	* correspondiente en el directorio para la ubicaci√≥n del kernel en la
 	* memoria virtual */
    add edi, ebx
 
-  /* Las entradas del directorio de p·gina apuntan a las mismas tablas de pagina
+  /* Las entradas del directorio de p√°gina apuntan a las mismas tablas de pagina
    * del primer MB de memoria y el kernel */
    mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
 
-  /* EAX = UbicaciÛn de la primera tabla de p·gina: EAX + 4096 (0x1000) */
+  /* EAX = Ubicaci√≥n de la primera tabla de p√°gina: EAX + 4096 (0x1000) */
    add eax, 0x1000
    
    /* Adicionar flags 00000000000000000011 = R/W = 1, P = 1*/
@@ -536,33 +536,33 @@ map_kernel_in_high_memory:
    add eax, 0x1000
    loop map_kernel_in_high_memory
 
-   /* EAX = direcciÛn fÌsica del directorio de tablas de p·gina */
+   /* EAX = direcci√≥n f√≠sica del directorio de tablas de p√°gina */
    mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
 
-   /* Almacenar la direcciÛn fÌsica del directorio de tablas de p·gina en el
+   /* Almacenar la direcci√≥n f√≠sica del directorio de tablas de p√°gina en el
 	* registro CR3*/
    mov cr3, eax
 
-   /* Activar la paginaciÛn: Establecer en 1 el bit 31 de CR0 */
+   /* Activar la paginaci√≥n: Establecer en 1 el bit 31 de CR0 */
    /* ENABLE_PAGING = 0x80000000 */
    mov eax, cr0
    or eax, ENABLE_PAGING
    mov cr0, eax
 
-  /* La especificaciÛn Multiboot recomienda cargar una nueva tabla global de
-   * descriptores tan pronto como sea necesario. Como se habilitÛ la paginaciÛn,
-   * es necesario cargar el registro GDTR con la direcciÛn LINEAL (en memoria
+  /* La especificaci√≥n Multiboot recomienda cargar una nueva tabla global de
+   * descriptores tan pronto como sea necesario. Como se habilit√≥ la paginaci√≥n,
+   * es necesario cargar el registro GDTR con la direcci√≥n LINEAL (en memoria
    * virtual en este momento) en la cual se encuentra la GDT */
 
-   /* Load GDT : UbicaciÛn fÌsica del apuntador a la GDT */
+   /* Load GDT : Ubicaci√≥n f√≠sica del apuntador a la GDT */
    lgdt [kernel_gdt_pointer]
 
    /* LJMP permite cargar en CS el selector correspondiente al descriptor de
     * segmento de datos de 32 bits definido en nuestra GDT */
    ljmp KERNEL_CODE_SELECTOR : OFFSET after_gdt_is_loaded
 
-/* La ejecuciÛn contin˙a en este punto, y el registro de segmento CS ya contiene
- * el valor 0x08. Esta entrada en la GDT define el segmento de cÛdigo para el
+/* La ejecuci√≥n contin√∫a en este punto, y el registro de segmento CS ya contiene
+ * el valor 0x08. Esta entrada en la GDT define el segmento de c√≥digo para el
  * kernel.*/
 after_gdt_is_loaded:
 
@@ -575,36 +575,36 @@ after_gdt_is_loaded:
   mov gs, eax
   mov ss, eax
 
-  /* Los selectores de los registros de cÛdigo y datos ya referencian los
+  /* Los selectores de los registros de c√≥digo y datos ya referencian los
    * descriptores configurados en la GDT.  */
 
     /* Ya se encuentra activada la memoria virtual!.
     * El primer MB de memoria y el kernel se encuentran mapeados en
     * KERNEL_VIRT_ADDR.  A partir de este punto, todas las direcciones de
-    * variable (OFFSET) son v·lidas y apuntan a la ubicaciÛn del kernel en
+    * variable (OFFSET) son v√°lidas y apuntan a la ubicaci√≥n del kernel en
     * memoria virtual.
     
-   /* EAX = direcciÛn (virtual) de la etiqueta on_virtual_memory */
+   /* EAX = direcci√≥n (virtual) de la etiqueta on_virtual_memory */
    lea eax, [on_virtual_memory]
 
-   /* Saltar a la direcciÛn en la memoria virtual!. Dado que esta direcciÛn se
-    * encuentra mapeada correctamente, no deberÌa ocurrir fallo de p·gina. */
+   /* Saltar a la direcci√≥n en la memoria virtual!. Dado que esta direcci√≥n se
+    * encuentra mapeada correctamente, no deber√≠a ocurrir fallo de p√°gina. */
    jmp eax
 
 on_virtual_memory:
 
-  /* El kernel ya se est· ejecutando en su posiciÛn de memoria virtual!
+  /* El kernel ya se est√° ejecutando en su posici√≥n de memoria virtual!
   */
 
- /* Configurar la pila en la nueva posiciÛn del kernel */
+ /* Configurar la pila en la nueva posici√≥n del kernel */
   mov esp, OFFSET kernel_stack_end
   
   /* Pasar el control a la rutina 'cmain' en el archivo kernel.c */
   call cmain 
 
-  /* La funciÛn cmain() retorna a este punto. Se debe entrar en un ciclo
+  /* La funci√≥n cmain() retorna a este punto. Se debe entrar en un ciclo
   infinito, para que el procesador no siga ejecutando instrucciones al finalizar
-  la ejecuciÛn del kernel. */
+  la ejecuci√≥n del kernel. */
 
 kernel_finished:	
     hlt
@@ -882,13 +882,13 @@ isr_no_error_code 254
 isr_no_error_code 255
 
 /**
- * Todas las ISR contin˙an su ejecuciÛn en este punto.
- * Guarda el estado del procesador en la posiciÛn actual de la pila, pasa a una
+ * Todas las ISR contin√∫an su ejecuci√≥n en este punto.
+ * Guarda el estado del procesador en la posici√≥n actual de la pila, pasa a una
  * pila temporal del kernel e invoca la rutina de C llamada
  * interrupt_dispatcher.
  * Cuando esta rutina retorna, recupera el estado del procesador almacenado en
  * la ubicacion de current_ss:current_esp y retorna el control al punto en el
- * cual se interrumpiÛ el procesador.
+ * cual se interrumpi√≥ el procesador.
 */
 handle_isr:
 	/* Almacenar en la pila los registros de proposito general en el siguiente
@@ -994,14 +994,14 @@ return_from_interrupt:
 	/*
 	Ahora la pila luce asi:
 	+--------------------------+
-	| old ss                   | Si ocurriÛ un cambio de contexto de pila,
-	|--------------------------| se almacena la posiciÛn de la pila anterior
+	| old ss                   | Si ocurri√≥ un cambio de contexto de pila,
+	|--------------------------| se almacena la posici√≥n de la pila anterior
 	| old esp                  | (SS:ESP).
 	|--------------------------|
 	| eflags                   | Estado del procesador (EFLAGS)
 	|--------------------------|
-	| old cs                   | DirecciÛn lineal CS:EIP a la cual se debe
-	|--------------------------| retornar (punto en el cual se interrumpiÛ
+	| old cs                   | Direcci√≥n lineal CS:EIP a la cual se debe
+	|--------------------------| retornar (punto en el cual se interrumpi√≥
 	| old eip                  | el procesador)
 	+--------------------------+ <-- ESP (tope de la pila)
 	*/
@@ -1271,9 +1271,9 @@ isr_table:
 .long isr255
 
 /** 
-* Imprime un mensaje en la ˙ltima lÌnea de la pantalla  y bloquea el
+* Imprime un mensaje en la √∫ltima l√≠nea de la pantalla  y bloquea el
 * kernel.
-* Entrada: [ebp + 8] : DirecciÛn del mensaje a imprimir
+* Entrada: [ebp + 8] : Direcci√≥n del mensaje a imprimir
 * Esta rutina no retorna.
 */
 kdebug:
@@ -1289,8 +1289,8 @@ kdebug:
   xor edi, edi
   mov edi, 0xB8000
   
-  /* Avanzar el cursor a la primera columna de la ˙ltima lÌnea en la pantalla */
-  /* 24 lÌneas * 80 columnas * 2 bytes por caracter = 3840 */
+  /* Avanzar el cursor a la primera columna de la √∫ltima l√≠nea en la pantalla */
+  /* 24 l√≠neas * 80 columnas * 2 bytes por caracter = 3840 */
   add edi, 3840
 
 1:
@@ -1307,16 +1307,16 @@ kdebug:
    hlt
    jmp 3b
 
-  /* Esta rutina no deberÌa llegar a este punto! sin embargo, realizar el
+  /* Esta rutina no deber√≠a llegar a este punto! sin embargo, realizar el
    * proceso normal para  retornar de la rutina. */
   mov esp, ebp
   pop ebp
   ret
 
 /*
-* Limpia una tabla de p·ginas
+* Limpia una tabla de p√°ginas
 * Entrada:
-* [ebp + 8] : DirecciÛn de la tabla a limpiar
+* [ebp + 8] : Direcci√≥n de la tabla a limpiar
 */
 flush_page_table:
    push ebp
@@ -1341,8 +1341,8 @@ flush_page_table:
    pop ebp
    ret
 
-/* Variables (globales) del kernel. Se acceden desde este cÛdigo en ensamblador
- * y tambiÈn podr·n ser accedidas desde el cÛdigo en C. */
+/* Variables (globales) del kernel. Se acceden desde este c√≥digo en ensamblador
+ * y tambi√©n podr√°n ser accedidas desde el c√≥digo en C. */
 .section .startdata
 
 /* Tabla Global de Descriptores (GDT) del kernel. */
@@ -1352,58 +1352,58 @@ kernel_gdt:
     /* La primera entrada del gdt debe ser nula */
    gdt_entry 0, 0, 0, 0, 0, 0, 0, 0
 
-    /* Descriptor de segmento de cÛdigo de 32 bits para el kernel */
+    /* Descriptor de segmento de c√≥digo de 32 bits para el kernel */
    gdt_entry 1, 0, 0xFFFFFFFF, CODE_SEGMENT, RING0_DPL, 1, 1, 1
     /* Descriptor de segmento de datos de 32 bits para el kernel */
    gdt_entry 1, 0, 0xFFFFFFFF, DATA_SEGMENT, RING0_DPL, 1, 1, 1
 
-    /* Descriptor de segmento de cÛdigo de 32 bits para las tareas */
+    /* Descriptor de segmento de c√≥digo de 32 bits para las tareas */
    gdt_entry 1, 0, 0xFFFFFFFF, CODE_SEGMENT, RING3_DPL, 1, 1, 1
     /* Descriptor de segmento de datos de 32 bits para las tareas */
    gdt_entry 1, 0, 0xFFFFFFFF, DATA_SEGMENT, RING3_DPL, 1, 1, 1
 
-    /* Descriptor de segmento de cÛdigo de 16 bits para el kernel */
+    /* Descriptor de segmento de c√≥digo de 16 bits para el kernel */
    gdt_entry 1, 0, 0xFFFF, CODE_SEGMENT, RING0_DPL, 1, 0, 0
     /* Descriptor de segmento de datos de 16 bits para el kernel */
    gdt_entry 1, 0, 0xFFFF, DATA_SEGMENT, RING0_DPL, 1, 0, 0
 
-    /*Espacio para otros descriptores de segmento (TSS), cÛdigo y datos para las
+    /*Espacio para otros descriptores de segmento (TSS), c√≥digo y datos para las
 	 * tareas, etc. */
 	.space MAX_GDT_ENTRIES - (( . - kernel_gdt) >> 3), 0
 
 /*Apuntador a la tabla global de descriptores, que se usa en la instruccion
 LGDT.
  Debe contener un word (16 bits) con el tamano del gdt (numero de entradas * 8
- bytes /entrada) - 1, y la direcciÛn LINEAL de 32 bits en la cual se encuentra
+ bytes /entrada) - 1, y la direcci√≥n LINEAL de 32 bits en la cual se encuentra
  la tabla de descriptores globales (GDT).
 */
 kernel_gdt_pointer:
-   /* Tamano de la GDT - 1: . (direcciÛn actual) - (direcciÛn del gdt) - 1 */
+   /* Tamano de la GDT - 1: . (direcci√≥n actual) - (direcci√≥n del gdt) - 1 */
    .word . - kernel_gdt - 1 
- /* DirecciÛn LINEAL de 32 bits en la cual se encuentra la GDT.
- La GDT se carga DESPU…S de habilitar la paginaciÛn, por lo cual la direcciÛn
- lineal proporcionada es la ubicaciÛn de la GDT EN MEMORIA VIRTUAL.
+ /* Direcci√≥n LINEAL de 32 bits en la cual se encuentra la GDT.
+ La GDT se carga DESPU√âS de habilitar la paginaci√≥n, por lo cual la direcci√≥n
+ lineal proporcionada es la ubicaci√≥n de la GDT EN MEMORIA VIRTUAL.
  */
    .long  kernel_gdt
 
-/* Tabla de Descriptores de InterrupciÛn (IDT) del kernel */
+/* Tabla de Descriptores de Interrupci√≥n (IDT) del kernel */
 .align 8
 .global kernel_idt
 kernel_idt:
   .space 8 * MAX_IDT_ENTRIES, 0
 
-/*Apuntador a la tabla de descriptores de interrupciÛn, usada en la instrucciÛn
+/*Apuntador a la tabla de descriptores de interrupci√≥n, usada en la instrucci√≥n
  * LIDT.
  Debe contener un word (16 bits) con el tamano en bytes de la IDT -1 1, y la
- direcciÛn LINEAL de 32 bits en la cual se encuentra tabla en memoria.
+ direcci√≥n LINEAL de 32 bits en la cual se encuentra tabla en memoria.
 */
 .global kernel_idt_pointer
 kernel_idt_pointer:
-   /* Tamano de la IDT - 1: . (direcciÛn actual) - (inicio de la IDT ) - 1 */
+   /* Tamano de la IDT - 1: . (direcci√≥n actual) - (inicio de la IDT ) - 1 */
   .word . - kernel_idt - 1
- /* DirecciÛn LINEAL de 32 bits en la cual se encuentra la IDT.
- La IDT se carga DESPU…S de habilitar la paginaciÛn, por lo cual la direcciÛn
- lineal proporcionada es la ubicaciÛn de la IDT EN MEMORIA VIRTUAL.
+ /* Direcci√≥n LINEAL de 32 bits en la cual se encuentra la IDT.
+ La IDT se carga DESPU√âS de habilitar la paginaci√≥n, por lo cual la direcci√≥n
+ lineal proporcionada es la ubicaci√≥n de la IDT EN MEMORIA VIRTUAL.
  */
   .long kernel_idt
 
@@ -1411,27 +1411,27 @@ kernel_idt_pointer:
 kernel_size:
 .long kernel_size_bytes
 
-/* N˙mero de p·ginas que ocupa el kernel, el directorio de tabla de p·ginas y
- * las tablas de p·gina necesarias para mapear el primer MB de memoria, el
- * kernel y los mÛdulos cargados junto con el kernel en la memoria virtual. Su
- * valor inicial lo calcula el linker, pero se actualiza adicionando el n˙mero
- * de p·ginas necesarias para almacenar el directorio de tablas de p·gina y las
- * tablas d ep·gina para mapear el kernel en memoria virtual. */
+/* N√∫mero de p√°ginas que ocupa el kernel, el directorio de tabla de p√°ginas y
+ * las tablas de p√°gina necesarias para mapear el primer MB de memoria, el
+ * kernel y los m√≥dulos cargados junto con el kernel en la memoria virtual. Su
+ * valor inicial lo calcula el linker, pero se actualiza adicionando el n√∫mero
+ * de p√°ginas necesarias para almacenar el directorio de tablas de p√°gina y las
+ * tablas d ep√°gina para mapear el kernel en memoria virtual. */
 
 total_kernel_pages:
 .long tmp_total_kernel_pages
 
-/* N˙mero de tablas de p·gina necesarias para mapear las p·ginas que ocupa el
- * primer MB de memoria, el kernel y los mÛdulos cargados por GRUB */
+/* N√∫mero de tablas de p√°gina necesarias para mapear las p√°ginas que ocupa el
+ * primer MB de memoria, el kernel y los m√≥dulos cargados por GRUB */
  .global kernel_page_tables
 kernel_page_tables:
 .long 0
 
-/* Variable que almacena la direcciÛn fÌsica en la cual se encuentra el
- * directorio de tablas de p·gina del kernel. Inicialmente se supone que se
- * encuentra justo al final del kernel en la direcciÛn kernel_phys_end
+/* Variable que almacena la direcci√≥n f√≠sica en la cual se encuentra el
+ * directorio de tablas de p√°gina del kernel. Inicialmente se supone que se
+ * encuentra justo al final del kernel en la direcci√≥n kernel_phys_end
  * calculada por el linker (ver link.ld). pero su valor se debe actualizar si se
- * han cargado mÛdulos adicionales. */
+ * han cargado m√≥dulos adicionales. */
 .global kernel_pd_addr
 kernel_pd_addr:
 .long kernel_phys_end
@@ -1459,8 +1459,8 @@ interrupt_stack_base:
 interrupt_stack_top: /* Tope de la pila temporal del kernel */
 .long 0x00000000
 
-/* Variable que almacena la direcciÛn fÌsica en la cual se encuentra la
- * Estructura de InformaciÛn Multiboot. Esta direcciÛn fÌsica es almacenada por
+/* Variable que almacena la direcci√≥n f√≠sica en la cual se encuentra la
+ * Estructura de Informaci√≥n Multiboot. Esta direcci√≥n f√≠sica es almacenada por
  * GRUB en el registro EBX al momento de pasar el control al kernel. */
 .global multiboot_info_location
 multiboot_info_location:
@@ -1474,7 +1474,7 @@ no_multiboot_loader:
 no_memory_info:
   .asciz "No se cuenta con el mapa de la memoria RAM"
 
-/* Almacena la direcciÛn fÌsica en la cual terminan las tablas de p·gina y
+/* Almacena la direcci√≥n f√≠sica en la cual terminan las tablas de p√°gina y
  * comienza la "memoria disponible" que puede ser usada por el kernel. */
 .global kernel_initial_pagetables_end
 kernel_initial_pagetables_end:
@@ -1486,13 +1486,13 @@ kernel_stack:
 .space KERNEL_STACK_SIZE
 kernel_stack_end:
 
-/* Mapa de bits para gestionar la memoria fÌsica.
-* Este mapa de bits permite gestionar hasta 4 GB de memoria fÌsica, que tendrÌa
-* 2 ^ 20 p·ginas de 4 KB. Dado que se requiere un bit para cada p·gina, el mapa
+/* Mapa de bits para gestionar la memoria f√≠sica.
+* Este mapa de bits permite gestionar hasta 4 GB de memoria f√≠sica, que tendr√≠a
+* 2 ^ 20 p√°ginas de 4 KB. Dado que se requiere un bit para cada p√°gina, el mapa
 * de bits completo ocupa 2 ^ 20 bits = 2 ^ 17 bytes = 128 KB = 0x20000.
 */
 .align 4096
-/* El mapa de bits se alinea a nivel de p·ginas*/
+/* El mapa de bits se alinea a nivel de p√°ginas*/
 .global kernel_memory_bitmap
 kernel_memory_bitmap:
 .space 0x20000

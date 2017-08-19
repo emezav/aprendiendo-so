@@ -16,7 +16,7 @@
 #include <stdlib.h>
 
 /** @brief Arreglo que contiene los apuntadores a las rutinas de manejo de
- * interrupci髇
+ * interrupci贸n
  */
 irq_handler irq_handlers[MAX_IRQ_ROUTINES];
 
@@ -33,7 +33,7 @@ irq_handler irq_handlers[MAX_IRQ_ROUTINES];
 void irq_dispatcher(interrupt_state * state);
 
 /**
- * @brief Funci髇 que se encarga de re-mapear las IRQ 0x8 a 0xF.
+ * @brief Funci贸n que se encarga de re-mapear las IRQ 0x8 a 0xF.
  * @details Al arranque, las IRQ 0 a 7 estan mapeadas a las interrupciones
  * 0x8 - 0xF. Estas entradas estan asignadas por defecto a las excepciones x86
  * (la entrada 8 es Double Fault, por ejemplo).
@@ -42,17 +42,17 @@ void irq_dispatcher(interrupt_state * state);
 void irq_remap(void);
 
 
-/* Implementaci髇 de las rutinas */
+/* Implementaci贸n de las rutinas */
 
 void irq_remap(void) {
-	/** Reprogramaci髇 del PIC  */
+	/** Reprogramaci贸n del PIC  */
 
 	/** Initialization Command Word 1 - ICW1
 	Esta es la palabra primaria para inicializar el PIC.
 	Para inicializar el PIC se requiere que los bits 0 y 4 de ICW1 esten en
 	1 y los demas en 0. Esto significa que el valor de ICW1 es 0x11.
 	ICW1 debe ser escrita en el  registro de comandos del PIC maestro
-	(direcci髇 de e/s 0x20). Si existe un PIC esclavo, ICW1 se debe enviar
+	(direcci贸n de e/s 0x20). Si existe un PIC esclavo, ICW1 se debe enviar
 	tambien su registro de comandos del PIC esclavo (0xA0)
 	*/
 
@@ -60,7 +60,7 @@ void irq_remap(void) {
 	outb(SLAVE_PIC_COMMAND_PORT, 0x11);
 
 	/** Initialization Command Word 2 - ICW2
-	Esta palabra permite definir la direcci髇 base (inicial) en la tabla de
+	Esta palabra permite definir la direcci贸n base (inicial) en la tabla de
 	descriptores de interrupcion que el PIC va a utilizar.
 
 	Debido a que las primeras 32 entradas estan reservadas para las
@@ -70,7 +70,7 @@ void irq_remap(void) {
 
 	Al utilizar los PIC en cascada, se debe enviar ICW2 a los dos
 	controladores en su registro de datos (0x21 y 0xA1 para maestro y
-	esclavo respectivamente), indicando la direcci髇 en la IDT que va a ser
+	esclavo respectivamente), indicando la direcci贸n en la IDT que va a ser
 	utilizada por cada uno de ellos.
 
 	Las primeras 8 IRQ van a ser manejadas por el PIC maestro y se mapearan
@@ -146,7 +146,7 @@ void setup_irq(void) {
 /**
  * @brief Permite definir un nuevo manejador de IRQ
  * @param number numero de irq a configurar
- * @param handler Funci髇 a manejar la irq
+ * @param handler Funci贸n a manejar la irq
  */
 void install_irq_handler(int number, irq_handler handler){
 	/* Simplemente sobre-escribir la rutina anterior, si existe.

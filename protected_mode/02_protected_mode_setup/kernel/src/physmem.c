@@ -3,10 +3,10 @@
  * @ingroup kernel_code 
  * @author Erwin Meza <emezav@gmail.com>
  * @copyright GNU Public License. 
- * @brief Contiene la implementaciÛn de las rutinas relacionadas
- * con la gestiÛn de memoria fÌsica mediante un mapa de bits.
+ * @brief Contiene la implementaci√≥n de las rutinas relacionadas
+ * con la gesti√≥n de memoria f√≠sica mediante un mapa de bits.
  * La memoria se gestiona en unidades de PAGE_SIZE denominadas marcos de
- * p·gina.
+ * p√°gina.
  */
 
 #include <console.h>
@@ -16,8 +16,8 @@
 #include <multiboot.h>
 #include <stdlib.h>
 
-/* Variable definida en start.S que almacena la direcciÛn fÌsica en la cual
- * terminan las tablas de p·gina iniciales del kernel */
+/* Variable definida en start.S que almacena la direcci√≥n f√≠sica en la cual
+ * terminan las tablas de p√°gina iniciales del kernel */
 extern unsigned int kernel_initial_pagetables_end;
 
 /** @brief Mapa de bits de memoria disponible
@@ -46,17 +46,17 @@ extern unsigned int kernel_initial_pagetables_end;
 unsigned int memory_bitmap_length =
 		~(0x0) / (PAGE_SIZE * BITS_PER_ENTRY);
 
-/** @brief Variable global del kernel que almacena el inicio de la regiÛn
+/** @brief Variable global del kernel que almacena el inicio de la regi√≥n
  * de memoria disponible */
 unsigned int memory_start;
 /** @brief Variable global del kernel que almacena el tamano en bytes de
  * la memoria disponible */
 unsigned int memory_length;
 
-/** @brief MÌnima direcciÛn de memoria permitida para liberar */
+/** @brief M√≠nima direcci√≥n de memoria permitida para liberar */
 unsigned int allowed_free_start;
 
-/* @brief Variable que almacena la ubicaciÛn de la estructura multiboot en
+/* @brief Variable que almacena la ubicaci√≥n de la estructura multiboot en
  * memoria. Definida en start.S */
 extern unsigned int multiboot_info_location;
 
@@ -69,7 +69,7 @@ void setup_physical_memory(void){
 	extern multiboot_header_t multiboot_header;
   extern unsigned int kernel_memory_bitmap;
 
-    /*Ubicar el mapa de bits justo despuÈs de las tablas de p·gina iniciales en
+    /*Ubicar el mapa de bits justo despu√©s de las tablas de p√°gina iniciales en
      * memoria. */
   memory_bitmap = (unsigned int*)&kernel_memory_bitmap;
 
@@ -81,27 +81,27 @@ void setup_physical_memory(void){
     unsigned int mmap_address;
     unsigned int mods_address;
 
-    /* Dado que ya se habilitÛ la memoria virtual, se debe usar la
-     * direcciÛn virtual en la cual se encuentra mapeada la estructura de
-     * informaciÛn multiboot. */
+    /* Dado que ya se habilit√≥ la memoria virtual, se debe usar la
+     * direcci√≥n virtual en la cual se encuentra mapeada la estructura de
+     * informaci√≥n multiboot. */
 	multiboot_info_t * info = (multiboot_info_t *)(multiboot_info_location + KERNEL_VIRT_OFFSET);
 
 	int i;
 
-	unsigned int mods_end; /* Almacena la direcciÛn de memoria final
+	unsigned int mods_end; /* Almacena la direcci√≥n de memoria final
 	del ultimo modulo cargado, o 0 si no se cargaron modulos. */
 
 	for(i=0; i<memory_bitmap_length; i++){
 		memory_bitmap[i] = 0;
 	}
 
-	/* si flags[3] = 1, se especificaron mÛdulos que deben ser cargados junto
-	 * con el kernel y justo despuÈs del mismo. */
+	/* si flags[3] = 1, se especificaron m√≥dulos que deben ser cargados junto
+	 * con el kernel y justo despu√©s del mismo. */
 
 	mods_end = 0;
 
-    /* Se debe sumar KERNEL_VIRT_OFFSET a la direcciÛn, dado que ya se
-     * activÛ la memoria virtual. */
+    /* Se debe sumar KERNEL_VIRT_OFFSET a la direcci√≥n, dado que ya se
+     * activ√≥ la memoria virtual. */
 	if (test_bit(info->flags, 3)) {
 		mod_info_t * mod_info;
         mods_address = info->mods_addr + KERNEL_VIRT_OFFSET;
@@ -110,7 +110,7 @@ void setup_physical_memory(void){
 				mod_count++, mod_info++) {
 			if (mod_info->mod_end > mods_end) {
 				/* Los modulos se redondean a limites de 4 KB, redondear
-				 * la direcciÛn final del modulo a un limite de 4096 */
+				 * la direcci√≥n final del modulo a un limite de 4096 */
 				mods_end = mod_info->mod_end + (mod_info->mod_end % 4096);
 			}
 		}
@@ -120,7 +120,7 @@ void setup_physical_memory(void){
 	/* si flags[6] = 1, los campos mmap_length y mmap_addr son validos */
 
 	/* Revisar las regiones de memoria, y extraer la region de memoria
-	 * de mayor tamano, marcada como disponible, cuya direcciÛn base sea
+	 * de mayor tamano, marcada como disponible, cuya direcci√≥n base sea
 	* mayor o igual a la posicion del kernel en memoria.
 	*/
 
@@ -130,17 +130,17 @@ void setup_physical_memory(void){
 	free_frames = 0;
 
 	/* Suponer que el inicio de la memoria disponible se encuentra
-	 * al finalizar el kernel, los mÛdulos, el directorio de tablas de p·gina y
-     * las tablas de p·gina del kernel. */
+	 * al finalizar el kernel, los m√≥dulos, el directorio de tablas de p√°gina y
+     * las tablas de p√°gina del kernel. */
 	allowed_free_start = kernel_initial_pagetables_end;
 
 
-	/** Existe un mapa de memoria v·lido creado por GRUB? */
+	/** Existe un mapa de memoria v√°lido creado por GRUB? */
 	if (test_bit(info->flags, 6)) {
         
 		memory_map_t *mmap;
 
-        /* Calcular la direcciÛn virtual del mapa de memoria*/
+        /* Calcular la direcci√≥n virtual del mapa de memoria*/
         mmap_address = info->mmap_addr + KERNEL_VIRT_OFFSET;
 
 		for (mmap = (memory_map_t *) (mmap_address);
@@ -149,7 +149,7 @@ void setup_physical_memory(void){
 									 + mmap->entry_size
 									 + sizeof (mmap->entry_size))) {
 
-	  /** Verificar si la regiÛn de memoria cumple con las condiciones
+	  /** Verificar si la regi√≥n de memoria cumple con las condiciones
 	   * para ser considerada "memoria disponible".
 	   *
 	   * Importante: Si se supone un procesador de 32 bits, los valores
@@ -164,7 +164,7 @@ void setup_physical_memory(void){
 	   * 	1 MB.
 	   * - Tener su atributo 'type' en 1 = memoria disponible.
 	   * */
-		 /* La region esta marcada como disponible y su direcciÛn base
+		 /* La region esta marcada como disponible y su direcci√≥n base
 		  * es igual o superior a 1 MB? */
 		 if (mmap->type == 1 && mmap->base_addr_low >= 0x100000)  {
 			 tmp_start = mmap->base_addr_low;
@@ -179,11 +179,11 @@ void setup_physical_memory(void){
 				 */
 				 tmp_start =kernel_initial_pagetables_end;
 
-				 /* Ahora verificar si ser cargaron mÛdulos junto con el
+				 /* Ahora verificar si ser cargaron m√≥dulos junto con el
 				  * kernel. Estos modulos se cargan en regiones continuas
 				  * al kernel.
-				  * Si es asÌ, la nueva posiciÛn inicial de la memoria
-				  * disponible es la posiciÛn en la cual terminan los mÛdulos
+				  * Si es as√≠, la nueva posici√≥n inicial de la memoria
+				  * disponible es la posici√≥n en la cual terminan los m√≥dulos
 				  * */
 				 if (mods_end > 0 &&
 						 mods_end >= tmp_start &&
@@ -210,32 +210,32 @@ void setup_physical_memory(void){
 		} //endfor
 	}
 
-	/* Existe una regiÛn de memoria disponible? */
+	/* Existe una regi√≥n de memoria disponible? */
 	if (memory_start > 0 && memory_length > 0) {
-		/* Antes de retornar, establecer la minima direcciÛn de memoria
+		/* Antes de retornar, establecer la minima direcci√≥n de memoria
 		 * permitida para liberar*/
 
 		tmp_start = memory_start;
-		/* Calcular la direcciÛn en la cual finaliza la memoria disponible */
+		/* Calcular la direcci√≥n en la cual finaliza la memoria disponible */
 		tmp_end = tmp_start + tmp_length;
 
-		/* Redondear el inicio y el fin de la regiÛn de memoria disponible a
-         * p·ginas */
+		/* Redondear el inicio y el fin de la regi√≥n de memoria disponible a
+         * p√°ginas */
 		tmp_end = ROUND_DOWN_TO_PAGE(tmp_end);
 		tmp_start = ROUND_UP_TO_PAGE(tmp_start);
 
-		/* Calcular el tamano de la regiÛn de memoria disponible, redondeada
-		 * a lÌmites de p·gina */
+		/* Calcular el tamano de la regi√≥n de memoria disponible, redondeada
+		 * a l√≠mites de p√°gina */
 		tmp_length = tmp_end - tmp_start;
 
 		/* Actualizar las variables globales del kernel */
 		memory_start = tmp_start;
 		memory_length = tmp_length;
 
-		/* Marcar la regiÛn de memoria como disponible */
+		/* Marcar la regi√≥n de memoria como disponible */
 		mark_available_memory(memory_start, memory_length);
 
-        /* Establecer la direcciÛn de memoria a partir de la cual se puede
+        /* Establecer la direcci√≥n de memoria a partir de la cual se puede
          * liberar memoria */
 		allowed_free_start = memory_start;
 		next_free_frame = allowed_free_start / PAGE_SIZE;
@@ -246,7 +246,7 @@ void setup_physical_memory(void){
 	}
  }
 
-/** @brief Permite verificar si el marco de p·gina se encuentra disponible. */
+/** @brief Permite verificar si el marco de p√°gina se encuentra disponible. */
 int test_frame(unsigned int frame) {
 	 volatile int entry = frame / BITS_PER_ENTRY;
 	 volatile int offset = frame % BITS_PER_ENTRY;
@@ -254,14 +254,14 @@ int test_frame(unsigned int frame) {
 }
 
 
-/** @brief  Permite marcar el marco de p·gina como ocupado */
+/** @brief  Permite marcar el marco de p√°gina como ocupado */
 void clear_frame(unsigned int frame) {
 	 volatile int entry = frame / BITS_PER_ENTRY;
 	 volatile int offset = frame % BITS_PER_ENTRY;
 	 memory_bitmap[entry] &= ~(0x1 << offset);
 }
 
-/** @brief Permite marcar el marco de p·gina como libre. */
+/** @brief Permite marcar el marco de p√°gina como libre. */
 void set_frame(unsigned int frame) {
 	 volatile int entry = frame / BITS_PER_ENTRY;
 	 volatile int offset = frame % BITS_PER_ENTRY;
@@ -271,7 +271,7 @@ void set_frame(unsigned int frame) {
 
 /**
  @brief Reserva un marco libre dentro del mapa de bits de memoria.
- * @return DirecciÛn de inicio del marco de p·gina, 0 si no existen marcos
+ * @return Direcci√≥n de inicio del marco de p√°gina, 0 si no existen marcos
  * disponibles
  */
 unsigned int allocate_frame(void) {
@@ -313,10 +313,10 @@ unsigned int allocate_frame(void) {
  	 return 0;
   }
 
-/** @brief Reserva una regiÛn de memoria contigua libre dentro del mapa de bits
+/** @brief Reserva una regi√≥n de memoria contigua libre dentro del mapa de bits
 * de memoria.
-* @param length Tamano de la regiÛn de memoria a asignar.
-* @return DirecciÛn de inicio de la regiÛn en memoria, 0 si no es posible
+* @param length Tamano de la regi√≥n de memoria a asignar.
+* @return Direcci√≥n de inicio de la regi√≥n en memoria, 0 si no es posible
 * reservar.
 */
 unsigned int allocate_frame_region(unsigned int length) {
@@ -346,15 +346,15 @@ unsigned int allocate_frame_region(unsigned int length) {
 			 for (i=frame; i<frame + frame_count; i++){
 				 result = (result && test_frame(i));
 			 }
-			 /* Marcar las p·ginas como ocupadas */
+			 /* Marcar las p√°ginas como ocupadas */
 			 if (result) {
 				 for (i=frame; i<frame + frame_count; i++){
-					 /* Descontar la p·gina tomada */
+					 /* Descontar la p√°gina tomada */
 					 free_frames--;
 					 clear_frame(i);
 				 }
 
-                 /* Avanzar en la posicion de busqueda del prÛximo marco
+                 /* Avanzar en la posicion de busqueda del pr√≥ximo marco
                   * disponible */
 				 next_free_frame = frame + frame_count;
 				 if (next_free_frame > base_frame + total_frames) {
@@ -374,9 +374,9 @@ unsigned int allocate_frame_region(unsigned int length) {
   }
 
 /**
- * @brief Permite liberar un marco de p·gina
- * @param addr DirecciÛn de inicio del marco. Se redondea hacia abajo si no es
- * m˙ltiplo de PAGE_SIZE
+ * @brief Permite liberar un marco de p√°gina
+ * @param addr Direcci√≥n de inicio del marco. Se redondea hacia abajo si no es
+ * m√∫ltiplo de PAGE_SIZE
  */
 void free_frame(unsigned int addr) {
 	 unsigned int start;
@@ -401,10 +401,10 @@ void free_frame(unsigned int addr) {
  }
 
 /**
- * @brief Marca una regiÛn de memoria como disponible
- * @param start_addr DirecciÛn de memoria del inicio de la regiÛn a marcar como
- * disponible. Se redondea por debajo a una p·gina
- * @param length Tamano de la regiÛn en bytes, m˙ltiplo de PAGE_SIZE
+ * @brief Marca una regi√≥n de memoria como disponible
+ * @param start_addr Direcci√≥n de memoria del inicio de la regi√≥n a marcar como
+ * disponible. Se redondea por debajo a una p√°gina
+ * @param length Tamano de la regi√≥n en bytes, m√∫ltiplo de PAGE_SIZE
  */
 void mark_available_memory(unsigned int start_addr, unsigned int length) {
 	 unsigned int start;
@@ -420,6 +420,6 @@ void mark_available_memory(unsigned int start_addr, unsigned int length) {
 		 free_frame(start);
 	 }
 
-	 /* Almacenar el inicio de la regiÛn liberada para una prÛxima asignaciÛn */
+	 /* Almacenar el inicio de la regi√≥n liberada para una pr√≥xima asignaci√≥n */
 	 next_free_frame = (unsigned int)start_addr / PAGE_SIZE;
 }

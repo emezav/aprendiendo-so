@@ -3,22 +3,22 @@
  * @ingroup kernel_code 
  * @author Erwin Meza <emezav@gmail.com>
  * @copyright GNU Public License. 
- * @brief Contiene la implementaci髇 de las rutinas para la gesti髇 del modo
+ * @brief Contiene la implementaci贸n de las rutinas para la gesti贸n del modo
  * protegido IA-32 y de la Tabla Global de Descriptores (GDT)
  */
 
 #include <pm.h>
 
 /** @brief Tabla Global de Descriptores (GDT). Es un arreglo de descriptores
- * de segmento. Seg鷑 el manual de Intel, esta tabla debe estar alineada a un
- * l韒ite de 8 bytes para un 髉timo desempe駉. */
+ * de segmento. Seg煤n el manual de Intel, esta tabla debe estar alineada a un
+ * l铆mite de 8 bytes para un 贸ptimo desempe帽o. */
 gdt_descriptor gdt[MAX_GDT_ENTRIES] __attribute((aligned(8)));
 
 /** @brief Variable que almacena la siguiente entrada disponible en la GDT */
 int current_gdt_entry = 0;
 
 /** @brief Variable que almacena el selector del descriptor de segmento de
- * c骴igo del kernel */
+ * c贸digo del kernel */
 unsigned short kernel_code_selector = KERNEL_CODE_SELECTOR;
 
 /** @brief Referencia al Descriptor de segmento de codigo del kernel dentro de
@@ -33,7 +33,7 @@ unsigned short kernel_data_selector = KERNEL_DATA_SELECTOR;
 gdt_descriptor * kernel_data_descriptor;
 
 /**
- * @brief Funci髇 que permite obtener el selector en la GDT a partir de un
+ * @brief Funci贸n que permite obtener el selector en la GDT a partir de un
  * apuntador a un descriptor de segmento
  * @param desc Referencia al descriptor de segmento del cual se desea obtener
  * el selector
@@ -51,7 +51,7 @@ unsigned short get_gdt_selector(gdt_descriptor * desc) {
 
 
 /**
- * @brief Funci髇 que permite obtener el descriptor de segmento en la GDT a
+ * @brief Funci贸n que permite obtener el descriptor de segmento en la GDT a
  * partir de un selector
  * @param selector Selector que permite obtener un descriptor de segmento
  * de la GDT
@@ -69,7 +69,7 @@ gdt_descriptor * get_gdt_descriptor(unsigned short selector) {
 /**
  * @brief Permite obtener un descriptor de segmento
  *  disponible en la GDT.
- *  @return Referencia al pr髕imo descriptor de segmento dentro de la GDT que se
+ *  @return Referencia al pr贸ximo descriptor de segmento dentro de la GDT que se
  *  encuentra disponible, nulo en caso que no exista una entrada disponible
  *  dentro de la GDT.
  */
@@ -126,13 +126,13 @@ void free_gdt_descriptor(gdt_descriptor *desc) {
  * @brief Permite configurar un descriptor de segmento dentro de la GDT
  * @param selector Selector que referencia al descriptor de segmento
  * dentro de la GDT
- * @param base Direcci髇 lineal del inicio del segmento en memoria
- * @param limit Tama駉 del segmento
+ * @param base Direcci贸n lineal del inicio del segmento en memoria
+ * @param limit Tama帽o del segmento
  * @param type Tipo de segmento
  * @param dpl Nivel de privilegios del segmento
- * @param code_or_data 1 = Segmento de c骴igo o datos, 0 = segmento del
+ * @param code_or_data 1 = Segmento de c贸digo o datos, 0 = segmento del
  * sistema
- * @param opsize Tama駉 de operandos: 0 = 16 bits, 1 = 32 bits
+ * @param opsize Tama帽o de operandos: 0 = 16 bits, 1 = 32 bits
  */
 void setup_gdt_descriptor(unsigned short selector , unsigned int base,
 		unsigned int limit, char type, char dpl, int code_or_data, char opsize)

@@ -27,7 +27,7 @@ void init_serial() {
 }
 
 /**
- * Verifica si el puerto serial se encuentra vacío
+ * Verifica si el puerto serial se encuentra vacÃ­o
 */
 int is_transmit_empty() {
    return inb(COM1_PORT + 5) & 0x20;
@@ -68,7 +68,7 @@ void serial_printf(char * format,...) {
         char *p;
         int i;
 
-        //Posicionar arg en la dirección de format
+        //Posicionar arg en la direcciÃ³n de format
         arg = (char **)&format;
 
         /* Avanzar arg para que apunte al siguiente parametro */

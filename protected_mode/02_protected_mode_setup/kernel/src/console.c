@@ -14,11 +14,11 @@
 
 /** @brief Apuntador al inicio de la memoria de video.
  * @details
- * La memoria de video se encuentra mapeada en la direcci髇 lineal 0xB8000.
+ * La memoria de video se encuentra mapeada en la direcci贸n lineal 0xB8000.
  * Cada caracter en pantalla ocupa dos caracteres (bytes) en la memoria de
  * video:
  * - El byte menos significativo contiene el caracter ASCII a mostrar
- * - El byte m醩 significativo contiene los atributos de texto y fondo
+ * - El byte m谩s significativo contiene los atributos de texto y fondo
  *   del caracter a mostrar. A su vez este byte se subdivide en:
  *   @verbatim
  *    7  6  5  4  3  2  1  0
@@ -37,34 +37,34 @@ unsigned short * videoptr =
 /** @brief Byte que almacena los atributos de texto */
 char text_attributes = COLOR(LIGHTGRAY, BLACK);
 
-/** @brief Variable que controla el n鷐ero de l韓eas de la pantalla */
+/** @brief Variable que controla el n煤mero de l铆neas de la pantalla */
 int screen_lines = SCREEN_LINES;
 
-/** @brief Variable que controla el n鷐ero de columnas de la pantalla */
+/** @brief Variable que controla el n煤mero de columnas de la pantalla */
 int screen_columns = SCREEN_COLUMNS;
 
-/** @brief Variable que controla la l韓ea actual en la pantalla */
+/** @brief Variable que controla la l铆nea actual en la pantalla */
 int current_line = 0;
 
 /** @brief Variable que controla la columna actual en la pantalla */
 int current_column = 0;
 
 /**
- * @brief Funci髇 privada para subir una l韓ea si se ha llegado al final
+ * @brief Funci贸n privada para subir una l铆nea si se ha llegado al final
  * de la pantalla
  */
 void console_scroll(void);
 
 /**
- * @brief Funci髇 privada que permite actualizar el cursor en la pantalla.
+ * @brief Funci贸n privada que permite actualizar el cursor en la pantalla.
  * */
 void console_update_cursor(void);
 
 /**
- * @brief Funci髇 para imprimir un caracter
+ * @brief Funci贸n para imprimir un caracter
  *
  * Imprime directamente en la memoria de video. Valida
- * caracteres especiales, como fin de l韓ea, tabulador y backspace.
+ * caracteres especiales, como fin de l铆nea, tabulador y backspace.
  * @param c caracter ascii a imprimir
  */
 void console_putchar(char c) {
@@ -119,9 +119,9 @@ void console_putchar(char c) {
 }
 
 /**
- * @brief Funci髇 para imprimir una cadena de caracteres.
+ * @brief Funci贸n para imprimir una cadena de caracteres.
  *
- * Esta rutina valida caracteres especiales, como fin de l韓ea, tabulador y
+ * Esta rutina valida caracteres especiales, como fin de l铆nea, tabulador y
  * backspace.
  * @param s Cadena terminada en nulo que se desea imprimir
  */
@@ -142,7 +142,7 @@ void console_puts(char * s ) {
 }
 
 /**
- * @brief Funci髇 para limpiar la pantalla
+ * @brief Funci贸n para limpiar la pantalla
 */
 void console_clear(void) {
 	char linea[SCREEN_COLUMNS];
@@ -170,7 +170,7 @@ void console_clear(void) {
 /* Rutinas privadas de stdio.c */
 
 /**
- * @brief Funci髇 privada que permite actualizar el cursor en la pantalla.
+ * @brief Funci贸n privada que permite actualizar el cursor en la pantalla.
  */
 void console_update_cursor(void) {
 
@@ -185,7 +185,7 @@ void console_update_cursor(void) {
 	 * - 0x3D5 = registro de datos.
 	 *
 	 * Para escribir en el microcontrolador CRT, se debe escribir dos veces:
-	 * Primero se debe escribir en el registro de 韓dice, para indicar el tipo
+	 * Primero se debe escribir en el registro de 铆ndice, para indicar el tipo
 	 * de datos que se desea escribir, y luego se escribe en el registro de
 	 * datos el dato que se desea escribir.
 	 */
@@ -220,7 +220,7 @@ void console_update_cursor(void) {
 }
 
 /**
- * @brief Funci髇 privada para subir una l韓ea si se ha llegado al final
+ * @brief Funci贸n privada para subir una l铆nea si se ha llegado al final
  * de la pantalla
  */
 void console_scroll(void) {
@@ -262,7 +262,7 @@ void console_printf(char * format,...) {
         char *p;
         int i;
 
-        //Posicionar arg en la direcci髇 de format
+        //Posicionar arg en la direcci贸n de format
         arg = (char **)&format;
 
         /* Avanzar arg para que apunte al siguiente parametro */

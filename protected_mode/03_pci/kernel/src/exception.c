@@ -63,12 +63,12 @@ unsigned char *exceptions[] = {
 };
 
 /**
- * @brief Crea un manejador de interrupci髇 para las
- * 32 excepciones de IA-32 e inicializa la tabla de manejadores de excepci髇.
+ * @brief Crea un manejador de interrupci贸n para las
+ * 32 excepciones de IA-32 e inicializa la tabla de manejadores de excepci贸n.
  * Para todas las excepciones se establece la rutina 'exception_dispatcher'
- * como la rutina de manejo de interrupci髇.
- * Esta rutina se encarga de "despachar" a un manejador de la excepci髇,
- * configurado para cada una de ellas mediante la funci髇
+ * como la rutina de manejo de interrupci贸n.
+ * Esta rutina se encarga de "despachar" a un manejador de la excepci贸n,
+ * configurado para cada una de ellas mediante la funci贸n
  * install_exception_handler().
  */
 void setup_exceptions(void) {
@@ -136,9 +136,9 @@ void exception_dispatcher() {
 /**
  * @brief Permite definir un nuevo manejador de excepcion
  * para una de las excepciones de los procesadores x86.
- * @param index N鷐ero de la excepci髇 a la cual se le desea instalar
+ * @param index N煤mero de la excepci贸n a la cual se le desea instalar
  * la rutina de manejo
- * @param handler Funci髇 de manejo de la excepci髇
+ * @param handler Funci贸n de manejo de la excepci贸n
  */
 int install_exception_handler(unsigned char index, exception_handler handler) {
 	if (exception_handlers[index] != NULL_INTERRUPT_HANDLER) {
@@ -151,7 +151,7 @@ int install_exception_handler(unsigned char index, exception_handler handler) {
 
 /**
  * @brief Permite quitar un  manejador de excepcion
- * @param index N鷐ero de la excepci髇 a la cual se desea desinstalar
+ * @param index N煤mero de la excepci贸n a la cual se desea desinstalar
  * su manejador
  */
 void uninstall_exception_handler(unsigned char index) {
