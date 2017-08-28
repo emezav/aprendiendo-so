@@ -1416,7 +1416,7 @@ kernel_size:
  * kernel y los módulos cargados junto con el kernel en la memoria virtual. Su
  * valor inicial lo calcula el linker, pero se actualiza adicionando el número
  * de páginas necesarias para almacenar el directorio de tablas de página y las
- * tablas d epágina para mapear el kernel en memoria virtual. */
+ * tablas de página para mapear el kernel en memoria virtual. */
 
 total_kernel_pages:
 .long tmp_total_kernel_pages

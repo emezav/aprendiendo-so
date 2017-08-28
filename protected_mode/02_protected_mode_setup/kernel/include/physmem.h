@@ -9,6 +9,15 @@
 
 #ifndef PHYSMEM_H_
 #define PHYSMEM_H_
+#include "bitmap.h"
+
+/** @brief Granularidad de la memoria fisica */
+#define PHYSMEM_GRANULARITY 0x1000000
+
+#define PHYSMEM_REGION_COUNT (0xFFFFFFFF / PHYSMEM_GRANULARITY)
+
+/** @brief Limite inferior de la memoria fisica  = 16 MB */
+#define PHYSMEM_LOW_LIMIT 0x1000000
 
 /** @brief Número de bytes que tiene una entrada en el mapa de bits */
 #define BYTES_PER_ENTRY sizeof(unsigned int)
@@ -23,6 +32,21 @@
 /** @brief Desplazamiento en bits dentro de la entrada en el mapa de bits */
 #define bitmap_offset(addr) \
 	(addr / PAGE_SIZE) % ( BITS_PER_ENTRY )
+
+/** @brief Descriptor de region de memoria */
+typedef struct memory_region {
+    /** @brief Apuntador a la siguiente region de memoria */
+    struct memory_region * next;
+    /** @brief Apuntador a la anterior region de memoria */
+    struct memory_region * prev;
+    /** @brief Direccion de inicio de la region */
+    unsigned int start;
+    /** @brief Tamaño de la region */
+    unsigned int length;
+    /** @brief Tipo de la region de memoria */
+    bitmap map;
+}memory_region;
+
 
 /**
  * @brief Inicializa el mapa de bits de memoria,
@@ -49,13 +73,5 @@ unsigned int allocate_frame_region(unsigned int length);
  * múltiplo de PAGE_SIZE
  */
 void free_frame(unsigned int addr);
-
-/**
- * @brief Marca una región de memoria como disponible
- * @param start_addr Dirección de memoria del inicio de la región a marcar como
- * disponible. Se redondea por debajo a un múltiplo de PAGE_SIZE
- * @param length Tamaño de la región en bytes, múltiplo de PAGE_SIZE
- */
-void mark_available_memory(unsigned int start_addr, unsigned int length);
 
 #endif /* PHYSMEM_H_ */

@@ -8,13 +8,26 @@
  * La memoria se gestiona en unidades de PAGE_SIZE denominadas marcos de
  * página.
  */
-
+#include <asm.h>
+#include <bitmap.h>
 #include <console.h>
 #include <pm.h>
 #include <paging.h>
 #include <physmem.h>
 #include <multiboot.h>
 #include <stdlib.h>
+
+/** @brief Lista de regiones fisicas de memoria */
+memory_region physmem[PHYSMEM_REGION_COUNT];
+
+/** @brief Apuntador a la lista de regiones fisicas de memoria */
+memory_region * physmem_list = 0;
+
+/** @brief Apuntador a la region fisica de memoria actual */
+memory_region * current_physmem;
+
+/** @brief numero de regiones de memoria disponibles */
+int physmem_count;
 
 /* Variable definida en start.S que almacena la dirección física en la cual
  * terminan las tablas de página iniciales del kernel */
@@ -66,12 +79,14 @@ extern unsigned int multiboot_info_location;
  */
 void setup_physical_memory(void){
 
+    int i;
+
 	extern multiboot_header_t multiboot_header;
-  extern unsigned int kernel_memory_bitmap;
+    extern unsigned int kernel_memory_bitmap;
 
     /*Ubicar el mapa de bits justo después de las tablas de página iniciales en
      * memoria. */
-  memory_bitmap = (unsigned int*)&kernel_memory_bitmap;
+    memory_bitmap = (unsigned int*)&kernel_memory_bitmap;
 
 	/* Variables temporales para hallar la region de memoria disponible */
 	unsigned int tmp_start;
@@ -81,15 +96,18 @@ void setup_physical_memory(void){
     unsigned int mmap_address;
     unsigned int mods_address;
 
+    unsigned int * tmp_ptr;
+    int slots;
+
     /* Dado que ya se habilitó la memoria virtual, se debe usar la
      * dirección virtual en la cual se encuentra mapeada la estructura de
      * información multiboot. */
-	multiboot_info_t * info = (multiboot_info_t *)(multiboot_info_location + KERNEL_VIRT_OFFSET);
+	multiboot_info_t * info = (multiboot_info_t *)(multiboot_info_location 
+            + KERNEL_VIRT_OFFSET);
 
-	int i;
-
-	unsigned int mods_end; /* Almacena la dirección de memoria final
-	del ultimo modulo cargado, o 0 si no se cargaron modulos. */
+    /* Almacena la dirección de memoria final del ultimo modulo cargado, o
+     * 0 si no se cargaron modulos. */
+	unsigned int mods_end; 
 
 	for(i=0; i<memory_bitmap_length; i++){
 		memory_bitmap[i] = 0;
@@ -97,7 +115,6 @@ void setup_physical_memory(void){
 
 	/* si flags[3] = 1, se especificaron módulos que deben ser cargados junto
 	 * con el kernel y justo después del mismo. */
-
 	mods_end = 0;
 
     /* Se debe sumar KERNEL_VIRT_OFFSET a la dirección, dado que ya se
@@ -133,7 +150,6 @@ void setup_physical_memory(void){
 	 * al finalizar el kernel, los módulos, el directorio de tablas de página y
      * las tablas de página del kernel. */
 	allowed_free_start = kernel_initial_pagetables_end;
-
 
 	/** Existe un mapa de memoria válido creado por GRUB? */
 	if (test_bit(info->flags, 6)) {
@@ -212,6 +228,7 @@ void setup_physical_memory(void){
 
 	/* Existe una región de memoria disponible? */
 	if (memory_start > 0 && memory_length > 0) {
+
 		/* Antes de retornar, establecer la minima dirección de memoria
 		 * permitida para liberar*/
 
@@ -232,9 +249,6 @@ void setup_physical_memory(void){
 		memory_start = tmp_start;
 		memory_length = tmp_length;
 
-		/* Marcar la región de memoria como disponible */
-		mark_available_memory(memory_start, memory_length);
-
         /* Establecer la dirección de memoria a partir de la cual se puede
          * liberar memoria */
 		allowed_free_start = memory_start;
@@ -243,75 +257,86 @@ void setup_physical_memory(void){
 		total_frames = free_frames;
 		base_frame = next_free_frame;
 
-	}
- }
+        /* Inicializar las regiones de memoria disponibles */
+        physmem_count = 0;
 
-/** @brief Permite verificar si el marco de página se encuentra disponible. */
-int test_frame(unsigned int frame) {
-	 volatile int entry = frame / BITS_PER_ENTRY;
-	 volatile int offset = frame % BITS_PER_ENTRY;
-	 return (memory_bitmap[entry] & 0x1 << offset);
+        tmp_start = memory_start; //Inicio de la memoria fisica disponible
+        tmp_end = memory_start + memory_length; //Fin de la memoria fisica
+        tmp_ptr = (unsigned int*)&kernel_memory_bitmap; //Mapa de bits
+
+        do {
+            if (tmp_start < tmp_end) {
+                physmem[physmem_count].start = tmp_start;
+                physmem[physmem_count].next = 0;
+                physmem[physmem_count].prev = 0;
+                if (physmem_count > 0) {
+                    physmem[physmem_count].prev = &physmem[physmem_count - 1];
+                    physmem[physmem_count -1].next = &physmem[physmem_count];
+                }
+                if (tmp_start + PHYSMEM_GRANULARITY < tmp_end) {
+                    physmem[physmem_count].length = 
+                        PHYSMEM_GRANULARITY;
+                }else {
+                    physmem[physmem_count].length = tmp_end - tmp_start;
+                }
+
+                slots = physmem[physmem_count].length / PAGE_SIZE;
+
+                /* Inicializar el mapa de bits para esta region */
+                bitmap_init(&physmem[physmem_count].map, tmp_ptr, slots);
+                tmp_ptr += slots / BITS_PER_BITMAP_ENTRY;
+
+                /* Redondear al siguiente apuntador de entero sin signo si
+                 * es necesario */
+                if (slots % BITS_PER_BITMAP_ENTRY != 0) {
+                    tmp_ptr++;
+                }
+
+                /*
+                console_printf("0x%x (%d)\n", 
+                        physmem[physmem_count].start,
+                        physmem[physmem_count].map.free_slots);
+                */
+
+                physmem_count++;
+            }
+            tmp_start += PHYSMEM_GRANULARITY;
+        }while (tmp_start < tmp_end);
+
+        if (physmem_count > 0) {
+            physmem[physmem_count - 1].next = &physmem[0];
+            physmem[0].prev = &physmem[physmem_count - 1];
+            physmem_list = &physmem[0];
+            current_physmem = physmem_list;
+        }
+    }
 }
-
-
-/** @brief  Permite marcar el marco de página como ocupado */
-void clear_frame(unsigned int frame) {
-	 volatile int entry = frame / BITS_PER_ENTRY;
-	 volatile int offset = frame % BITS_PER_ENTRY;
-	 memory_bitmap[entry] &= ~(0x1 << offset);
-}
-
-/** @brief Permite marcar el marco de página como libre. */
-void set_frame(unsigned int frame) {
-	 volatile int entry = frame / BITS_PER_ENTRY;
-	 volatile int offset = frame % BITS_PER_ENTRY;
-	 memory_bitmap[entry] |= (0x1 << offset);
-}
-
 
 /**
  @brief Reserva un marco libre dentro del mapa de bits de memoria.
  * @return Dirección de inicio del marco de página, 0 si no existen marcos
  * disponibles
  */
-unsigned int allocate_frame(void) {
-	 unsigned int frame;
-	 unsigned int entry;
-	 unsigned int offset;
+unsigned int allocate_frame() {
+    unsigned int addr;
+    int slot;
+    memory_region * aux;
 
+    aux = current_physmem;
 
-	 /* Si no existen marcos libres, retornar*/
-	 if (free_frame == 0) {
-		 return 0;
-	 }
-
-	/* Iterar por el mapa de bits*/
- 	frame = next_free_frame;
- 	 do {
- 		 if (test_frame(frame)) {
- 			 entry = frame / BITS_PER_ENTRY;
- 			 offset = frame % BITS_PER_ENTRY;
- 			 memory_bitmap[entry] &= ~(0x1 << offset);
-
-        /* Avanzar en la posicion de busqueda de la proxima unidad disponible */
- 			 next_free_frame++;
-			 if (next_free_frame > base_frame + total_frames) {
-				 next_free_frame = base_frame;
-			 }
- 			/* Descontar la unidad tomada */
-
- 			free_frames--;
- 			 return frame * PAGE_SIZE;
- 		 }
- 		frame++;
- 		if (frame > base_frame + total_frames) {
- 			frame = base_frame;
- 		}
- 	 }while (frame != next_free_frame);
-
-
- 	 return 0;
-  }
+    do {
+        if (aux->map.free_slots != 0) {
+            slot = bitmap_allocate(&aux->map);
+            if (slot >= 0) {
+                addr = aux->start + (slot * PAGE_SIZE);
+                return addr;
+            }
+        }
+        aux = aux->next;
+    }while(aux != current_physmem);
+    
+    return 0;
+}
 
 /** @brief Reserva una región de memoria contigua libre dentro del mapa de bits
 * de memoria.
@@ -320,58 +345,33 @@ unsigned int allocate_frame(void) {
 * reservar.
 */
 unsigned int allocate_frame_region(unsigned int length) {
-	unsigned int frame;
 	unsigned int frame_count;
-	unsigned int i;
-	int result;
+    unsigned int addr;
+    int slot;
+    memory_region * aux;
 
-	frame_count = (length / PAGE_SIZE);
+    frame_count = (length / PAGE_SIZE);
 
 	if (length % PAGE_SIZE > 0) {
 		frame_count++;
 	}
 
-    /* Verificar si existe suficiente espacio */
-	if (free_frames < frame_count) {
-		 return 0;
-	}
+    aux = current_physmem;
 
-	/* Iterar por el mapa de bits*/
-	frame = next_free_frame;
-	 do {
-		 if (test_frame(frame) &&
-				 (frame + frame_count) < (base_frame + total_frames)) {
-
-			 result = 1;
-			 for (i=frame; i<frame + frame_count; i++){
-				 result = (result && test_frame(i));
-			 }
-			 /* Marcar las páginas como ocupadas */
-			 if (result) {
-				 for (i=frame; i<frame + frame_count; i++){
-					 /* Descontar la página tomada */
-					 free_frames--;
-					 clear_frame(i);
-				 }
-
-                 /* Avanzar en la posicion de busqueda del próximo marco
-                  * disponible */
-				 next_free_frame = frame + frame_count;
-				 if (next_free_frame > base_frame + total_frames) {
-					 next_free_frame = base_frame;
-				 }
-
-				return frame * PAGE_SIZE;
-			 }
-		 }
-		frame++;
-		if (frame > base_frame + total_frames) {
-			frame = base_frame;
-		}
-	 }while (frame != next_free_frame);
-
-	  return 0;
-  }
+    do {
+        if (aux->map.free_slots != 0 && 
+                aux->map.free_slots >= frame_count) {
+            slot = bitmap_allocate_region(&aux->map, frame_count);
+            if (slot >= 0) {
+                addr = aux->start + (slot * PAGE_SIZE);
+                return addr;
+            }
+        }
+        aux = aux->next;
+    }while(aux != current_physmem);
+    
+    return 0;
+}
 
 /**
  * @brief Permite liberar un marco de página
@@ -379,47 +379,21 @@ unsigned int allocate_frame_region(unsigned int length) {
  * múltiplo de PAGE_SIZE
  */
 void free_frame(unsigned int addr) {
-	 unsigned int start;
-	 unsigned int entry;
-	 int offset;
-	 unsigned int frame;
+    int slot;
+    unsigned int start;
+    memory_region * aux;
 
-	 start = ROUND_DOWN_TO_PAGE(addr);
+    start = ROUND_DOWN_TO_PAGE(addr);
+    aux = current_physmem;
 
-	 if (start < allowed_free_start) {return;}
-
-	 frame = start / PAGE_SIZE;
-
-	 set_frame(frame);
-
-	 /* Marcar la unidad recien liberada como la proxima unidad
-	  * para asignar */
-	 next_free_frame = frame;
-
-	 /* Aumentar en 1 el numero de unidades libres */
-	 free_frames ++;
- }
-
-/**
- * @brief Marca una región de memoria como disponible
- * @param start_addr Dirección de memoria del inicio de la región a marcar como
- * disponible. Se redondea por debajo a una página
- * @param length Tamano de la región en bytes, múltiplo de PAGE_SIZE
- */
-void mark_available_memory(unsigned int start_addr, unsigned int length) {
-	 unsigned int start;
-	 unsigned int end;
-
-	 start = ROUND_DOWN_TO_PAGE((unsigned int)start_addr);
-
-	 if (start < allowed_free_start) {return;}
-
-	 end = start + length;
-
-	 for (; start < end; start += PAGE_SIZE) {
-		 free_frame(start);
-	 }
-
-	 /* Almacenar el inicio de la región liberada para una próxima asignación */
-	 next_free_frame = (unsigned int)start_addr / PAGE_SIZE;
+    do {
+        if (start >= aux->start && start < aux->start + aux->length) {
+            slot = (start - aux->start) / PAGE_SIZE;
+            bitmap_free(&aux->map, slot);
+            return;
+        }
+        aux = aux->next;
+    }while(aux != current_physmem);
 }
+
+
