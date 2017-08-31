@@ -17,6 +17,11 @@
 #include <multiboot.h>
 #include <stdlib.h>
 
+/** @brief Mapa de bits de la memoria fisica. */
+unsigned int 
+    physical_memory_bitmap[PHYSMEM_MAXFRAMES / BITS_PER_BITMAP_ENTRY] 
+    __attribute__((aligned(4096)));
+
 /** @brief Lista de regiones fisicas de memoria */
 memory_region physmem[PHYSMEM_REGION_COUNT];
 
@@ -37,27 +42,6 @@ extern unsigned int kernel_initial_pagetables_end;
  * @details Esta variable almacena el apuntador del inicio del mapa de bits
  * que permite gestionar las unidades de memoria. */
  unsigned int * memory_bitmap;
-
- /** @brief Siguiente marco disponible en el mapa de bits */
- unsigned int next_free_frame;
-
- /** @brief Numero de marcos libres en la memoria */
- int free_frames;
-
- /** @brief Numero total de marcos disponibles en la memoria */
- int total_frames;
-
- /** @brief Marco inicial de los marcos disponibles en memoria */
- unsigned int base_frame;
-
-
- /** @brief Tamano del mapa de bits en memoria.
-  * @details
-  * Para un espacio fisico de maximo 4 GB, se requiere un mapa de bits
-  * de 128 KB. Si cada entrada ocupa 4 bytes, se requiere 32678 entradas.
-  */
-unsigned int memory_bitmap_length =
-		~(0x0) / (PAGE_SIZE * BITS_PER_ENTRY);
 
 /** @brief Variable global del kernel que almacena el inicio de la región
  * de memoria disponible */
@@ -82,11 +66,9 @@ void setup_physical_memory(void){
     int i;
 
 	extern multiboot_header_t multiboot_header;
-    extern unsigned int kernel_memory_bitmap;
 
-    /*Ubicar el mapa de bits justo después de las tablas de página iniciales en
-     * memoria. */
-    memory_bitmap = (unsigned int*)&kernel_memory_bitmap;
+    /* Apuntar al mapa de bits de memoria física. */
+    memory_bitmap = (unsigned int*)&physical_memory_bitmap;
 
 	/* Variables temporales para hallar la region de memoria disponible */
 	unsigned int tmp_start;
@@ -108,10 +90,6 @@ void setup_physical_memory(void){
     /* Almacena la dirección de memoria final del ultimo modulo cargado, o
      * 0 si no se cargaron modulos. */
 	unsigned int mods_end; 
-
-	for(i=0; i<memory_bitmap_length; i++){
-		memory_bitmap[i] = 0;
-	}
 
 	/* si flags[3] = 1, se especificaron módulos que deben ser cargados junto
 	 * con el kernel y justo después del mismo. */
@@ -143,8 +121,6 @@ void setup_physical_memory(void){
 
 	memory_start = 0;
 	memory_length = 0;
-
-	free_frames = 0;
 
 	/* Suponer que el inicio de la memoria disponible se encuentra
 	 * al finalizar el kernel, los módulos, el directorio de tablas de página y
@@ -229,6 +205,11 @@ void setup_physical_memory(void){
 	/* Existe una región de memoria disponible? */
 	if (memory_start > 0 && memory_length > 0) {
 
+        /*
+        console_printf("Memory start at: 0x%x, length:0x%x\n", 
+                memory_start, memory_length);
+        */
+
 		/* Antes de retornar, establecer la minima dirección de memoria
 		 * permitida para liberar*/
 
@@ -252,17 +233,13 @@ void setup_physical_memory(void){
         /* Establecer la dirección de memoria a partir de la cual se puede
          * liberar memoria */
 		allowed_free_start = memory_start;
-		next_free_frame = allowed_free_start / PAGE_SIZE;
-
-		total_frames = free_frames;
-		base_frame = next_free_frame;
 
         /* Inicializar las regiones de memoria disponibles */
         physmem_count = 0;
 
         tmp_start = memory_start; //Inicio de la memoria fisica disponible
         tmp_end = memory_start + memory_length; //Fin de la memoria fisica
-        tmp_ptr = (unsigned int*)&kernel_memory_bitmap; //Mapa de bits
+        tmp_ptr = (unsigned int*)&physical_memory_bitmap; //Mapa de bits
 
         do {
             if (tmp_start < tmp_end) {

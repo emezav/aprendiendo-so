@@ -1486,17 +1486,6 @@ kernel_stack:
 .space KERNEL_STACK_SIZE
 kernel_stack_end:
 
-/* Mapa de bits para gestionar la memoria física.
-* Este mapa de bits permite gestionar hasta 4 GB de memoria física, que tendría
-* 2 ^ 20 páginas de 4 KB. Dado que se requiere un bit para cada página, el mapa
-* de bits completo ocupa 2 ^ 20 bits = 2 ^ 17 bytes = 128 KB = 0x20000.
-*/
-.align 4096
-/* El mapa de bits se alinea a nivel de páginas*/
-.global kernel_memory_bitmap
-kernel_memory_bitmap:
-.space 0x20000
-
 /**
 @endverbatim
 */

@@ -3,18 +3,27 @@
  * @ingroup kernel_code 
  * @author Erwin Meza <emezav@gmail.com>
  * @copyright GNU Public License. 
- * @brief Contiene las definiciones relacionadas con las gestión * de memoria
+ * @brief Contiene las definiciones relacionadas con las gestión de memoria
  * física.
  */
 
 #ifndef PHYSMEM_H_
 #define PHYSMEM_H_
-#include "bitmap.h"
+#include <mem.h>
+
+/** @brief Tamaño en bytes de un marco de pagina */
+#define FRAME_SIZE 4096
+
+/** @brief Cantidad máxima de memoria física: 4 GB*/
+#define PHYSMEM_MAXSIZE 0xFFFFFFFF
+
+/** @brief Máximo número de páginas en memoria física (marcos de página)*/
+#define PHYSMEM_MAXFRAMES (PHYSMEM_MAXSIZE / FRAME_SIZE)
 
 /** @brief Granularidad de la memoria fisica */
 #define PHYSMEM_GRANULARITY 0x1000000
 
-#define PHYSMEM_REGION_COUNT (0xFFFFFFFF / PHYSMEM_GRANULARITY)
+#define PHYSMEM_REGION_COUNT (PHYSMEM_MAXSIZE / PHYSMEM_GRANULARITY)
 
 /** @brief Limite inferior de la memoria fisica  = 16 MB */
 #define PHYSMEM_LOW_LIMIT 0x1000000
@@ -32,21 +41,6 @@
 /** @brief Desplazamiento en bits dentro de la entrada en el mapa de bits */
 #define bitmap_offset(addr) \
 	(addr / PAGE_SIZE) % ( BITS_PER_ENTRY )
-
-/** @brief Descriptor de region de memoria */
-typedef struct memory_region {
-    /** @brief Apuntador a la siguiente region de memoria */
-    struct memory_region * next;
-    /** @brief Apuntador a la anterior region de memoria */
-    struct memory_region * prev;
-    /** @brief Direccion de inicio de la region */
-    unsigned int start;
-    /** @brief Tamaño de la region */
-    unsigned int length;
-    /** @brief Tipo de la region de memoria */
-    bitmap map;
-}memory_region;
-
 
 /**
  * @brief Inicializa el mapa de bits de memoria,
