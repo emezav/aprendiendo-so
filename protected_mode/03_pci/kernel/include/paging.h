@@ -94,6 +94,9 @@ int map_page(unsigned int vaddr, unsigned int addr);
 /** @brief Permite quitar una página del espacio virtual */
 int unmap_page(unsigned int vaddr);
 
+/** @brief Quita una página del espacio virtual y libera el marco asociado */
+int destroy_page(unsigned int vaddr);
+
 /** @brief Manejador por defecto para fallo de página. */
 void page_fault_handler(interrupt_state * state);
 

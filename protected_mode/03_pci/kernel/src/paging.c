@@ -150,12 +150,12 @@ int map_page(unsigned int vaddr, unsigned int addr) {
     if (! (kernel_pd[pd_entry] & PG_PRESENT)) {
         if (! (new_addr = create_new_page_table(pd_entry))) {
             //No se pudo crear la tabla de páginas, retornar.
+            // console_printf("Could not create page table for entry %d\n", pd_entry);
             return 0;
         }
     }
 
-
-    /* Ubicar la tabla de páginas correspondiente y marcar la entada como no
+    /* Ubicar la tabla de páginas correspondiente y marcar la entrada como 
      * usada */
     pt = (page_table)((KERNEL_PAGETABLES_VADDR) + (pd_entry * PAGE_SIZE));
     if (pt[pt_entry] & PG_PRESENT) {
@@ -204,7 +204,7 @@ int unmap_page(unsigned int vaddr) {
         return 0;
     }
 
-    /* Ubicar la tabla de páginas correspondiente y marcar la entada como no
+    /* Ubicar la tabla de páginas correspondiente y marcar la entrada como
      * usada */
     pt = (page_table)((KERNEL_PAGETABLES_VADDR) + (pd_entry * PAGE_SIZE));
     if (pt[pt_entry] & PG_PRESENT) {
@@ -242,7 +242,83 @@ int unmap_page(unsigned int vaddr) {
         free_frame(pt_frame);
     }
     return 1;
+}
 
+/**
+ * @brief Quita una página del espacio virtual y libera el marco asociado
+ */
+int destroy_page(unsigned int vaddr) {
+    int pd_entry;
+    int pt_entry;
+    int i;
+    page_table pt;
+    unsigned int frame;
+    unsigned int pt_frame;
+
+    /* Redondear la dirección virtual a un límite de página */
+    vaddr = ROUND_DOWN_TO_PAGE(vaddr);
+
+    /* No se puede tocar los últimos 4 MB de la memoria*/
+    if (vaddr >= KERNEL_PAGETABLES_VADDR) {
+        /* No se puede quitar una nueva página en la región destinada para las
+         * tablas de página en la memoria virtual  */
+        //console_printf("Warning! attempting to unmap over the page tables memory!\n");
+        return 0;
+    }
+
+    /* Obtener la entrada en el directorio y en la tabla de páginas */
+    pd_entry = vaddr / (PAGE_SIZE * PD_ENTRIES);
+    pt_entry = (vaddr % (PAGE_SIZE * PD_ENTRIES)) / PAGE_SIZE;
+
+    //console_printf("PD entry: %d PT entry: %d\n", pd_entry, pt_entry);
+
+    /* No se puede quitar el mapeo de una tabla que no está presente. */
+    if (! (kernel_pd[pd_entry] & PG_PRESENT)) {
+        //console_printf("Warning! PD entry %d not present!\n", pd_entry);
+        return 0;
+    }
+
+    /* Ubicar la tabla de páginas correspondiente y marcar la entrada como no
+     * usada */
+    pt = (page_table)((KERNEL_PAGETABLES_VADDR) + (pd_entry * PAGE_SIZE));
+    if (pt[pt_entry] & PG_PRESENT) {
+        frame = pt[pt_entry] & 0xFFFFF000;
+        //Libera el marco de pagina de la memoria fisica
+        free_frame(pt_frame);
+        pt[pt_entry] = PG_UNUSED;
+    }
+
+    /* Invalidar la página en el TLB */
+    invalidate_page(vaddr);
+
+    /* Recorrer la tabla de páginas para verificar si está usando alguna entrada
+     * */
+    i = 0;
+    while (i < PT_ENTRIES && (pt[i] & PG_UNUSED)){
+        i++;
+    }
+    //console_printf("Page table empty entries: %d\n", i);
+
+    /* Si ninguna entrada de la tabla está siendo usada, se puede liberar la
+     * página de memoria que contiene la tabla de páginas y marcar la entrada
+     * correspondiente en el directorio como no usada. */
+    if (i == 1024) {
+        /* Obtener la dirección del marco de página en el cual se encuentra la
+         * tabla de páginas */
+        pt_frame = kernel_pd[pd_entry] & 0xFFFFF000;
+
+        //console_printf("Invalidate page 0x%x => 0x%x\n", (unsigned int)pt, pt_frame);
+        
+        /* Invalidar la página en el TLB */
+        invalidate_page((unsigned int)pt);
+
+        /* Marcar la entrada en el directorio como no usada */
+        kernel_pd[pd_entry] = PG_UNUSED;
+
+        /* Liberar el marco de página que tenía asignada la tabla */
+        free_frame(pt_frame);
+    }
+    return 1;
 }
 
 /**
