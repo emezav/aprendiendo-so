@@ -11,6 +11,8 @@
 #ifndef STRING_H_
 #define STRING_H_
 
+#define BUFSIZ 4096
+
 /**
  * @brief Copia un numero determinado de bytes
  * de una posicion de memoria a otra.
