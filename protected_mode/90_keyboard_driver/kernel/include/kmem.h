@@ -36,13 +36,13 @@
 void setup_kmem(void);
 
 /**
- @brief Busca y reserva una página libre dentro de la memoria del kernel
+ * @brief Busca y reserva una página libre dentro de la memoria del kernel
  * @return Dirección de inicio de la página
  */
 unsigned int kmem_get_page(void);
 
 /**
- @brief Busca una región continua de páginas libres en la memoria del kernel
+ * @brief Busca una región continua de páginas libres en la memoria del kernel
  * @return Dirección de inicio de la página
  */
 unsigned int kmem_get_pages(int count);
@@ -54,15 +54,23 @@ unsigned int kmem_get_pages(int count);
 unsigned int kmem_allocate_page(void);
 
 /**
- @brief Busca y mapea una región continua de páginas libres
+ * @brief Busca y mapea una región continua de páginas libres
+ * @param count Numero de paginas a buscar y mapear
+ * @param adjacent 1 = los marcos deben ser contiguos en memoria fisica
  * @return Dirección de inicio de la página
  */
-unsigned int kmem_allocate_pages(int count);
+unsigned int kmem_allocate_pages(int count, int adjacent);
 
 /**
- * @brief Permite liberar una pagina
- * @param addr Dirección de inicio a liberar
+ * @brief Permite liberar una página
+ * @param addr Dirección de la página a liberar
  */
 void kmem_free(unsigned int addr);
+
+/**
+ * @brief Retorna el número de páginas disponibles en la memoria del kernel
+ * @return Número de páginas disponibles
+ */
+int available_pages();
 
 #endif /* KMEM_H_ */

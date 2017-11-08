@@ -68,4 +68,10 @@ unsigned int allocate_frame_region(unsigned int length);
  */
 void free_frame(unsigned int addr);
 
+/**
+ * @brief Retorna el número de marcos de mágina libres
+ * @return Número de marcos de página disponibles
+ */
+int available_frames();
+
 #endif /* PHYSMEM_H_ */

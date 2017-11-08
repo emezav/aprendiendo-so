@@ -40,12 +40,34 @@ void cmain(){
     /* Inicializar la memoria virtual para el kernel */
     setup_kmem();
 
-    console_printf("Allocate pages 0x%x\n", kmem_allocate_pages(10));
-    console_printf("Allocate page 0x%x\n", kmem_allocate_page());
-    console_printf("Get page 0x%x\n", kmem_get_page());
-    console_printf("Get pages 0x%x\n", kmem_get_pages(5));
-    console_printf("Allocate page 0x%x\n", kmem_allocate_page());
+    console_printf("Available frames: %d Available pages: %d\n", 
+            available_frames(),
+            available_pages());
 
+    console_printf("Allocate pages 0x%x\n", kmem_allocate_pages(10, 0));
+    console_printf("Available frames: %d Available pages: %d\n", 
+            available_frames(),
+            available_pages());
+
+    console_printf("Allocate page 0x%x\n", kmem_allocate_page());
+    console_printf("Available frames: %d Available pages: %d\n", 
+            available_frames(),
+            available_pages());
+
+    console_printf("Get page 0x%x\n", kmem_get_page());
+    console_printf("Available frames: %d Available pages: %d\n", 
+            available_frames(),
+            available_pages());
+
+    console_printf("Get pages 0x%x\n", kmem_get_pages(5));
+    console_printf("Available frames: %d Available pages: %d\n", 
+            available_frames(),
+            available_pages());
+
+    console_printf("Allocate page 0x%x\n", kmem_allocate_page());
+    console_printf("Available frames: %d Available pages: %d\n", 
+            available_frames(),
+            available_pages());
 
 
 }

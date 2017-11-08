@@ -31,8 +31,11 @@ memory_region * physmem_list = 0;
 /** @brief Apuntador a la region fisica de memoria actual */
 memory_region * current_physmem;
 
-/** @brief numero de regiones de memoria disponibles */
+/** @brief Numero de regiones de memoria disponibles */
 int physmem_count;
+
+/* @brief Numero total de marcos de pagina disponibles */
+int physmem_available_frames;
 
 /* Variable definida en start.S que almacena la dirección física en la cual
  * terminan las tablas de página iniciales del kernel */
@@ -121,6 +124,9 @@ void setup_physical_memory(void){
 
 	memory_start = 0;
 	memory_length = 0;
+
+    physmem_count = 0;
+    physmem_available_frames = 0;
 
 	/* Suponer que el inicio de la memoria disponible se encuentra
 	 * al finalizar el kernel, los módulos, el directorio de tablas de página y
@@ -235,7 +241,6 @@ void setup_physical_memory(void){
 		allowed_free_start = memory_start;
 
         /* Inicializar las regiones de memoria disponibles */
-        physmem_count = 0;
 
         tmp_start = memory_start; //Inicio de la memoria fisica disponible
         tmp_end = memory_start + memory_length; //Fin de la memoria fisica
@@ -276,6 +281,7 @@ void setup_physical_memory(void){
                 */
 
                 physmem_count++;
+                physmem_available_frames += slots;
             }
             tmp_start += PHYSMEM_GRANULARITY;
         }while (tmp_start < tmp_end);
@@ -300,12 +306,17 @@ unsigned int allocate_frame() {
     memory_region * aux;
 
     aux = current_physmem;
+    
+    if (physmem_available_frames == 0) {
+        return 0;
+    }
 
     do {
         if (aux->map.free_slots != 0) {
             slot = bitmap_allocate(&aux->map);
             if (slot >= 0) {
                 addr = aux->start + (slot * PAGE_SIZE);
+                physmem_available_frames--;
                 return addr;
             }
         }
@@ -333,6 +344,10 @@ unsigned int allocate_frame_region(unsigned int length) {
 		frame_count++;
 	}
 
+    if (physmem_available_frames < frame_count) {
+        return 0;
+    }
+
     aux = current_physmem;
 
     do {
@@ -341,6 +356,7 @@ unsigned int allocate_frame_region(unsigned int length) {
             slot = bitmap_allocate_region(&aux->map, frame_count);
             if (slot >= 0) {
                 addr = aux->start + (slot * PAGE_SIZE);
+                physmem_available_frames -= frame_count;
                 return addr;
             }
         }
@@ -367,10 +383,19 @@ void free_frame(unsigned int addr) {
         if (start >= aux->start && start < aux->start + aux->length) {
             slot = (start - aux->start) / PAGE_SIZE;
             bitmap_free(&aux->map, slot);
+            physmem_available_frames++;
             return;
         }
         aux = aux->next;
     }while(aux != current_physmem);
+}
+
+/**
+ * @brief Retorna el número de marcos de mágina libres
+ * @return Número de marcos de página disponibles
+ */
+int available_frames() {
+    return physmem_available_frames;
 }
 
 

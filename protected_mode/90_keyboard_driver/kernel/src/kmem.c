@@ -23,8 +23,11 @@ memory_region * kmem_list = 0;
 /** @brief Apuntador a la region de memoria actual */
 memory_region * current_kmem;
 
-/** @brief numero de regiones de memoria disponibles */
+/** @brief Numero de regiones de memoria disponibles */
 int kmem_count;
+
+/** @brief Numero total de paginas disponibles */
+int kmem_available_pages;
 
 /* Variable definida en start.S que almacena la dirección física en la cual
  * terminan las tablas de página iniciales del kernel */
@@ -55,6 +58,7 @@ void setup_kmem(void){
 
     /* Inicializar las regiones de memoria disponibles */
     kmem_count = 0;
+    kmem_available_pages = 0;
 
     //Inicio de la memoria virtual disponible
     //Donde terminan las tablas de pagina  iniciales + 1 pagina
@@ -85,9 +89,12 @@ void setup_kmem(void){
             }
 
             slots = kmem[kmem_count].length / PAGE_SIZE;
+            kmem_available_pages += slots;
 
             /* Inicializar el mapa de bits para esta region */
             bitmap_init(&kmem[kmem_count].map, tmp_ptr, slots);
+
+            /* Apuntar a la siguiente entrada */
             tmp_ptr += slots / BITS_PER_BITMAP_ENTRY;
 
             /* Redondear al siguiente apuntador de entero sin signo si
@@ -118,13 +125,17 @@ void setup_kmem(void){
 }
 
 /**
- @brief Busca y reserva una página libre dentro de la memoria del kernel
+ * @brief Busca y reserva una página libre dentro de la memoria del kernel
  * @return Dirección de inicio de la página
  */
 unsigned int kmem_get_page() {
     unsigned int addr;
     int slot;
     memory_region * aux;
+
+    if (kmem_available_pages == 0) {
+        return 0;
+    }
 
     aux = current_kmem;
 
@@ -133,6 +144,7 @@ unsigned int kmem_get_page() {
             slot = bitmap_allocate(&aux->map);
             if (slot >= 0) {
                 addr = aux->start + (slot * PAGE_SIZE);
+                kmem_available_pages--;
                 return addr;
             }
         }
@@ -143,7 +155,7 @@ unsigned int kmem_get_page() {
 }
 
 /**
- @brief Busca una región continua de páginas libres en la memoria del kernel
+ * @brief Busca una región continua de páginas libres en la memoria del kernel
  * @return Dirección de inicio de la página
  */
 unsigned int kmem_get_pages(int count) {
@@ -153,12 +165,17 @@ unsigned int kmem_get_pages(int count) {
 
     aux = current_kmem;
 
+    if (kmem_available_pages < count) {
+        return 0;
+    }
+
     do {
         if (aux->map.free_slots != 0 && 
                 aux->map.free_slots >= count) {
             slot = bitmap_allocate_region(&aux->map, count);
             if (slot >= 0) {
                 addr = aux->start + (slot * PAGE_SIZE);
+                kmem_available_pages -= count;
                 return addr;
             }
         }
@@ -169,7 +186,7 @@ unsigned int kmem_get_pages(int count) {
 }
 
 /**
- @brief Busca una página y un marco libre y realiza el mapeo
+ * @brief Busca una página y un marco libre y realiza el mapeo
  * @return Dirección de inicio de la página
  */
 unsigned int kmem_allocate_page(void){
@@ -194,64 +211,82 @@ unsigned int kmem_allocate_page(void){
         return page;
     }else {
         kmem_free(page);
+        //No se pudo mapear la pagina, liberar el marco
         free_frame(frame);
     }
     return 0;
 }
 
 /**
- @brief Busca y mapea una región continua de páginas libres
+ * @brief Busca y mapea una región continua de páginas libres
+ * @param count Numero de paginas a buscar y mapear
+ * @param adjacent 1 = los marcos deben ser contiguos en memoria fisica
  * @return Dirección de inicio de la página
  */
-unsigned int kmem_allocate_pages(int count) {
+unsigned int kmem_allocate_pages(int count, int adjacent) {
     int i;
-    unsigned int frame;
     unsigned int page;
     int done;
 
     unsigned int tmp_frame;
     unsigned int tmp_page;
     int j;
+    unsigned int frame;
 
-    frame = allocate_frame_region(count * FRAME_SIZE);
-    if (!frame) {
+    //Verificar si existen suficientes marcos de pagina disponibles
+    if (available_frames() < count) {
         return 0;
     }
 
+    //Obtener las paginas contiguas en memoria virtual
     page = kmem_get_pages(count);
-
     if (!page) {
-        for (i = 0; i < count; i++, frame += FRAME_SIZE) {
-            free_frame(frame);
-        }
         return 0;
     }
 
     tmp_page = page;
-    tmp_frame = frame;
     done = 1;
-    for (i = 0; i < count && done == 1; i++, tmp_page += PAGE_SIZE, tmp_frame += FRAME_SIZE){
-        if (!map_page(tmp_page, tmp_frame)) {
+
+    if (!adjacent) {
+        //Mapear las paginas a marcos (no necesariamente adyacentes)
+        for (i = 0 ;
+                i < count && done == 1; 
+                i++, tmp_page += PAGE_SIZE){
+            tmp_frame = allocate_frame();
+            if (!map_page(tmp_page, tmp_frame)) {
+                done = 0;
+            }
+        }
+
+    }else {
+        //Buscar count marcos de pagina adyacentes
+        frame = allocate_frame_region(count * FRAME_SIZE);
+        if (frame) {
+            tmp_frame = frame;
+            done = 1;
+            for (i = 0; i < count && done == 1; i++, tmp_page += PAGE_SIZE, tmp_frame += FRAME_SIZE){
+                if (!map_page(tmp_page, tmp_frame)) {
+                    done = 0;
+                }
+            }
+        }else {
             done = 0;
         }
     }
     if (done) {
         return page;
     }else {
-        for (j = 0; j <i; j++, page += PAGE_SIZE, frame += FRAME_SIZE) {
+        for (j = 0; j <i; j++, page += PAGE_SIZE) {
             kmem_free(page);
-            free_frame(frame);
         }
     }
-
     return 0;
 }
 
 
 /**
- * @brief Permite liberar un marco de página
- * @param addr Dirección de inicio del marco. Se redondea hacia abajo si no es
- * múltiplo de PAGE_SIZE
+ * @brief Permite liberar una página
+ * @param addr Dirección de la página a liberar
  */
 void kmem_free(unsigned int addr) {
     int slot;
@@ -272,4 +307,13 @@ void kmem_free(unsigned int addr) {
         aux = aux->next;
     }while(aux != current_kmem);
 }
+
+/**
+ * @brief Retorna el número de páginas disponibles en la memoria del kernel
+ * @return Número de páginas disponibles
+ */
+int available_pages() {
+    return kmem_available_pages;
+}
+
 
