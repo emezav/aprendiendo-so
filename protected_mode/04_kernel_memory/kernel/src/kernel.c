@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <kmem.h>
+#include <kcache.h>
 
 void cmain(){
 
@@ -40,34 +41,23 @@ void cmain(){
     /* Inicializar la memoria virtual para el kernel */
     setup_kmem();
 
-    console_printf("Available frames: %d Available pages: %d\n", 
-            available_frames(),
-            available_pages());
+    kcache * cache;
 
-    console_printf("Allocate pages 0x%x\n", kmem_allocate_pages(10, 0));
-    console_printf("Available frames: %d Available pages: %d\n", 
-            available_frames(),
-            available_pages());
+    cache = kcache_create(32);
 
-    console_printf("Allocate page 0x%x\n", kmem_allocate_page());
-    console_printf("Available frames: %d Available pages: %d\n", 
-            available_frames(),
-            available_pages());
+    if (cache == 0) {
+        console_printf("Could not create cache!\n");
+        for (;;);
+    }
 
-    console_printf("Get page 0x%x\n", kmem_get_page());
-    console_printf("Available frames: %d Available pages: %d\n", 
-            available_frames(),
-            available_pages());
+    void * ptr = kcache_alloc(cache);
 
-    console_printf("Get pages 0x%x\n", kmem_get_pages(5));
-    console_printf("Available frames: %d Available pages: %d\n", 
-            available_frames(),
-            available_pages());
+    if (ptr == 0) {
+        console_printf("Could not allocate object!\n");
+        for (;;);
+    }
 
-    console_printf("Allocate page 0x%x\n", kmem_allocate_page());
-    console_printf("Available frames: %d Available pages: %d\n", 
-            available_frames(),
-            available_pages());
+    kcache_free(ptr);
 
 
 }
