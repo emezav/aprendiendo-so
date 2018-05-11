@@ -13,7 +13,7 @@ incluir código en ensamblador directamente dentro del código en C.
 
 @verbatim
 
-__asm__ __volatile__(" instrucciones_asm"
+__asm__ (" instrucciones_asm"
 					 : operandos de salida
 					 : operandos de entrada
 					 : registros a invalidar
@@ -32,7 +32,7 @@ HOWTO de assembler en línea.
  *
  */
 #define inline_assembly(code...) \
-		__asm__ __volatile__(code)
+		__asm__ (code)
 
 /**
  * @brief Lee un byte de un puerto de entrada / salida.

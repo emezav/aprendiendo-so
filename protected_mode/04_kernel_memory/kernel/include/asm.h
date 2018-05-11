@@ -13,7 +13,7 @@ incluir código en ensamblador directamente dentro del código en C.
 
 @verbatim
 
-__asm__ __volatile__(" instrucciones_asm"
+__asm__ (" instrucciones_asm"
 					 : operandos de salida
 					 : operandos de entrada
 					 : registros a invalidar
@@ -32,7 +32,7 @@ HOWTO de assembler en línea.
  *
  */
 #define inline_assembly(code...) \
-		__asm__ __volatile__(code)
+		__asm__ (code)
 
 /* Punto de depuración mágico de Bochs. Debe estar habilitado en el archivo de
  * configuración bochsrc*/
@@ -46,7 +46,7 @@ HOWTO de assembler en línea.
  */
 static __inline__ unsigned char inb(unsigned short port) {
 	unsigned char data;
-	inline_assembly("inb %1,%0" : "=a" (data) : "dN" (port));
+	inline_assembly("inb %w1, %b0" : "=a" (data) : "dN" (port));
 	return data;
 }
 
@@ -57,7 +57,7 @@ static __inline__ unsigned char inb(unsigned short port) {
  *
  */
 static __inline__ void outb(unsigned short port, unsigned char data){
-	inline_assembly("outb %1,%0" : : "dN" (port), "a" (data));
+	inline_assembly("outb %b1, %w0" : : "dN" (port), "a" (data));
 }
 
 /**
@@ -67,7 +67,7 @@ static __inline__ void outb(unsigned short port, unsigned char data){
  */
 static __inline__ unsigned short inw(unsigned short port) {
 	unsigned short data;
-	inline_assembly("inw %1,%0" : "=a" (data) : "dN" (port));
+	inline_assembly("inw %w1, %w0" : "=a" (data) : "dN" (port));
 	return data;
 }
 
@@ -78,7 +78,7 @@ static __inline__ unsigned short inw(unsigned short port) {
  * @return void
  */
 static __inline__ void outw(unsigned short port, unsigned short data){
-	inline_assembly("outw %1,%0" : : "dN" (port), "a" (data));
+	inline_assembly("outw %w1, %w0" : : "dN" (port), "a" (data));
 }
 
 /**
@@ -88,7 +88,7 @@ static __inline__ void outw(unsigned short port, unsigned short data){
  */
 static __inline__ unsigned int inl(unsigned short port) {
 	unsigned int data;
-	inline_assembly("inl %1,%0" : "=a" (data) : "dN" (port));
+	inline_assembly("inl %w1, %0" : "=a" (data) : "dN" (port));
 	return data;
 }
 
@@ -99,8 +99,82 @@ static __inline__ unsigned int inl(unsigned short port) {
  * @return void
  */
 static __inline__ void outl(unsigned short port, unsigned int data){
-	inline_assembly("outl %1,%0" : : "dN" (port), "a" (data));
+	inline_assembly("outl %1, %w0" : : "dN" (port), "a" (data));
 }
+
+/**
+ * @brief Lee bytes desde un puerto de entrada/salida.
+ * @param port Puerto de e/s del cual se lee los bytes
+ * @param addr Buffer en donde se leen los bytes
+ * @param count Cantidad de bytes a leer del puerto
+ *
+ * @return void
+ */
+static __inline__ void insb(unsigned short port, void * addr, unsigned int count) {
+	inline_assembly("rep; insb": "+D"(addr), "+c"(count):"d"(port):"memory");
+}
+
+/**
+ * @brief Lee words desde un puerto de entrada/salida.
+ * @param port Puerto de e/s del cual se lee los words
+ * @param addr Buffer en donde se leen los words
+ * @param count Cantidad de words a leer del puerto
+ *
+ * @return void
+ */
+static __inline__ void insw(unsigned short port, void * addr, unsigned int count) {
+	inline_assembly("rep; insw": "+D"(addr), "+c"(count):"d"(port):"memory");
+}
+
+/**
+ * @brief Lee doublewords desde un puerto de entrada/salida.
+ * @param port Puerto de e/s del cual se lee los doublewords
+ * @param addr Buffer en donde se leen los doublewords
+ * @param count Cantidad de doublewords a leer del puerto
+ *
+ * @return void
+ */
+static __inline__ void insl(unsigned short port, void * addr, unsigned int count) {
+	inline_assembly("rep; insl": "+D"(addr), "+c"(count):"d"(port):"memory");
+}
+
+/**
+ * @brief Escribe bytes a un puerto de entrada/salida.
+ * @param port Puerto de e/s al cual se escriben los bytes
+ * @param addr Buffer desde el cual se leen los bytes
+ * @param count Cantidad de bytes a escribir en el puerto
+ *
+ * @return void
+ */
+static __inline__ void outsb(unsigned short port, void * addr, unsigned int count) {
+	inline_assembly("rep; outsb": "+S"(addr), "+c"(count):"d"(port):"memory");
+}
+
+/**
+ * @brief Escribe words a un puerto de entrada/salida.
+ * @param port Puerto de e/s al cual se escriben los words
+ * @param addr Buffer desde el cual se leen los words
+ * @param count Cantidad de words a escribir en el puerto
+ *
+ * @return void
+ */
+static __inline__ void outsw(unsigned short port, void * addr, unsigned int count) {
+	inline_assembly("rep; outsw": "+S"(addr), "+c"(count):"d"(port):"memory");
+}
+
+/**
+ * @brief Escribe doublewords a un puerto de entrada/salida.
+ * @param port Puerto de e/s al cual se escriben los doublewords
+ * @param addr Buffer desde el cual se leen los doublewords
+ * @param count Cantidad de doublewords a escribir en el puerto
+ *
+ * @return void
+ */
+static __inline__ void outsl(unsigned short port, void * addr, unsigned int count) {
+	inline_assembly("rep; outsl": "+S"(addr), "+c"(count):"d"(port):"memory");
+}
+
+
 
 /**
  * @brief Intercambio atómico de un byte.
