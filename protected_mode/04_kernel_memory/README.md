@@ -21,31 +21,31 @@ demás). De esta forma, el espacio libre abarca desde el final del kernel en
 memoria virtual hasta la dirección lineal 0xFF000000.
 
     +-------------------------+
-	|_________________________| <- Directorio de tablas de página mapeado
-	|                         |    recursivamente
-	| (4 MB)                  |
-	|                         |    0xFFC00000
-	|_________________________| <- Tablas de página mapeadas recursivamente
-	| (12 MB)                 |    0xFF000000
-	|_________________________| <- Espacio reservado para diversos usos
-	|                         | <- Fin de la memoria (virtual) disponible
-	| (aprox. 1 GB)           |    
-	| 1 GB -16MB -tam. kernel |  
-	|   - 1MB                 |  
-	|_________________________| <- Fin del kernel
-	|                         |
-	| Kernel (código y datos) |
-	|_________________________|
-	| (1 MB)                  |   0xC000000
-	|_________________________| <- Primer MegaByte de RAM y kernel mapeados
-	| Espacio virtual         |    a esta dirección
-	| disponible para las     |
-	| tareas                  |
-	| (Aprox. 3 GB)           |
-	|                         |
-	|                         |
-	|                         |
-	|_________________________|
+    |_________________________| <- Directorio de tablas de página mapeado
+    |                         |    recursivamente
+    | (4 MB)                  |
+    |                         |    0xFFC00000
+    |_________________________| <- Tablas de página mapeadas recursivamente
+    | (12 MB)                 |    0xFF000000
+    |_________________________| <- Espacio reservado para diversos usos
+    |                         | <- Fin de la memoria (virtual) disponible
+    | (aprox. 1 GB)           |    
+    | 1 GB -16MB -tam. kernel |  
+    |   - 1MB                 |  
+    |_________________________| <- Fin del kernel
+    |                         |
+    | Kernel (código y datos) |
+    |_________________________|
+    | (1 MB)                  |   0xC000000
+    |_________________________| <- Primer MegaByte de RAM y kernel mapeados
+    | Espacio virtual         |    a esta dirección
+    | disponible para las     |
+    | tareas                  |
+    | (Aprox. 3 GB)           |
+    |                         |
+    |                         |
+    |                         |
+    |_________________________|
 
 El espacio disponible (denominado kmem - kernel memory) de aproximadamente
 1 GB se subdivide en regiones de páginas con un tamaño de
