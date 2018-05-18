@@ -71,8 +71,12 @@
 
 /** @brief Tipo para un descriptor de segmento */
 typedef struct __attribute__((packed)) {
-    unsigned int high : 32;
-    unsigned int low : 32;
+	/* Bits menos significativos del descriptor. Agrupan
+	* Limite 0..15 y Base 0..15 del descriptor */
+	unsigned int low : 32;
+	/* Bits más significativos del descriptor. Agrupan Base 16..23, Tipo,
+	* S, DPL, P, Límite, AVL, L, D/B, G y Base 24..31 */
+	unsigned int high: 32;
 }gdt_descriptor;
 
 /** @brief Estructura de datos para un descriptor de segmento

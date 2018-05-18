@@ -264,7 +264,9 @@ unsigned int kmem_allocate_pages(int count, int adjacent) {
         if (frame) {
             tmp_frame = frame;
             done = 1;
-            for (i = 0; i < count && done == 1; i++, tmp_page += PAGE_SIZE, tmp_frame += FRAME_SIZE){
+            for (i = 0; 
+                    i < count && done == 1; 
+                    i++, tmp_page += PAGE_SIZE, tmp_frame += FRAME_SIZE){
                 if (!map_page(tmp_page, tmp_frame)) {
                     done = 0;
                 }

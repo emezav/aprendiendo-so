@@ -1347,29 +1347,21 @@ flush_page_table:
 
 /* Tabla Global de Descriptores (GDT) del kernel. */
 .align 8
-//present=0,base=0,limit=0,type=0,dpl=0,code_or_data=0,DB=0,G=0
+.global kernel_gdt
 kernel_gdt:
     /* La primera entrada del gdt debe ser nula */
-   gdt_entry 0, 0, 0, 0, 0, 0, 0, 0
+  //present=0,base=0,limit=0,type=0,dpl=0,code_or_data=0,DB=0,G=0
+  gdt_entry 0, 0, 0, 0, 0, 0, 0, 0
 
-    /* Descriptor de segmento de código de 32 bits para el kernel */
-   gdt_entry 1, 0, 0xFFFFFFFF, CODE_SEGMENT, RING0_DPL, 1, 1, 1
-    /* Descriptor de segmento de datos de 32 bits para el kernel */
-   gdt_entry 1, 0, 0xFFFFFFFF, DATA_SEGMENT, RING0_DPL, 1, 1, 1
+  /* Descriptor de segmento de código de 32 bits para el kernel */
+  gdt_entry 1, 0, 0xFFFFFFFF, CODE_SEGMENT, RING0_DPL, 1, 1, 1
 
-    /* Descriptor de segmento de código de 32 bits para las tareas */
-   gdt_entry 1, 0, 0xFFFFFFFF, CODE_SEGMENT, RING3_DPL, 1, 1, 1
-    /* Descriptor de segmento de datos de 32 bits para las tareas */
-   gdt_entry 1, 0, 0xFFFFFFFF, DATA_SEGMENT, RING3_DPL, 1, 1, 1
+  /* Descriptor de segmento de datos de 32 bits para el kernel */
+  gdt_entry 1, 0, 0xFFFFFFFF, DATA_SEGMENT, RING0_DPL, 1, 1, 1
 
-    /* Descriptor de segmento de código de 16 bits para el kernel */
-   gdt_entry 1, 0, 0xFFFF, CODE_SEGMENT, RING0_DPL, 1, 0, 0
-    /* Descriptor de segmento de datos de 16 bits para el kernel */
-   gdt_entry 1, 0, 0xFFFF, DATA_SEGMENT, RING0_DPL, 1, 0, 0
-
-    /*Espacio para otros descriptores de segmento (TSS), código y datos para las
-	 * tareas, etc. */
-	.space MAX_GDT_ENTRIES - (( . - kernel_gdt) >> 3), 0
+  /*Espacio para otros descriptores de segmento (TSS), código y datos para las
+  * tareas, etc. */
+	.space 8 * (MAX_GDT_ENTRIES - (( . - kernel_gdt) >> 3)), 0
 
 /*Apuntador a la tabla global de descriptores, que se usa en la instruccion
 LGDT.

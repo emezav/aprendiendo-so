@@ -11,8 +11,9 @@
 
 /** @brief Tabla Global de Descriptores (GDT). Es un arreglo de descriptores
  * de segmento. Según el manual de Intel, esta tabla debe estar alineada a un
- * límite de 8 bytes para un óptimo desempeño. */
-gdt_descriptor gdt[MAX_GDT_ENTRIES] __attribute((aligned(8)));
+ * límite de 8 bytes para un óptimo desempeño. Definida en
+ * kernel/src/start.S.*/
+extern gdt_descriptor kernel_gdt[];
 
 /** @brief Variable que almacena la siguiente entrada disponible en la GDT */
 int current_gdt_entry = 0;
@@ -40,12 +41,9 @@ gdt_descriptor * kernel_data_descriptor;
  * @return Selector que referencia al descriptor dentro de la GDT.
  */
 unsigned short get_gdt_selector(gdt_descriptor * desc) {
-	unsigned short offset = (unsigned short)((char*)desc - (char*)gdt);
+	unsigned short offset = (unsigned short)((char*)desc - (char*)kernel_gdt);
 	if (offset < 0) {return 0;}
 	if (offset > sizeof(gdt_descriptor) * MAX_GDT_ENTRIES) {return 0;}
-	if (offset % sizeof(gdt_descriptor)) {
-		return 0;
-	}
 	return offset;
 }
 
@@ -63,7 +61,7 @@ gdt_descriptor * get_gdt_descriptor(unsigned short selector) {
 	if (selector % sizeof(gdt_descriptor)) {
 		return 0;
 	}
-	return &gdt[selector>>3];
+	return &kernel_gdt[selector>>3];
 }
 
 /**
@@ -81,14 +79,14 @@ gdt_descriptor * allocate_gdt_descriptor(void) {
 
 	do {
 			if(next_gdt_entry != 0  /* Valida? */
-					&& gdt[next_gdt_entry].low == 0 /* Entrada vacia? */
-					&& 	gdt[next_gdt_entry].high == 0){
+					&& kernel_gdt[next_gdt_entry].low == 0 /* Entrada vacia? */
+					&& 	kernel_gdt[next_gdt_entry].high == 0){
 				/*Entrada valida!*/
 				/* Marcar la entrada como 'Presente' para evitar
 				 * que una llamada concurrente encuentre la misma entrada */
-				gdt[next_gdt_entry].high |= 1 << 15;
+				kernel_gdt[next_gdt_entry].high |= 1 << 15;
 				current_gdt_entry = (current_gdt_entry + 1) % MAX_GDT_ENTRIES;
-				return &gdt[next_gdt_entry];
+				return &kernel_gdt[next_gdt_entry];
 			}
 			next_gdt_entry = (next_gdt_entry + 1) % MAX_GDT_ENTRIES;
 	}while (next_gdt_entry > current_gdt_entry);
@@ -116,8 +114,8 @@ void free_gdt_descriptor(gdt_descriptor *desc) {
 
 	if (selector == 0) {return;}
 		index = selector >> 3;
-		gdt[index].low = 0;
-		gdt[index].high = 0;
+		kernel_gdt[index].low = 0;
+		kernel_gdt[index].high = 0;
 		current_gdt_entry = index;
 }
 
