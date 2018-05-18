@@ -24,14 +24,14 @@ unsigned short kernel_code_selector = KERNEL_CODE_SELECTOR;
 
 /** @brief Referencia al Descriptor de segmento de codigo del kernel dentro de
  * la GDT*/
-gdt_descriptor * kernel_code_descriptor;
+gdt_descriptor * kernel_code_descriptor = &kernel_gdt[KERNEL_CODE_SELECTOR >> 3];
 
 /** @brief  Variable que almacena el selector del descriptor de segmento de
  * datos para el kernel */
 unsigned short kernel_data_selector = KERNEL_DATA_SELECTOR;
 
 /** @brief Referencia al Descriptor de segmento de datos del kernel */
-gdt_descriptor * kernel_data_descriptor;
+gdt_descriptor * kernel_data_descriptor = &kernel_gdt[KERNEL_DATA_SELECTOR >> 3];
 
 /**
  * @brief Función que permite obtener el selector en la GDT a partir de un
