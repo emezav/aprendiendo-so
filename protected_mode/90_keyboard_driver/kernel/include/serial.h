@@ -42,5 +42,4 @@ void serial_puts(char * s);
 */
 void serial_printf(char * ,...);
 
-
 #endif /* SERIAL_H_ */

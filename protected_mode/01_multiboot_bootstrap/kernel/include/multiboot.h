@@ -174,6 +174,10 @@ typedef struct {
 
 }multiboot_info_t;
 
+/* @brief Variable que almacena la ubicación de la estructura multiboot en
+ * memoria. Definida en start.S */
+extern unsigned int multiboot_info_location;
+
 #endif
 
 #endif

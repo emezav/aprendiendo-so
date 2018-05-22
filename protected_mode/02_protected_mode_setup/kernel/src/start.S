@@ -1476,7 +1476,15 @@ kernel_initial_pagetables_end:
 .align 4096
 kernel_stack:
 .space KERNEL_STACK_SIZE
+.global kernel_stack_end
 kernel_stack_end:
+.long .
+
+.space KERNEL_STACK_SIZE
+.global tmp_stack
+tmp_stack:
+.long .
+
 
 /**
 @endverbatim

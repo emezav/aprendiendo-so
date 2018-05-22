@@ -11,7 +11,7 @@
 #include <string.h>
 
 /**
- * @brief Permite copiar un numero determinado de bytes
+ * @brief Copia un numero determinado de bytes
  * de una posicion de memoria a otra.
  * @param dst Dirección de memoria de destino de los datos
  * @param src Dirección de memoria de fuente de los datos
@@ -47,7 +47,8 @@ void *memset(void *dst, char val, int count) {
 }
 
 /**
- * @brief Calcula la longitud de una cadena terminada en el caracter nulo.
+ * @brief Calcula la longitud de una cadena
+ * terminada en el caracter nulo.
  * @param str Apuntador al inicio de la cadena de caracteres
  * @return Longitud de la cadena. No incluye en la longitud el caracter nulo
  *  al final de la cadena.
@@ -106,7 +107,6 @@ char * strcat(char *dst, const char *src) {
  * @return Resultado de la comparacion ( 0 :  cadenas iguales,
  *  		!= 0 : cadenas diferentes)
  */
-
 int strcmp(const char *a, const char *b) {
 	const char *x = a;
 	const char *y = b;
@@ -190,5 +190,69 @@ int nexttok(char * source, char * destination, char delim, int offset) {
     }
 
    return nchars;
+}
+
+/**
+ * @brief Imprime datos en un buffer de salida
+ * @param dst Buffer de destino, que se termina en nulo
+ */
+int sprintf(char * dst, char * format, ...) {
+    char ** arg;
+    char c;
+    char buf[255];
+    char *p;
+    int i;
+
+    char * aux;
+
+    aux = dst;
+
+    //Posicionar arg en la dirección de format
+    arg = (char **)&format;
+
+    /* Avanzar arg para que apunte al siguiente parametro */
+    arg++;
+
+    while ((c = *format++) != '\0') {
+            //Buscar el indicador de formato '%'
+            if (c != '%') { //Imprimir el caracter
+                    *dst++ = c;
+                    *dst = 0;
+                    continue; //Pasar a la siguiente iteracion
+            }
+            //c = '%', el siguiente caracter indica el tipo de datos
+            c = *format++;
+            if (c == 'd') { //Entero con signo
+                itoa (*((int *) arg++), buf, 10);
+                strcat(dst, buf);
+                dst += strlen(buf);
+            }else if (c == 'u') { //Entero sin signo
+                utoa (*((int *) arg++), buf, 10);
+                strcat(dst, buf);
+                dst += strlen(buf);
+            }else if(c == 'x') { //hex
+                itoa (*((int *) arg++), buf, 16);
+                strcat(dst, buf);
+                dst += strlen(buf);
+            }else if(c == 'b') { //binario
+                itoa (*((int *) arg++), buf, 2);
+                strcat(dst, buf);
+                dst += strlen(buf);
+            }else if(c == 'o') { //octal
+                itoa (*((int *) arg++), buf, 8);
+                strcat(dst, buf);
+                dst += strlen(buf);
+            } else if(c == 's') { //String
+                p = *arg++;
+                if (p != 0 && *p != 0){
+                    strcat(dst, p);
+                    dst += strlen(p);
+                }
+            }else { //En caso contrario, mostrar la referencia
+                *dst++ = *((int *) arg++);
+                *dst = 0;
+            }
+    }
+    return dst - aux;
 }
 

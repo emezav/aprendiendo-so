@@ -30,6 +30,9 @@
 
 #define KMEM_REGION_COUNT (KMEM_MAXSIZE / KMEM_GRANULARITY)
 
+/** @brief Numero total de paginas disponibles */
+extern int kmem_available_pages;
+
 /**
  * @brief Inicializa la memoria virtual del kernel
  */

@@ -87,4 +87,10 @@ int strncmp(const char *a, const char *b, int n);
  * */
 int nexttok(char * source, char * destination, char delim, int offset);
 
+/**
+ * @brief Imprime datos en un buffer de salida
+ * @param dst Buffer de destino, que se termina en nulo
+ */
+int sprintf(char * dst, char * format, ...);
+
 #endif /* STRING_H_ */

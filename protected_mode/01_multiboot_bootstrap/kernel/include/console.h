@@ -141,4 +141,12 @@ void console_puts(char * s );
 */
 void console_printf(char * ,...);
 
+/**
+ * @brief Imprime una cadena en una posicion x, y
+ * @param s Cadena terminada en nulo a imprimir
+ * @param x Fila
+ * @param y Columna
+ */
+void console_putxy(char * s, short x, short y);
+
 #endif /* CONSOLE_H_ */

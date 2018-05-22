@@ -228,6 +228,7 @@ unsigned int kmem_allocate_pages(int count, int adjacent) {
     unsigned int page;
     int done;
 
+
     unsigned int tmp_frame;
     unsigned int tmp_page;
     int j;
@@ -303,6 +304,7 @@ void kmem_free(unsigned int addr) {
             slot = (start - aux->start) / PAGE_SIZE;
             bitmap_free(&aux->map, slot);
             //Liberar la pagina y el marco de pagina
+            kmem_available_pages++;
             destroy_page(addr);
             return;
         }

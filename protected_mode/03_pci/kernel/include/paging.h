@@ -49,10 +49,10 @@
 #define KERNEL_PD_VADDR (KERNEL_PAGETABLES_VADDR + 0x3FF000)
 
 /** @brief Redondea una dirección dada al inicio de la página */
-#define ROUND_DOWN_TO_PAGE(value) ((value / PAGE_SIZE) * PAGE_SIZE)
+#define ROUND_DOWN_TO_PAGE(value) ((int)(value / PAGE_SIZE) * PAGE_SIZE)
 
 /** @brief Redondea una dirección dada al inicio de la siguiente página */
-#define ROUND_UP_TO_PAGE(value) (((value / PAGE_SIZE) + 1) * PAGE_SIZE)
+#define ROUND_UP_TO_PAGE(value) (((int)(value / PAGE_SIZE) + 1) * PAGE_SIZE)
 
 /** @brief Excepcion de fallo de pagina. */
 #define PAGE_FAULT_EXCEPTION 14

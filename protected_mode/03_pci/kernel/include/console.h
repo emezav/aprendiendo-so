@@ -117,7 +117,7 @@ void console_clear(void);
 /**
  * @brief Función para imprimir un caracter
  *
- * Esta rutina imprime directamente en la memoria de video. No valida
+ * Imprime directamente en la memoria de video. No valida
  * caracteres especiales.
  * @param c caracter ascii a imprimir
  */
@@ -140,5 +140,13 @@ void console_puts(char * s );
  *
 */
 void console_printf(char * ,...);
+
+/**
+ * @brief Imprime una cadena en una posicion x, y
+ * @param s Cadena terminada en nulo a imprimir
+ * @param x Fila
+ * @param y Columna
+ */
+void console_putxy(char * s, short x, short y);
 
 #endif /* CONSOLE_H_ */

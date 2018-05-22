@@ -303,3 +303,36 @@ void console_printf(char * format,...) {
                 }
         }
 }
+
+/**
+ * @brief Imprime una cadena en una posicion x, y
+ * @param s Cadena terminada en nulo a imprimir
+ * @param x Fila
+ * @param y Columna
+ */
+void console_putxy(char * s, short x, short y) {
+
+    int len;
+    unsigned int offset;
+    unsigned short * ptr;
+
+    offset = (y * SCREEN_COLUMNS) + x;
+
+    len = strlen(s);
+
+    if (offset + len > SCREEN_COLUMNS * SCREEN_LINES) {
+        return;
+    }
+
+	ptr = (unsigned short *) VIDEO_START_ADDR;
+
+    ptr += offset;
+
+    while (*s != 0) {
+        if (*s >= 0x20 && *s < 0x7F) {
+            *(ptr++) = (text_attributes << 8 | *s);
+        }
+        s++;
+    }
+}
+

@@ -161,6 +161,8 @@ extern unsigned int kernel_idt_pointer;
 
 extern unsigned int current_esp;
 
+extern unsigned int kernel_stack_end;
+
 /**
  * @brief Función que permite obtener el selector en la GDT a partir de un
  * apuntador a un descriptor de segmento

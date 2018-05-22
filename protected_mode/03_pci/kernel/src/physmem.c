@@ -388,6 +388,7 @@ void free_frame(unsigned int addr) {
         }
         aux = aux->next;
     }while(aux != current_physmem);
+    //console_printf("Frame at 0x%x not found!\n");
 }
 
 /**

@@ -42,6 +42,9 @@
 #define bitmap_offset(addr) \
 	(addr / PAGE_SIZE) % ( BITS_PER_ENTRY )
 
+/* @brief Numero total de marcos de pagina disponibles */
+extern int physmem_available_frames;
+
 /**
  * @brief Inicializa el mapa de bits de memoria,
  * a partir de la informacion obtenida del GRUB.

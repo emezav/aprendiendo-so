@@ -7,7 +7,6 @@
  * el manejo de interrupciones en la arquitectura IA-32
  */
 
-
 #include <asm.h>
 #include <exception.h>
 #include <irq.h>
@@ -138,13 +137,15 @@ void uninstall_interrupt_handler(unsigned char index) {
  * manejo de interrupción adecuada, si existe.
  */
 void interrupt_dispatcher() {
-    	/* Recuperar el marco de pila de la interrupcion. */
+    /* Recuperar el marco de pila de la interrupcion. */
 	interrupt_state * state;
 
-	/* Referencia al manejador de interrupcion */
+	/* Referencia al manejador de interrupcion. */
 	interrupt_handler handler;
 
+    /* Obtener el marco de pila de interrupcion. */
     state = (interrupt_state *) current_esp;
+
 	/* Buscar la rutina que maneja la interrupcion */
 	handler = interrupt_handlers[state->number];
 

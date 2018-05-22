@@ -91,7 +91,7 @@ unsigned int create_new_page_table(int pd_entry) {
     int i;
     page_table pt;
 
-    /* Obtener un marco de página*/
+    /* Obtener un marco de página */
     frame_addr = allocate_frame();
 
     //console_printf("Frame for page table allocated at 0x%x\n", frame_addr);
@@ -217,7 +217,7 @@ int unmap_page(unsigned int vaddr) {
     /* Recorrer la tabla de páginas para verificar si está usando alguna entrada
      * */
     i = 0;
-    while (i < PT_ENTRIES && (pt[i] & PG_UNUSED)){
+    while (i < PT_ENTRIES && !(pt[i] & PG_PRESENT)){
         i++;
     }
     //console_printf("Page table empty entries: %d\n", i);
@@ -270,7 +270,7 @@ int destroy_page(unsigned int vaddr) {
     pd_entry = vaddr / (PAGE_SIZE * PD_ENTRIES);
     pt_entry = (vaddr % (PAGE_SIZE * PD_ENTRIES)) / PAGE_SIZE;
 
-    //console_printf("PD entry: %d PT entry: %d\n", pd_entry, pt_entry);
+    //console_printf("\nVaddr: 0x%x PD entry: %d PT entry: %d\n", vaddr, pd_entry, pt_entry);
 
     /* No se puede quitar el mapeo de una tabla que no está presente. */
     if (! (kernel_pd[pd_entry] & PG_PRESENT)) {
@@ -284,7 +284,7 @@ int destroy_page(unsigned int vaddr) {
     if (pt[pt_entry] & PG_PRESENT) {
         frame = pt[pt_entry] & 0xFFFFF000;
         //Libera el marco de pagina de la memoria fisica
-        free_frame(pt_frame);
+        free_frame(frame);
         pt[pt_entry] = PG_UNUSED;
     }
 
@@ -294,9 +294,10 @@ int destroy_page(unsigned int vaddr) {
     /* Recorrer la tabla de páginas para verificar si está usando alguna entrada
      * */
     i = 0;
-    while (i < PT_ENTRIES && (pt[i] & PG_UNUSED)){
+    while (i < PT_ENTRIES && !(pt[i] & PG_PRESENT)){
         i++;
     }
+
     //console_printf("Page table empty entries: %d\n", i);
 
     /* Si ninguna entrada de la tabla está siendo usada, se puede liberar la
@@ -307,7 +308,7 @@ int destroy_page(unsigned int vaddr) {
          * tabla de páginas */
         pt_frame = kernel_pd[pd_entry] & 0xFFFFF000;
 
-        //console_printf("Invalidate page 0x%x => 0x%x\n", (unsigned int)pt, pt_frame);
+        //console_printf("Invalidate page table %d => 0x%x\n", pd_entry, pt_frame);
         
         /* Invalidar la página en el TLB */
         invalidate_page((unsigned int)pt);
@@ -327,8 +328,10 @@ int destroy_page(unsigned int vaddr) {
 void print_page_table(page_directory pd) {
     int i;
 
+    
     console_printf("Page table at 0x%x[0x%x]\n", (unsigned int)pd,
             ROUND_DOWN_TO_PAGE((unsigned int)pd[1023]));
+    
     
      /* Imprimir las entradas marcadas como válidas en el directorio de tablas
       * de  página */
@@ -353,7 +356,7 @@ unsigned int read_cr2() {
 void page_fault_handler(interrupt_state * state) {
     unsigned int vaddr;
     unsigned int page;
-    
+
     /* Se debe mapear la página a una dirección física válida, de lo contrario
      * al retornar de la interrupción se generará un nuevo fallo de página. */
 
