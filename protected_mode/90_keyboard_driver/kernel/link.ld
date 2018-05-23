@@ -45,7 +45,11 @@ SECTIONS {
        *(COMMON)
    } = 0x00000000
 
+   /* Alinear a un limite de 4096 bytes */
    . = ALIGN(4096);
+
+   /* Reservar 4096 bytes adicionales */
+   . += 4096;
 
    bss_phys_end = . - virt_offset;
 

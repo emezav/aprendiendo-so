@@ -1486,6 +1486,11 @@ tmp_stack:
 .long .
 
 
+.align 4096
+.global kernel_end
+kernel_end:
+.long .
+
 /**
 @endverbatim
 */

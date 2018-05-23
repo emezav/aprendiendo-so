@@ -149,7 +149,8 @@ int bitmap_allocate_region(bitmap * dst, int count){
         if (dst->data[entry] != 0) {
             //Found entry with at least one bit set!
             offset = 0;
-            while (offset < BITS_PER_BITMAP_ENTRY && BITMAP_TEST(dst, entry, offset) == 0) {
+            while (offset < BITS_PER_BITMAP_ENTRY 
+                    && BITMAP_TEST(dst, entry, offset) == 0) {
                 offset++;
             }
             

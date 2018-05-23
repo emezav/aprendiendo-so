@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <kmem.h>
 
-/** @brief Mapa de bits de la memoria fisica. */
+/** @brief Mapa de bits de la memoria lineal del kernel. */
 unsigned int 
     kernel_memory_bitmap[KMEM_MAXPAGES / BITS_PER_BITMAP_ENTRY] 
     __attribute__((aligned(4096)));
