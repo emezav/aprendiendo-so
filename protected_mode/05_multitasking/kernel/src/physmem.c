@@ -175,7 +175,7 @@ void setup_physical_memory(void){
 				  * de la memoria disponible en la posicion en la cual
 				  * finaliza el kernel
 				 */
-				 tmp_start = kernel_initial_pagetables_end;
+				 tmp_start =kernel_initial_pagetables_end;
 
 				 /* Ahora verificar si ser cargaron módulos junto con el
 				  * kernel. Estos modulos se cargan en regiones continuas

@@ -147,7 +147,7 @@ static __inline__ void insl(unsigned short port, void * addr, unsigned int count
  * @return void
  */
 static __inline__ void outsb(unsigned short port, void * addr, unsigned int count) {
-	inline_assembly("rep; outsb": "+S"(addr), "+c"(count):"d"(port):"memory");
+	inline_assembly("rep; outsb" : : "S"(addr), "c"(count), "d"(port):"memory");
 }
 
 /**
@@ -159,7 +159,7 @@ static __inline__ void outsb(unsigned short port, void * addr, unsigned int coun
  * @return void
  */
 static __inline__ void outsw(unsigned short port, void * addr, unsigned int count) {
-	inline_assembly("rep; outsw": "+S"(addr), "+c"(count):"d"(port):"memory");
+	inline_assembly("rep; outsw" : : "S"(addr), "c"(count), "d"(port):"memory");
 }
 
 /**
@@ -171,7 +171,7 @@ static __inline__ void outsw(unsigned short port, void * addr, unsigned int coun
  * @return void
  */
 static __inline__ void outsl(unsigned short port, void * addr, unsigned int count) {
-	inline_assembly("rep; outsl": "+S"(addr), "+c"(count):"d"(port):"memory");
+	inline_assembly("rep; outsl" : : "S"(addr), "c"(count), "d"(port):"memory");
 }
 
 

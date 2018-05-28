@@ -147,6 +147,56 @@ int strncmp(const char *a, const char *b, int n) {
 }
 
 /**
+ * @brief Busca c desde el inicio de str.
+ * @param str Cadena de caracteres terminada en nulo
+ * @param c Caracter a buscar.
+ * @return Apuntador a la primera ocurrencia de c en s.
+ */
+char * strchr(const char *s, const char c) {
+
+    if (s == 0 || *s == 0) {
+        return 0;
+    }
+
+    while (*s != 0) {
+        if (*s == (char)c) {
+            return (char *)s;
+        }
+        s++;
+    }
+    return 0;
+}
+
+/**
+ * @brief Busca c desde el final de str.
+ * @param str Cadena de caracteres terminada en nulo
+ * @param c Caracter a buscar.
+ * @return Apuntador a la primera ocurrencia de c en s.
+ */
+char * strrchr(const char *s, const char c) {
+
+    char * aux;
+    if (s == 0 || *s == 0) {
+        return 0;
+    }
+
+    aux = (char*)s;
+
+    while (*s != 0) {
+        s++;
+    }
+
+    while (s >= aux) {
+        if (*s == (char)c) {
+            return (char *)s;
+        }
+        s--;
+    }
+    return 0;
+}
+
+
+/**
  * @brief Permite obtener una 'palabra' de una cadena de entrada.
  * @param source Cadena de entrada
  * @param destination Cadena en la cual se almacena la palabra obtenida

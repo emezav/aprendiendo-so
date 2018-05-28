@@ -25,7 +25,6 @@ void *memcpy(void *dst, const void *src, int count);
 
 /**
  * @brief Copia auna region de memoria un valor (char) determinado.
- * Entrada:
  * @param dst Dirección de memoria de destino
  * @param val Valor a copiar
  * @param count Numero de repeticiones
@@ -76,6 +75,22 @@ int strcmp(const char *a, const char *b);
  *  		!= 0 : cadenas diferentes)
  */
 int strncmp(const char *a, const char *b, int n);
+
+/**
+ * @brief Busca c desde el inicio de str.
+ * @param str Cadena de caracteres terminada en nulo
+ * @param c Caracter a buscar.
+ * @return Apuntador a la primera ocurrencia de c en s.
+ */
+char * strchr(const char *s, const char c);
+
+/**
+ * @brief Busca c desde el final de str.
+ * @param str Cadena de caracteres terminada en nulo
+ * @param c Caracter a buscar.
+ * @return Apuntador a la primera ocurrencia de c en s.
+ */
+char * strrchr(const char *s, const char c);
 
 /**
  * @brief Permite obtener una 'palabra' de una cadena de entrada.

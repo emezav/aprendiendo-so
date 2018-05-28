@@ -20,9 +20,11 @@
 #include <kcache.h>
 #include <task.h>
 
-
-void dummy_task(void);
-void dummy_task2(void);
+/**
+ * @brief Primera tarea creada por el kernel.
+ * @return nunca retorna.
+ */
+void init(void);
 
 void cmain(){
 
@@ -50,47 +52,25 @@ void cmain(){
     /** - Inicializar el entorno de multi tareas. */
     setup_multitasking();
 
-    extern void dummy_task (void);
-    extern void dummy_task2 (void);
-
-    /*
-    create_task((unsigned int)dummy_task);
-    create_task((unsigned int)dummy_task2);
-    */
+    /** - Crear la tarea inicial (init). */
+    create_task((unsigned int)init);
 
     /** - Iniciar la ejecucion de las tareas. */
     start_multitasking();
 
-    /** - El kernel no vuelve a este punto, ya que al menos existe el
-     * proceso inactivo (idle_task : task.c). */
+    /** - El kernel no vuelve a este punto, ya que al menos existe una 
+     * tarea (init). En ultima instancia, se ejecuta idle_task (task.c) */
 
 }
 
-void dummy_task(void) {
-    unsigned int i;
-    bochs_break();
-    console_printf("Task %d started\n", current_task->pid);
-    console_printf("Stack at: 0x%x 0x%x -> 0x%x\n", current_task->current_esp, 
-            current_task->kernel_stack,
-            current_task->kernel_stack - TASK_STACK_SIZE);
-    for (i = 0; i < 0xFFFF; i++) {
-        unsigned char status = inb(0x64);
+/**
+ * @brief Primera tarea creada por el kernel.
+ * @return nunca retorna.
+ */
+void init(void){
+    //TODO Crear las tareas de inicio del sistema. 
+    console_printf("Init started\n");
+    while (1) {
+        inline_assembly("hlt");
     }
-
-    console_printf("Task %d finished\n", current_task->pid);
 }
-
-void dummy_task2(void) {
-    unsigned int i;
-    bochs_break();
-    console_printf("Task %d started\n", current_task->pid);
-    console_printf("Stack at: 0x%x 0x%x -> 0x%x\n", current_task->current_esp, 
-            current_task->kernel_stack,
-            current_task->kernel_stack - TASK_STACK_SIZE);
-    for (i = 0; i < 0xFFFF; i++) {
-        unsigned char status = inb(0x64);
-    }
-    console_printf("Task %d finished\n", current_task->pid);
-}
-
-

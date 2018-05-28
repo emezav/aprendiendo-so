@@ -62,6 +62,10 @@ typedef struct {
     pci_config_t config;
 }pci_device_t;
 
+
+/** @brief Referencia global a los dispositivos PCI en el sistema.*/
+extern pci_device_t pci_devices[];
+
 /**
  * @brief Realiza la detección de los dispositivos PCI.
  */
