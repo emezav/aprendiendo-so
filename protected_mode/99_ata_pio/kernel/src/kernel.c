@@ -46,8 +46,10 @@ void cmain(){
     /* Inicializar las estructuras de datos para dispostivos ATA. ata.c.*/
     setup_ata();
 
+    console_printf("ATA device count: %d\n", ata_get_device_count());
+
     /* Suponer que el primer dispositivo ATA existe. */
-    ata_device * dev = &ata_devices[0];
+    ata_device * dev = ata_get_device(0);
 
     if (!dev->present) {
         console_printf("ATA device not present!\n");
@@ -56,10 +58,15 @@ void cmain(){
 
     int res;
 
+    /* Leer a buf del primer dispositivo el sector 0 (1 sector). */
     res = ata_read(dev, buf, 0, 1);
 
     if (res == -1) {
         console_printf("Unable to read from ATA Device!\n");
+        return;
+    }else {
+        console_printf("ATA read successful.\n");
     }
+
 }
 

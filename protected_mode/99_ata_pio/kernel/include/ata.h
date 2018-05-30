@@ -61,6 +61,9 @@ extern ata_channel ata_channels[];
 /** @brief Referencia global a los dispositivos ATA */
 extern ata_device ata_devices[];
 
+/** @brief Cantidad de dispositivos ATA en el sistema. */
+extern int ata_device_count;
+
 /** @brief Direccion de E/S del registro de datos */
 #define ATA_DATA_REG(channel) (channel->io_base)
 
@@ -96,10 +99,8 @@ extern ata_device ata_devices[];
  * @description Leer de este puerto limpia cualquier IRQ pendiente. */
 #define ATA_ALT_STATUS_REG(channel) (channel->alt_status)
 
-
-
 /* Comandos ATA */
-#define ATA_IDENTIFY_DRIVE 0xEC
+#define ATA_IDENTIFY_DEVICE 0xEC
 #define ATA_READ_SECTORS 0x20
 #define ATA_WRITE_SECTORS 0x30
 #define ATA_READ_DMA 0xC8
@@ -140,11 +141,24 @@ typedef enum {
 /** @brief Configura las estructuras de datos para los dispositivos ATA.*/
 void setup_ata(void);
 
-/** @brief Envia el comando RESET DEVICE a un canal ATA. */
-void ata_reset(ata_channel channel);
+/** 
+ * @brief Retorna la cantidad de dispositivos ATA detectados.
+ * @return Cantidad de dispositivos ATA detectados en el sistema.
+ */
+int ata_get_device_count();
 
-/** @brief Envia el comando RESET DEVICE a un canal ATA. */
-void ata_reset(ata_channel channel);
+/** 
+ * @brief Retorna una referencia al dispositivo ATA solicitado.
+ * @param Indice del dispositivo 0 < MAX_ATA_DEVICES
+ * @return Referencia al dispositivo, nulo si hay error.
+ */
+ata_device * ata_get_device(char index);
+
+/** 
+ * @brief Reinicia un canal ATA.
+ * @param Referencia al canal ATA a reiniciar.
+*/
+void ata_reset(ata_channel * chan);
 
 /** 
  * @brief Lee hasta 256 sectores de un dispositivo ATA.

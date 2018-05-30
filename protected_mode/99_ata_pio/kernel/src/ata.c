@@ -45,8 +45,13 @@ static inline decode_ata_str(char * str, int len) {
 
 }
 
-/** @brief Identifica un dispositivo conectado a un canal ATA. */
-void ata_identify(char chan_id, char dev_id);
+/** 
+ * @brief Identifica un dispositivo conectado a un canal ATA.
+ * @param chan_id Canal (0 = primario, 1 = secundario).
+ * @param dev_id (0 = maestro, 1 = esclavo).
+ * @return 0 si se identifica correctamente el dispositivo.
+*/
+int ata_identify(char chan_id, char dev_id);
 
 /** @brief Rutina de manejo de interrupción del dispositivo ATA. */
 void ata_handler(interrupt_state *state) {
@@ -86,7 +91,8 @@ void setup_ata() {
     }
 
     ptr = pci_devices;
-    pci_list();
+    //Imprimir la lista de dispositivos PCI detectados.
+    //pci_list();
 
     for (i = 0; i < pci_device_count; i++) {
         if (
@@ -125,15 +131,19 @@ void setup_ata() {
             ata_channels[1].alt_status = bar3;
             ata_channels[1].dev_ctrl = bar3;
             
-            console_printf("Disk 0x%x 0x%x 0x%x 0x%x\n", bar0, bar1, bar2, bar3);
+            //Imprimir los BAR del controlador ATA
+            //console_printf("ATA 0x%x 0x%x 0x%x 0x%x\n", bar0, bar1, bar2, bar3);
             
             for (chan = 0; chan < MAX_ATA_CHANNELS; chan++) {
                 for (dev = 0; dev < MAX_ATA_DEV_PER_CHANNEL; dev++) {
-                    ata_identify(chan, dev);
+                    if (ata_identify(chan, dev) == 0) {
+                        //Incrementar la cantidad de dispositivos
+                        ata_device_count++;
+                    }
                 }
             }
 
-            //We only configure primary and secondary channels, sorry..
+            //Controlador ATA encontrado, terminar busqueda.
             break;
             
         }
@@ -143,12 +153,44 @@ void setup_ata() {
     ata_setup_ready = 1;
 }
 
-void ata_reset(ata_channel channel) {
-    console_printf("TODO Reset interface");
+/** 
+ * @brief Retorna la cantidad de dispositivos ATA detectados.
+ * @return Cantidad de dispositivos ATA detectados en el sistema.
+ */
+int ata_get_device_count() {
+    return ata_device_count;
+}
+
+/** 
+ * @brief Retorna una referencia al dispositivo ATA solicitado.
+ * @param Indice del dispositivo 0 < MAX_ATA_DEVICES
+ * @return Referencia al dispositivo, nulo si hay error.
+ */
+ata_device * ata_get_device(char index) {
+    if (index < 0 || index >= MAX_ATA_DEVICES) {
+        return 0;
+    }
+
+    return &ata_devices[index];
 }
 
 
-void ata_identify(char chan_id, char dev_id) {
+/** 
+ * @brief Reinicia un canal ATA.
+ * @param Referencia al canal ATA a reiniciar.
+*/
+void ata_reset(ata_channel * chan) {
+    console_printf("TODO Reset channel %d\n", chan->channel);
+}
+
+
+/** 
+ * @brief Identifica un dispositivo conectado a un canal ATA.
+ * @param chan_id Canal (0 = primario, 1 = secundario).
+ * @param dev_id (0 = maestro, 1 = esclavo).
+ * @return 0 si se identifica correctamente el dispositivo.
+*/
+int ata_identify(char chan_id, char dev_id) {
 
     unsigned short buf[256];
     char dev_offset;
@@ -178,7 +220,7 @@ void ata_identify(char chan_id, char dev_id) {
     outb(ATA_LBA_MI_REG(chan), 0);
     outb(ATA_LBA_HI_REG(chan), 0);
     outb(ATA_DEVICE_REG(chan), (dev_id << 4));
-    outb(ATA_COMMAND_REG(chan), ATA_IDENTIFY_DRIVE);
+    outb(ATA_COMMAND_REG(chan), ATA_IDENTIFY_DEVICE);
 
     unsigned char status = 0;
 
@@ -201,7 +243,7 @@ void ata_identify(char chan_id, char dev_id) {
          chan_id,
          dev_id); 
         */
-        return;
+        return -1;
     }
 
     /* Read data! */
@@ -232,12 +274,16 @@ void ata_identify(char chan_id, char dev_id) {
         dev->features |= LBA48_SUPPORTED;
     }
 
+    /*
     console_printf("(%d, %d) LBA-28 Sectors: %d "
             "LBA-48 lo: %d LBA-48 hi: %d Feat. %b\n", 
             chan_id, dev_id,
             dev->sectors,
             dev->lba48_sectors_lo, dev->lba48_sectors_hi,
             dev->features);
+    */
+
+    return 0;
 }
 
 /** 
