@@ -11,6 +11,7 @@
 #include <asm.h>
 #include <stdlib.h>
 #include <console.h>
+#include <string.h>
 
 /** @brief Apuntador al inicio de la memoria de video.
  * @details

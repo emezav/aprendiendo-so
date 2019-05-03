@@ -9,6 +9,8 @@
  */
 
 #include <string.h>
+#include <stdlib.h>
+
 
 /**
  * @brief Copia un numero determinado de bytes
