@@ -1,0 +1,12 @@
+###############################################################
+# bochsrc.txt Base Bochs configuration File
+###############################################################
+
+romimage: file=$BXSHARE/BIOS-bochs-latest
+vgaromimage: file=$BXSHARE/VGABIOS-lgpl-latest
+vga: extension=vbe
+
+#Enable bochs break on xchg bx, bx
+magic_break: enabled=1
+
+#keyboard: keymap=$BXSHARE/keymaps/x11-pc-us.map

@@ -1,0 +1,6 @@
+default 0
+timeout 2
+color cyan/blue white/blue
+
+title Aprendiendo Sistemas Operativos
+kernel /boot/kernel

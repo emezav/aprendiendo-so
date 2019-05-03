@@ -1,0 +1,6 @@
+/** @defgroup bootsector_code Código del sector de arranque
+ *  Conjunto de archivos usados por el sector de arranque
+ *  @{
+ */
+
+/** @} */

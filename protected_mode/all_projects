@@ -1,0 +1,25 @@
+#!/bin/bash
+rule=${1:-"none"}
+
+if [ $rule = "none" ]; then
+	echo -e "Uso: $0 DIRECTIVA"
+	echo -e "\tDonde DIRECTIVA es la directiva definida en el archivo Makefile"  
+	exit 0
+fi
+
+
+for i in *; do
+	if [ -d $i ]; then #Es directorio?
+		cd $i
+		if [ -f Makefile ]; then #Existe makefile?
+			rule_line=$(grep $rule: Makefile)
+			#La directiva esta definida?
+			if [ ${#rule_line} -gt 0 ]; then
+				echo "Applying '$rule' in $PWD" 
+				make $rule
+			fi 
+		fi
+		cd ..
+	fi
+done
+

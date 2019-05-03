@@ -1,0 +1,60 @@
+ACUERDO DE LICENCIA
+
+Los archivos contenidos en este directorio y sus sub-directorios,  si no se
+especifica lo contario, son Copyright (C) 2010 Erwin Meza Vega.
+
+Erwin Meza Vega, quien en adelante se denominara EL AUTOR, proporciona derecho
+personal e intransferible sobre los archivos contenidos en este directorio y sus
+sub-directorios, que en adelante se denominaran LOS MATERIALES, para que puedan
+ser usados, modificados y re-distribuidos siempre y cuando se mantengan el 
+Copyright que EL AUTOR posee sobre LOS MATERIALES y la presente licencia. 
+
+EL AUTOR se reserva el derecho a cesar la distribucion de LOS MATERIALES en 
+cualquier momento. Esto, sin embargo, no implica que el autor cesa sus derechos
+sobre LOS MATERIALES.
+
+LOS MATERIALES son proporcionados por EL AUTOR para ser usados "como una 
+introducción a los aspectos básicos de la programación de sistemas de 
+Arquitectura Intel (x86 y compatible), y al aprendizaje de las funcionalidades
+básicas de un Sistema Operativo para esta familia de procesadores". EL AUTOR no
+será bajo ninguna circunstancia responsable por perjuicios causados por el uso 
+de LOS MATERIALES o por trabajos derivados y/o adaptacionesde LOS MATERIALES. 
+Asimismo, EL AUTOR no se hace responsable por omisiones, errores o imprecisiones
+que puedan existir en LOS MATERIALES.
+
+LOS MATERIALES deberan ser distribuidos junto con esta licencia que solo puede
+ser modificada por EL AUTOR. Cualquier omision, modificacion o la 
+eliminacion de esta licencia constituye una violacion de la misma. EL AUTOR 
+podra emprender las acciones legales requeridas para restituir los derechos 
+sobre LOS MATERIALES. 
+
+Las imagenes de disco contienen codigo binario del cargador de 
+arranque GRUB (The GRand Unified Bootloader), Copyright (C) de sus titulares.
+
+Los nombres registrados que se enuncian en el codigo fuente o cualquier archivo
+dentro de LOS MATERIALES son Copyright (C) de sus respectivos titulares.
+
+------------------------------------------------------------------------
+The MIT License (MIT)
+
+Copyright (c) 2010 Erwin Meza Vega <emezav@gmail.com>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+------------------------------------------------------------------------
