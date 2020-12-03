@@ -11,25 +11,23 @@
 #ifndef SERIAL_H_
 #define SERIAL_H_
 
+/** @brief Direccion de E/S del puerto COM1*/
 #define COM1_PORT 0x3f8   /* COM1 */
 
 /**
- * Inicializa el puerto serial COM1
+ * @brief Inicializa el puerto serial COM1
  */
-void init_serial();
+void setup_serial();
 
 /**
- * Verifica si el puerto serial se encuentra vacío
+ * @brief Escribe un caracter en el puerto serial
+ * @param c caracter a escribir
 */
-int is_transmit_empty();
- 
-/**
- * Escribe un caracter en el puerto serial
-*/
-void serial_putchar(char a);
+void serial_putchar(char c);
 
 /**
- * Escribe una cadena de caracteres en el puerto serial
+ * @brief Escribe una cadena de caracteres en el puerto serial
+ * @param s cadena a escribir
  */
 void serial_puts(char * s);
 
@@ -40,7 +38,7 @@ void serial_puts(char * s);
  * @param ...  Lista de referencias a memoria de las variables a imprimir
  *
 */
-void serial_printf(char * ,...);
+void serial_printf(char * format,...);
 
 
 #endif /* SERIAL_H_ */

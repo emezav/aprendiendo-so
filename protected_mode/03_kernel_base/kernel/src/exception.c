@@ -88,7 +88,7 @@ void setup_exceptions(void) {
 
 
 /**
- * @brief Recibe el control de la interrupt_dispatcher.
+ * @brief Recibe el control de la subrutina interrupt_dispatcher.
  * Su trabajo consiste en determinar el vector de interrupcion a partir del
  * contexto actual de interrupcion, y de invocar la rutina de manejo de
  * excepcion adecuada, si existe.
@@ -134,11 +134,7 @@ void exception_dispatcher() {
 }
 
 /**
- * @brief Permite definir un nuevo manejador de excepcion
- * para una de las excepciones de los procesadores x86.
- * @param index Número de la excepción a la cual se le desea instalar
- * la rutina de manejo
- * @param handler Función de manejo de la excepción
+ * @brief Definir un nuevo manejador de excepción.
  */
 int install_exception_handler(unsigned char index, exception_handler handler) {
 	if (exception_handlers[index] != NULL_INTERRUPT_HANDLER) {
@@ -150,9 +146,7 @@ int install_exception_handler(unsigned char index, exception_handler handler) {
 }
 
 /**
- * @brief Permite quitar un  manejador de excepcion
- * @param index Número de la excepción a la cual se desea desinstalar
- * su manejador
+ * @brief Quitar un  manejador de excepción.
  */
 void uninstall_exception_handler(unsigned char index) {
 	/* Simplemente quitar la referencia a la rutina de manejo de interrupcion.*/

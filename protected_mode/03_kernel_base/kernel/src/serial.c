@@ -14,9 +14,9 @@
 #include <stdlib.h>
 
 /**
- * Inicializa el puerto serial COM1
+ * @brief Inicializa el puerto serial COM1
  */
-void init_serial() {
+void setup_serial() {
    outb(COM1_PORT + 1, 0x00);    // Disable all interrupts
    outb(COM1_PORT + 3, 0x80);    // Enable DLAB (set baud rate divisor)
    outb(COM1_PORT + 0, 0x03);    // Set divisor to 3 (lo byte) 38400 baud
@@ -27,23 +27,23 @@ void init_serial() {
 }
 
 /**
- * Verifica si el puerto serial se encuentra vacío
+ * @brief Verifica si el puerto serial se encuentra vacío
 */
 int is_transmit_empty() {
    return inb(COM1_PORT + 5) & 0x20;
 }
  
 /**
- * Escribe un caracter en el puerto serial
+ * @brief Escribe un caracter en el puerto serial
 */
-void serial_putchar(char a) {
+void serial_putchar(char c) {
    while (is_transmit_empty() == 0);
  
-   outb(COM1_PORT,a);
+   outb(COM1_PORT, c);
 }
 
 /**
- * Escribe una cadena de caracteres en el puerto serial
+ * @brief Escribe una cadena de caracteres en el puerto serial
  */
 void serial_puts(char * s) {
     char * aux;
@@ -57,9 +57,6 @@ void serial_puts(char * s) {
 /**
  * @brief  Esa funcion implementa en forma basica el comportamiento de
  * 'printf' en C.
- * @param format Formato de la cadena de salida
- * @param ...  Lista de referencias a memoria de las variables a imprimir
- *
 */
 void serial_printf(char * format,...) {
         char ** arg;

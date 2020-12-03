@@ -13,10 +13,10 @@
 
 #include <pm.h>
 
-/** En la arquitectura IA-32 se definen 32 excepciones. */
+/** @brief Numero de excepciones en la arquitectura IA-32. */
 #define MAX_EXCEPTIONS 32
 
-/** Alias para las rutinas de manejo de excepcion*/
+/** @brief Alias para las rutinas de manejo de excepcion*/
 typedef interrupt_handler exception_handler;
 
 /**
@@ -26,7 +26,7 @@ typedef interrupt_handler exception_handler;
 void setup_exceptions(void);
 
 /**
- * @brief Permite definir un nuevo manejador de excepcion
+ * @brief Definir un nuevo manejador de excepción.
  * para una de las excepciones de los procesadores x86.
  * @param index Número de la excepción a la cual se le desea instalar
  * la rutina de manejo

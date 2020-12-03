@@ -24,7 +24,7 @@
 void *memcpy(void *dst, const void *src, int count);
 
 /**
- * @brief Copia auna region de memoria un valor (char) determinado.
+ * @brief Replica un valor (char) en un buffer.
  * @param dst Dirección de memoria de destino
  * @param val Valor a copiar
  * @param count Numero de repeticiones
@@ -33,7 +33,7 @@ void *memcpy(void *dst, const void *src, int count);
 void *memset(void *dst, char val, int count);
 
 /**
- * @brief Calcula la longitud de una cadena
+ * @brief Calcula la longitud de una cadena.
  * terminada en el caracter nulo.
  * @param str Apuntador al inicio de la cadena de caracteres
  * @return Longitud de la cadena. No incluye en la longitud el caracter nulo
@@ -67,7 +67,7 @@ char * strcat(char *dst, const char *src);
 int strcmp(const char *a, const char *b);
 
 /**
- * @brief Compara los primeros n bytes de dos cadenas
+ * @brief Compara los primeros n bytes de dos cadenas.
  * @param a Apuntador a la cadena de destinno
  * @param b Apuntador a la cadena fuente
  * @param n Apuntador a la cadena fuente
@@ -78,7 +78,7 @@ int strncmp(const char *a, const char *b, int n);
 
 /**
  * @brief Busca c desde el inicio de str.
- * @param str Cadena de caracteres terminada en nulo
+ * @param s Cadena de caracteres terminada en nulo
  * @param c Caracter a buscar.
  * @return Apuntador a la primera ocurrencia de c en s.
  */
@@ -86,7 +86,7 @@ char * strchr(const char *s, const char c);
 
 /**
  * @brief Busca c desde el final de str.
- * @param str Cadena de caracteres terminada en nulo
+ * @param s Cadena de caracteres terminada en nulo
  * @param c Caracter a buscar.
  * @return Apuntador a la primera ocurrencia de c en s.
  */
@@ -103,8 +103,9 @@ char * strrchr(const char *s, const char c);
 int nexttok(char * source, char * destination, char delim, int offset);
 
 /**
- * @brief Imprime datos en un buffer de salida
+ * @brief Imprime datos en un buffer de salida.
  * @param dst Buffer de destino, que se termina en nulo
+ * @param format Cadena con el formato para los datos
  */
 int sprintf(char * dst, char * format, ...);
 

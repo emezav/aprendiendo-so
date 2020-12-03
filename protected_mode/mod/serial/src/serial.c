@@ -36,10 +36,10 @@ int is_transmit_empty() {
 /**
  * @brief Escribe un caracter en el puerto serial
 */
-void serial_putchar(char a) {
+void serial_putchar(char c) {
    while (is_transmit_empty() == 0);
  
-   outb(COM1_PORT,a);
+   outb(COM1_PORT, c);
 }
 
 /**
@@ -55,10 +55,8 @@ void serial_puts(char * s) {
 }
 
 /**
- * @brief  Comportamiento de 'printf' en C.
- * @param format Formato de la cadena de salida
- * @param ...  Lista de referencias a memoria de las variables a imprimir
- *
+ * @brief  Esa funcion implementa en forma basica el comportamiento de
+ * 'printf' en C.
 */
 void serial_printf(char * format,...) {
         char ** arg;

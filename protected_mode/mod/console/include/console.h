@@ -106,7 +106,6 @@ extern int screen_columns;
 /** @brief Caracter ASCII de Tabulador */
 #define TAB 0x09
 
-
 /** @ brief inicializa la consola. */
 void setup_console(void);
 
@@ -116,7 +115,7 @@ void setup_console(void);
 void console_clear(void);
 
 /**
- * @brief Función para imprimir un caracter
+ * @brief Imprimir un caracter en la memoria de video.
  *
  * Imprime directamente en la memoria de video. No valida
  * caracteres especiales.
@@ -125,7 +124,7 @@ void console_clear(void);
 void console_putchar(char c);
 
 /**
- * @brief Función para imprimir una cadena de caracteres.
+ * @brief Imprimir una cadena de caracteres.
  *
  * Esta rutina no valida caracteres especiales.
  * @param s Cadena terminada en nulo que se desea imprimir
@@ -134,13 +133,12 @@ void console_puts(char * s );
 
 
 /**
- * @brief  Esa funcion implementa en forma basica el comportamiento de
- * 'printf' en C.
+ * @brief  Implementa en forma basica el comportamiento de 'printf' en C.
  * @param format Formato de la cadena de salida
  * @param ...  Lista de referencias a memoria de las variables a imprimir
  *
 */
-void console_printf(char * ,...);
+void console_printf(char * format ,...);
 
 /**
  * @brief Imprime una cadena en una posicion x, y

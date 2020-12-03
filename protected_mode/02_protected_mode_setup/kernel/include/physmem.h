@@ -49,7 +49,8 @@ void setup_physical_memory(void);
  */
 unsigned int allocate_frame(void);
 
-/** @brief Busca una región de memoria contigua libre dentro del mapa de bits
+/** 
+ * @brief Busca una región de memoria contigua libre dentro del mapa de bits
  * de memoria.
  * @param length Tamaño de la región de memoria a asignar.
  * @return Dirección de inicio de la región en memoria.

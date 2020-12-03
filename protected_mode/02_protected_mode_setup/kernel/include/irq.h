@@ -101,7 +101,7 @@ void install_irq_handler(int number, irq_handler handler);
  * @brief Permite quitar un  manejador de IRQ.
  *
  * 	@param number numero de irq a quitar
- * 	@return void*/
+ */
 void uninstall_irq_handler(int number);
 
 #endif /* IRQ_H_ */

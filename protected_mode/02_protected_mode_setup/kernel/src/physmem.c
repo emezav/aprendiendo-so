@@ -325,11 +325,9 @@ unsigned int allocate_frame() {
     return 0;
 }
 
-/** @brief Reserva una región de memoria contigua libre dentro del mapa de bits
+/** 
+* @brief Reserva una región de memoria contigua libre dentro del mapa de bits
 * de memoria.
-* @param length Tamano de la región de memoria a asignar.
-* @return Dirección de inicio de la región en memoria, 0 si no es posible
-* reservar.
 */
 unsigned int allocate_frame_region(unsigned int length) {
 	unsigned int frame_count;
@@ -366,9 +364,7 @@ unsigned int allocate_frame_region(unsigned int length) {
 }
 
 /**
- * @brief Permite liberar un marco de página
- * @param addr Dirección de inicio del marco. Se redondea hacia abajo si no es
- * múltiplo de FRAME_SIZE
+ * @brief Liberar un marco de página.
  */
 void free_frame(unsigned int addr) {
     int slot;

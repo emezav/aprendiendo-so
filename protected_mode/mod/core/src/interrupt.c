@@ -105,9 +105,6 @@ void setup_interrupts(void) {
 /**
  * @brief Instala un nuevo manejador de interrupción para un número de
  * interrupción determinado.
- * @param index Número de interrupción para la cual se desea instalar el
- * manejador
- * @param handler Función para el manejo de la interrupción.
  */
 void install_interrupt_handler(unsigned char index, interrupt_handler handler) {
 	if (interrupt_handlers[index] != NULL_INTERRUPT_HANDLER) {
@@ -118,9 +115,7 @@ void install_interrupt_handler(unsigned char index, interrupt_handler handler) {
 }
 
 /**
- * @brief Desinstala un manejador de interrupción
- * @param index Número de la interrupción para la cual se va a desinstalar
- * el manejador
+ * @brief Desinstala un manejador de interrupción.
  */
 void uninstall_interrupt_handler(unsigned char index) {
 	/* Simplemente quitar la referencia a la rutina de manejo de interrupción.*/
@@ -132,9 +127,6 @@ void uninstall_interrupt_handler(unsigned char index) {
 /**
  * @brief Recibe el control de la Rutina de Servicio
  * de Interrupción (ISR) isr0, isr1.. etc. correspondiente.
- * Su trabajo consiste en determinar el vector de interrupción a partir del
- * estado del procesador almacenado en * current_esp e invocar la rutina de
- * manejo de interrupción adecuada, si existe.
  */
 void interrupt_dispatcher() {
     /* Recuperar el marco de pila de la interrupcion. */

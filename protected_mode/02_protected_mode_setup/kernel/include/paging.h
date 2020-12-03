@@ -86,15 +86,24 @@ extern page_directory kernel_pd;
 /** @brief Completa el proceso de configurar la paginación para el kernel.  */
 void setup_paging();
 
-/** @brief Permite mapear una página a un marco de páginas en el espacio virtual
- * del kernel 
+/** @brief Mapear una página a un marco de páginas en el espacio virtual
+ * del kernel
+ * @param vaddr Dirección virtual de la página a mapear
+ * @param addr Dirección física del marco de página 
+ * @return 1 en caso de éxito, 0 si ocurre un error.
  */
 int map_page(unsigned int vaddr, unsigned int addr);
 
-/** @brief Permite quitar una página del espacio virtual */
+/** @brief Quitar una página del espacio virtual.
+ * @param vaddr Dirección virtual de la página a quitar.
+ * @return 1 en caso de éxito, 0 si ocurre un error.
+ */
 int unmap_page(unsigned int vaddr);
 
-/** @brief Quita una página del espacio virtual y libera el marco asociado */
+/** @brief Quita una página del espacio virtual y libera el marco asociado.
+ * @param vaddr Dirección virtual de la página a quitar.
+ * @return 1 en caso de éxito, 0 si ocurre un error.
+ */
 int destroy_page(unsigned int vaddr);
 
 /** @brief Manejador por defecto para fallo de página. */

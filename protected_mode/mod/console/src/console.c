@@ -69,11 +69,7 @@ void setup_console(void) {
 }
 
 /**
- * @brief Función para imprimir un caracter
- *
- * Imprime directamente en la memoria de video. Valida
- * caracteres especiales, como fin de línea, tabulador y backspace.
- * @param c caracter ascii a imprimir
+ * @brief Imprime un caracter en la memoria de video.
  */
 void console_putchar(char c) {
 
@@ -127,11 +123,7 @@ void console_putchar(char c) {
 }
 
 /**
- * @brief Función para imprimir una cadena de caracteres.
- *
- * Esta rutina valida caracteres especiales, como fin de línea, tabulador y
- * backspace.
- * @param s Cadena terminada en nulo que se desea imprimir
+ * @brief Imprime una cadena de caracteres en la memoria de video.
  */
 void console_puts(char * s ) {
 
@@ -148,8 +140,6 @@ void console_puts(char * s ) {
         console_putchar(c);
 	}
 }
-
-
 
 /**
  * @brief Función para limpiar la pantalla
@@ -261,9 +251,6 @@ void console_scroll(void) {
 /**
  * @brief  Esa funcion implementa en forma basica el comportamiento de
  * 'printf' en C.
- * @param format Formato de la cadena de salida
- * @param ...  Lista de referencias a memoria de las variables a imprimir
- *
 */
 void console_printf(char * format,...) {
         char ** arg;
@@ -316,9 +303,6 @@ void console_printf(char * format,...) {
 
 /**
  * @brief Imprime una cadena en una posicion x, y
- * @param s Cadena terminada en nulo a imprimir
- * @param x Fila
- * @param y Columna
  */
 void console_putxy(char * s, short x, short y) {
 

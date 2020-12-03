@@ -20,10 +20,10 @@ int pci_device_count = 0;
 
 /**
  * @brief Lee un registro del espacio de configuración PCI
- * @param char bus
- * @param char slot (dispositivo)
- * @param char funcion
- * @param char offset (registro a leer)
+ * @param bus PCI
+ * @param slot (dispositivo)
+ * @param function Funcion
+ * @param offset (registro a leer)
  * @return dato leido del registro PCI
  */
 unsigned int read_pci_register(unsigned char bus, unsigned char slot, unsigned

@@ -11,7 +11,6 @@
 
 #include <pm.h>
 #include <asm.h>
-#include <console.h>
 #include <irq.h>
 #include <stdlib.h>
 
@@ -28,7 +27,6 @@ irq_handler irq_handlers[MAX_IRQ_ROUTINES];
  * de la interrupcion que ocurrio, asi como el estado del procesador.
  * Con el numero de la interrupcion y restando IDT_IRQ_OFFSET se puede
  * obtener el numero de IRQ.
- * @param state Apuntador al estado del procesador cuando ocurre la IRQ
  */
 void irq_dispatcher(interrupt_state * state);
 
@@ -145,8 +143,6 @@ void setup_irq(void) {
 
 /**
  * @brief Permite definir un nuevo manejador de IRQ
- * @param number numero de irq a configurar
- * @param handler Función a manejar la irq
  */
 void install_irq_handler(int number, irq_handler handler){
 	/* Simplemente sobre-escribir la rutina anterior, si existe.
@@ -159,8 +155,6 @@ void install_irq_handler(int number, irq_handler handler){
 
 /**
  * @brief Permite quitar un  manejador de IRQ.
- *
- * 	@param number numero de irq a quitar
  * 	@return void*/
 void uninstall_irq_handler(int number) {
 
@@ -177,7 +171,6 @@ void uninstall_irq_handler(int number) {
  * de la interrupcion que ocurrio, asi como el estado del procesador.
  * Con el numero de la interrupcion y restando IDT_IRQ_OFFSET se puede
  * obtener el numero de IRQ.
- * @param state Apuntador al estado del procesador cuando ocurre la IRQ
  */
 void irq_dispatcher(interrupt_state * state) {
 
@@ -208,9 +201,5 @@ void irq_dispatcher(interrupt_state * state) {
 			handler(state);
 	}else {
 		/* En caso contrario ignorar la interrupcion. */
-        /*
-		console_printf(" Warning! unhandled IRQ %d (INT %d)", index, state->number);
-        for (;;);
-        */
 	}
 }
