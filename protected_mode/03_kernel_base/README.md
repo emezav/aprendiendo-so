@@ -1,4 +1,6 @@
-# Peripheral Component Interconnect
+Peripheral Component Interconnect
+================================
+
 Este proyecto implementa el código para detectar los dispositivos que se
 encuentran conectados a los buses del sistema mediante la interfaz PCI.
 
@@ -7,21 +9,10 @@ buses PCI. Luego, para cada bus, se detectan los dispositivos y las
 funciones disponibles. Con la información recopilada se crea un arreglo con
 máximo 256 entradas para los diferentes dispositivos detectados.
 
-
-
-## Dependencias
-- console
-- physmem
-- paging
-
-
-## Subrutina de inicialización
-- setup_pci
-
 En caso de no encontrar buses PCI, el kernel detiene su ejecución.
 
-## Breve introducción a PCI
-
+Breve introducción a PCI
+===========================
 La interfaz PCI fue propuesta por Intel en los años 90 para conectar
 diferentes dispositivos periféricos a la tarjeta madre del computador,
 permitiendo una mayor velocidad de intercambio de datos entre los
@@ -47,8 +38,8 @@ compatibilidad radica en la posibilidad de usar los mecanismos de
 detección y configuración de hardware PCI Express usando las
 implementaciones de software basadas en PCI, sin modificaciones.
 
-# Espacio de configuración PCI
-
+Espacio de configuración PCI
+==============================
 Todos los dispositivos conectados a un bus PCI deben proporcionar un
 __Espacio de Configuración__.  Este espacio se divide en 64 __registros__
 de 32 bits (4 bytes) cada uno, para un total de 256 bytes.
@@ -144,8 +135,8 @@ La combinación de los campos Vendor ID, Device ID, clase, subclase e
 interfaz se pueden usar para implementar drivers específicos para cada
 dispositivo conectado.
 
-## Detección de dispositivos conectados
-
+Detección de dispositivos conectados
+------------------------------------
 La mayoría de sistemas cuentan con dos buses PCI (bus 0 y bus 1), en
 los cuales se conectan todos los dispositivos. Sin embargo, si se desea
 realizar una detección exhaustiva, se debe verificar cada posición en la
@@ -183,8 +174,8 @@ siguiente:
               Fin para
         Fin para
 
-## Acceso al espacio de configuración mediante operaciones de E/S
-
+Acceso al espacio de configuración mediante operaciones de E/S
+----------------------------------
 En los computadores personales, el acceso al espacio de configuración se
 puede realizar mediante un par de registros de 32 bits, llamados Registro
 de configuración (0xCF8), y Registro de Datos (0xCFC).  El acceso se
@@ -220,8 +211,8 @@ escribir el siguiente valor en el registro de configuración:
      |1|  00000000   |   00000000    | 00000   | 000 |  00000    |0|0|
      +---------------------------------------------------------------+
 
-## Acceso al espacio de configuración en memoria
-
+Acceso al espacio de configuración en memoria
+--------------------------------------
 PCI Express definió otro mecanismo para acceder al espacio de configuración.
 El Firmware (BIOS o UEFI) o el sistema operativo pueden mapear todo el
 espacio de configuración a una dirección de memoria determinada. Dado que
@@ -231,8 +222,8 @@ inicio de este espacio se encontrará el espacio de configuración de la
 función 0 del slot 0 del bus 0, luego la función 1 del slot 0 del bus 0, y
 así sucesivamente.
 
-## Detección de la interfaz en sistemas con PCI
-
+Detección de la interfaz en sistemas con PCI
+------------------------------
 En sistemas con PCI, se puede usar los servicios de la BIOS mientras se
 está operando en modo real para obtener la información PCI. La función a
 usar es int 0x1A, ax= 0x101 (Installation check). La descripción de este
@@ -245,8 +236,8 @@ correspondiente al Registro de Configuración PCI (0xCF8), el cual contendrá
 la última transacción realizada posiblemente por el Firmware. En caso de no
 existir la interfaz PCI, se obtendrá como resultado el valor 0xFFFFFFFF.
 
-## Detección de la interfaz en sistemas con PCI Express
-
+Detección de la interfaz en sistemas con PCI Express
+------------------------------
 En sistemas con PCI Express, se debe usar la configuración proporcionada
 por el subsistema ACPI. El proceso básico es el siguiente:
 
@@ -256,8 +247,42 @@ por el subsistema ACPI. El proceso básico es el siguiente:
         Mapeo de Memoria de PCI (MCFG). Esta entrada corresponde a la dirección
         en donde se encuentra mapeado el espacio de configuración de PCI.
 
-## Vea también
+Compilación y ejecución del proyecto
+==================================
 
+La compilación del código y la ejecución del emulador se realiza mediante la
+utilidad *make*. Para ejecutar este proyecto, se debe abrir un *shell* y
+ubicarse en la carpeta del proyecto. Luego se deberá ingresar uno de los
+siguientes comandos, de acuerdo con el emulador que se desee usar para ejecutar
+el código:
+- __make qemu__: Compila el código, crea la imagen de disco floppy e Inicia el
+  emulador *qemu* con la imagen de disco creada.
+- __make bochs__: Similar al comando anterior, pero a cambio inicia el emulador
+   *bochs*.
+- __make bochsdbg__: En este caso se compila el código, se crea la imagen de
+    disco floppy y se inicia el emulador *bochs* desde esta imagen de disco, con
+    la interfaz gráfica del depurador activada.
+
+También se cuenta con otros *targets* que permiten realizar otras tareas:
+- __make clean__: Elimina los archivos resultado de la compilación del código y
+    la imagen de disco obtenida.
+- __make docs__: Genera automáticamente la documentación del proyecto en formato
+    html y latex, dentro del directorio *docs*.
+
+Puede revisar el archivo __Makefile__ que se encuentra en el directorio del
+proyecto para estudiar el proceso que realiza la utilidad *make* para 
+compilar el código fuente y generar la imagen de disco.
+
+Depuración paso a paso
+======================
+En el archivo bochsrc.txt se ha activado el *Magic break*, por lo cual si se
+incluye la instrucción *xchg bx, bx* en cualquier parte del código, se pausará
+la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
+(comando *make bochsdbg*).
+
+
+Vea también
+===========
 - Ralph Brown's Interrupt List http://www.ctyme.com/intr/rb-2371.htm
 - ACPI - Advanced Configuration and Power Interface http://www.uefi.org/acpi/specs
 - PCI Special Interest Group - PCI SIG http://www.pcisig.com
