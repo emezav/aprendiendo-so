@@ -20,7 +20,8 @@ Este directorio contiene los ejemplos de programación en Modo Protegido:
   También se inicializa la IDT, por lo cual las interrupciones no gestionadas
   causan que el kernel muestre un mensaje de advertencia de interrupción no 
   manejada.
-- 03_pci: Detecta y almacena la información de los dispositivos PCI presentes
+- 03_kernel_base: Implementa la funcionalidad base del kernel. 
+  Detecta y almacena la información de los dispositivos PCI presentes
   en el sistema. Esta información puede ser usada para crear y cargar los
   manejadores de dispositivo adecuados.
 
