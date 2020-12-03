@@ -67,7 +67,7 @@ void ata_handler(interrupt_state *state) {
 
 
 /** @brief Configura las estructuras de datos para los dispositivos ATA.*/
-void setup_ata() {
+void setup_ata_pio() {
     int i;
     char chan;
     char dev;
@@ -291,6 +291,7 @@ int ata_identify(char chan_id, char dev_id) {
  * @param addr Direccion lineal a leer los datos
  * @param start Direccion LBA del sector inicial a leer
  * @param count Numero de sectores a leer, 0 = 256
+ * @return 0 en caso de exito, -1 si ha ocurrido un error
  */
 int ata_read(ata_device *dev, 
         char *addr,
@@ -387,6 +388,7 @@ int ata_read(ata_device *dev,
  * @param addr Direccion lineal en donde se encuentran los datos
  * @param start Direccion LBA del sector inicial a escribir
  * @param count Numero de sectores a escribir, 0 = 256
+ * @return 0 en caso de exito, -1 si ha ocurrido un error
  */
 int ata_write(ata_device *dev, 
         char *addr,
@@ -427,6 +429,8 @@ int ata_write(ata_device *dev,
     outb(ATA_COMMAND_REG(chan), ATA_WRITE_SECTORS);
 
     unsigned short status;
+
+    //Espera activa mientras el bit BSY se encuentre activo
     do {
         status = inb(ATA_ALT_STATUS_REG(chan));
     }while (status & ATA_STATUS_BSY);

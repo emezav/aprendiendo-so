@@ -61,6 +61,14 @@ void console_scroll(void);
  * */
 void console_update_cursor(void);
 
+
+/**
+ * @brief Inicializar la consola
+*/
+void setup_console(void) {
+    console_clear();
+}
+
 /**
  * @brief Función para imprimir un caracter
  *

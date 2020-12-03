@@ -30,7 +30,7 @@ typedef enum {
 
 struct ata_channel;
 
-/** @Dispositivo ATA. */
+/** @brief Dispositivo ATA. */
 typedef struct {
     char present;
     struct ata_channel * channel_ref;
@@ -112,9 +112,10 @@ extern int ata_device_count;
 #define ATA_STATUS_DRQ 0x08
 #define ATA_STATUS_ERR 0x01
 
-/* Bit siempre activo en el selector del dispositivo */
+/** @brief Bit siempre activo en el selector del dispositivo */
 #define ATA_DRIVE 0xA0
 
+/** @brief Bit para determinar si un dispositivo es LBA */
 #define LBA_DEVICE (1<<6)
 
 /* Codigos de bits de identify device */
@@ -128,18 +129,20 @@ extern int ata_device_count;
 /** @brief bit 10 de identify device [83]*/
 #define LBA48_SUPPORTED (1<<10)
 
+/** @brief Direcciones de E/S de los puertos ATA */
 typedef enum {
     ata_io_primary      = 0x1F0,
     ata_io_secondary    = 0x170
 }ata_io_port;
 
+/** @brief Direcciones de E/S de los puertos alternos ATA */
 typedef enum {
     ata_alt_primary     =  0x3F6,
     ata_alt_secondary   = 0x376
 }ata_alt_status;
 
 /** @brief Configura las estructuras de datos para los dispositivos ATA.*/
-void setup_ata(void);
+void setup_ata_pio(void);
 
 /** 
  * @brief Retorna la cantidad de dispositivos ATA detectados.
@@ -165,6 +168,7 @@ void ata_reset(ata_channel * chan);
  * @param addr Direccion lineal a leer los datos
  * @param start Direccion LBA del sector inicial a leer
  * @param count Numero de sectores a leer, 0 = 256
+ * @return 0 en caso de exito, -1 si ha ocurrido un error
  */
 int ata_read(ata_device *dev, 
         char *addr,
@@ -176,6 +180,7 @@ int ata_read(ata_device *dev,
  * @param addr Direccion lineal en donde se encuentran los datos
  * @param start Direccion LBA del sector inicial a escribir
  * @param count Numero de sectores a escribir, 0 = 256
+ * @return 0 en caso de exito, -1 si ha ocurrido un error
  */
 int ata_write(ata_device *dev, 
         char *addr,

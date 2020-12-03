@@ -106,8 +106,8 @@ extern int screen_columns;
 /** @brief Caracter ASCII de Tabulador */
 #define TAB 0x09
 
-
-void console_init(unsigned int addr);
+/** @ brief inicializa la consola. */
+void setup_console(void);
 
 /**
  * @brief Función para limpiar la pantalla

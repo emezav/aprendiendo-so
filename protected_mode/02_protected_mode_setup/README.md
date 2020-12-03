@@ -123,9 +123,9 @@ directorio de tablas de página y tantas tablas de página como sean necesarias
 para mapear el primer megabyte de memoria física y el kernel en memoria virtual.
 
 Luego de crear el directorio de tablas de página y las tablas de página
-necesarias para el kernel y sus estructuras de datos, se mapea el kernel tanto en la
-parte baja de la memoria como en la parte alta, como se muestra en la siguiente
-figura:
+necesarias para el kernel y sus estructuras de datos, se mapea el kernel
+tanto en la parte baja de la memoria como en la parte alta, como se muestra
+en la siguiente figura:
 
 
     Espacio lineal (virtual)
@@ -186,9 +186,9 @@ como disponible.
 Finalmente, la subrutina setup_interrupts definida en kernel/src/interrupt.c
 se encarga de realizar la lógica necesaria para configurar la IDT y definir
 un manejador genérico para todas las interrupciones. También se define un
-manejador genérico para cada excepción del procesador (ver kernel/src/exception.c),
-y se realiza la configuración de las solicitudes de interrupción de hardware 
-(ver kernel/src/irq.c).
+manejador genérico para cada excepción del procesador (ver
+kernel/src/exception.c), y se realiza la configuración de las solicitudes
+de interrupción de hardware (ver kernel/src/irq.c).  
 
 El kernel finaliza imprimiendo un mensaje por consola.
 

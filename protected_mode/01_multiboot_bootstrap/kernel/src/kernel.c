@@ -14,6 +14,6 @@
 
 void cmain(){
     bochs_break();
-    console_clear();
+    setup_console();
     console_printf("Hello, world!\n");
 }

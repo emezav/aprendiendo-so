@@ -62,6 +62,13 @@ void console_scroll(void);
 void console_update_cursor(void);
 
 /**
+ * @brief Inicializar la consola
+*/
+void setup_console(void) {
+    console_clear();
+}
+
+/**
  * @brief Función para imprimir un caracter
  *
  * Imprime directamente en la memoria de video. Valida
@@ -143,12 +150,6 @@ void console_puts(char * s ) {
 }
 
 
-/**
- * @brief Inicializar la consola
-*/
-void setup_console(void) {
-    console_clear();
-}
 
 /**
  * @brief Función para limpiar la pantalla

@@ -22,7 +22,7 @@
 void cmain(){
 
     /* Inicializar y limpiar la consola console.c*/
-    console_clear();
+    setup_console();
 
      /* Inicializar la estructura para gestionar la memoria física 
      physmem.c*/
@@ -34,8 +34,6 @@ void cmain(){
     
     /* Llamar a la función setup_paging definida en paging.c*/
     setup_paging();
-    
-
     
     console_printf("Kernel started!\n");
 

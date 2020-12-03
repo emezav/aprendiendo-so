@@ -28,19 +28,11 @@
 /** @brief Limite inferior de la memoria fisica  = 16 MB */
 #define PHYSMEM_LOW_LIMIT 0x1000000
 
-/** @brief Número de bytes que tiene una entrada en el mapa de bits */
-#define BYTES_PER_ENTRY sizeof(unsigned int)
+/** @brief Redondea una dirección dada al inicio del marco */
+#define ROUND_DOWN_TO_FRAME(value) ((int)(value / FRAME_SIZE) * FRAME_SIZE)
 
-/* @brief Núnero de bits por entrada en el mapa de bits */
-#define BITS_PER_ENTRY (8 * BYTES_PER_ENTRY)
-
-/** @brief Entrada en el mapa de bits correspondiente a una dirección */
-#define bitmap_entry(addr) \
-	( addr /  PAGE_SIZE) / ( BITS_PER_ENTRY )
-
-/** @brief Desplazamiento en bits dentro de la entrada en el mapa de bits */
-#define bitmap_offset(addr) \
-	(addr / PAGE_SIZE) % ( BITS_PER_ENTRY )
+/** @brief Redondea una dirección dada al inicio del siguiente marco */
+#define ROUND_UP_TO_FRAME(value) (((int)(value / FRAME_SIZE) + 1) * FRAME_SIZE)
 
 /* @brief Numero total de marcos de pagina disponibles */
 extern int physmem_available_frames;

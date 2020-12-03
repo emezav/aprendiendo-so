@@ -23,7 +23,7 @@
 void cmain(){
 
     /* Inicializar y limpiar la consola console.c*/
-    console_clear();
+    setup_console();
 
      /* Inicializar la estructura para gestionar la memoria física. physmem.c*/
     setup_physical_memory();
@@ -37,7 +37,7 @@ void cmain(){
     console_printf("Kernel started!\n");
 
     /* Detecta los dispositivos PCI conectados. pci.c */
-    pci_detect();
+    setup_pci();
 
     pci_list();
 

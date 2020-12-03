@@ -108,7 +108,7 @@ extern int screen_columns;
 
 
 /** @ brief inicializa la consola. */
-void setup_console();
+void setup_console(void);
 
 /**
  * @brief Función para limpiar la pantalla

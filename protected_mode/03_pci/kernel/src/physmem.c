@@ -5,14 +5,13 @@
  * @copyright GNU Public License. 
  * @brief Contiene la implementación de las rutinas relacionadas
  * con la gestión de memoria física mediante un mapa de bits.
- * La memoria se gestiona en unidades de PAGE_SIZE denominadas marcos de
+ * La memoria se gestiona en unidades de FRAME_SIZE denominadas marcos de
  * página.
  */
 #include <asm.h>
 #include <bitmap.h>
-#include <console.h>
+//#include <console.h>
 #include <pm.h>
-#include <paging.h>
 #include <physmem.h>
 #include <multiboot.h>
 #include <stdlib.h>
@@ -224,9 +223,9 @@ void setup_physical_memory(void){
 		tmp_end = tmp_start + tmp_length;
 
 		/* Redondear el inicio y el fin de la región de memoria disponible a
-         * páginas */
-		tmp_end = ROUND_DOWN_TO_PAGE(tmp_end);
-		tmp_start = ROUND_UP_TO_PAGE(tmp_start);
+         * marcos */
+		tmp_end = ROUND_DOWN_TO_FRAME(tmp_end);
+		tmp_start = ROUND_UP_TO_FRAME(tmp_start);
 
 		/* Calcular el tamano de la región de memoria disponible, redondeada
 		 * a límites de página */
@@ -262,7 +261,7 @@ void setup_physical_memory(void){
                     physmem[physmem_count].length = tmp_end - tmp_start;
                 }
 
-                slots = physmem[physmem_count].length / PAGE_SIZE;
+                slots = physmem[physmem_count].length / FRAME_SIZE;
 
                 /* Inicializar el mapa de bits para esta region */
                 bitmap_init(&physmem[physmem_count].map, tmp_ptr, slots);
@@ -315,7 +314,7 @@ unsigned int allocate_frame() {
         if (aux->map.free_slots != 0) {
             slot = bitmap_allocate(&aux->map);
             if (slot >= 0) {
-                addr = aux->start + (slot * PAGE_SIZE);
+                addr = aux->start + (slot * FRAME_SIZE);
                 physmem_available_frames--;
                 return addr;
             }
@@ -338,9 +337,9 @@ unsigned int allocate_frame_region(unsigned int length) {
     int slot;
     memory_region * aux;
 
-    frame_count = (length / PAGE_SIZE);
+    frame_count = (length / FRAME_SIZE);
 
-	if (length % PAGE_SIZE > 0) {
+	if (length % FRAME_SIZE > 0) {
 		frame_count++;
 	}
 
@@ -355,7 +354,7 @@ unsigned int allocate_frame_region(unsigned int length) {
                 aux->map.free_slots >= frame_count) {
             slot = bitmap_allocate_region(&aux->map, frame_count);
             if (slot >= 0) {
-                addr = aux->start + (slot * PAGE_SIZE);
+                addr = aux->start + (slot * FRAME_SIZE);
                 physmem_available_frames -= frame_count;
                 return addr;
             }
@@ -369,19 +368,19 @@ unsigned int allocate_frame_region(unsigned int length) {
 /**
  * @brief Permite liberar un marco de página
  * @param addr Dirección de inicio del marco. Se redondea hacia abajo si no es
- * múltiplo de PAGE_SIZE
+ * múltiplo de FRAME_SIZE
  */
 void free_frame(unsigned int addr) {
     int slot;
     unsigned int start;
     memory_region * aux;
 
-    start = ROUND_DOWN_TO_PAGE(addr);
+    start = ROUND_DOWN_TO_FRAME(addr);
     aux = current_physmem;
 
     do {
         if (start >= aux->start && start < aux->start + aux->length) {
-            slot = (start - aux->start) / PAGE_SIZE;
+            slot = (start - aux->start) / FRAME_SIZE;
             bitmap_free(&aux->map, slot);
             physmem_available_frames++;
             return;

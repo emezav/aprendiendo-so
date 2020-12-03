@@ -107,7 +107,8 @@ extern int screen_columns;
 #define TAB 0x09
 
 
-void console_init(unsigned int addr);
+/** @ brief inicializa la consola. */
+void setup_console();
 
 /**
  * @brief Función para limpiar la pantalla

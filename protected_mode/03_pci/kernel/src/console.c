@@ -9,8 +9,8 @@
 
 #include <pm.h>
 #include <asm.h>
-#include <console.h>
 #include <stdlib.h>
+#include <console.h>
 #include <string.h>
 
 /** @brief Apuntador al inicio de la memoria de video.
@@ -140,6 +140,14 @@ void console_puts(char * s ) {
 	while ((c = *aux++) != '\0'){
         console_putchar(c);
 	}
+}
+
+
+/**
+ * @brief Inicializar la consola
+*/
+void setup_console(void) {
+    console_clear();
 }
 
 /**
