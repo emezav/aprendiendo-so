@@ -38,15 +38,15 @@ causa que no se puedan asignar unidades de memoria menores a 4 KB.
 A continuación se presenta una descripción gráfica del uso de un mapa de bits.
 
                Esquema del Mapa de Bits
- 
-    +-----------------------------------+        Cada bit en el mapa de bits
-    | 1| 0| 1| 0| 1| 0|..|..|..|..| 0| 1|        representa una unidad de
-    +-----------------------------------+        asignación de memoria  
      
-    +-------------------------------------------------------------------------+
-    |libre |usada|libre|usada|libre|usada|...  |     |     |     |usada|libre |
-    |      |     |     |     |     |     |     |     |     |     |     |      |
-    +-------------------------------------------------------------------------+
+     +-----------------------------------+        Cada bit en el mapa de bits
+     | 1| 0| 1| 0| 1| 0|..|..|..|..| 0| 1|        representa una unidad de
+     +-----------------------------------+        asignación de memoria  
+      
+     +-------------------------------------------------------------------------+
+     |libre |usada|libre|usada|libre|usada|...  |     |     |     |usada|libre |
+     |      |     |     |     |     |     |     |     |     |     |     |      |
+     +-------------------------------------------------------------------------+
 
 ## Creación del mapa de bits
 
@@ -54,7 +54,7 @@ El mapa de bits inicialmente se llena de unos, para indicar todo el espacio
 de memoria como disponible. Luego a partir de la información de la memoria
 disponible se "toman" (usan) las unidades y los bits correspondientes se
 marcan con cero.
- 
+
 ## Asignación de memoria
 
 La asignación de memoria se puede realizar de dos formas:
@@ -65,47 +65,46 @@ La asignación de memoria se puede realizar de dos formas:
   retorna.
 
                   Asignar una unidad de memoria
-    
-	  +-------- Esta entrada (bit) en el mapa de bits se encuentra en 1.
-      |         Esto significa que la región asociada a este bit está
-      v         disponible.  
-     +-----------------------------------+        Cada bit en el mapa de bits
-     | 1| 0| 1| 0| 1| 0|..|..|..|..| 0| 1|        representa una unidad de
-     +-----------------------------------+        asignación de memoria  
-     
-    +-------------------------------------------------------------------------+
-    |libre |usada|libre|usada|libre|usada|...  |     |     |     |usada|libre |
-    |      |     |     |     |     |     |     |     |     |     |     |      |
-    +-------------------------------------------------------------------------+
-      ^
-      |
-      +---------- Región de memoria representada por el primer bit. Se debe 
-                  retornar la dirección de memoria de inicio de la región.
-
-
-      +------------- La entrada se marca como "no disponible"             
-      |              
-      v  
-    +-----------------------------------+      Mapa de bits actualizado  
-    | 0| 0| 1| 0| 1| 0|..|..|..|..| 0| 1|        
-    +-----------------------------------+          
+        
+         +-------- Esta entrada (bit) en el mapa de bits se encuentra en 1.
+         |         Esto significa que la región asociada a este bit está
+         v         disponible.  
+        +-----------------------------------+        Cada bit en el mapa de bits
+        | 1| 0| 1| 0| 1| 0|..|..|..|..| 0| 1|        representa una unidad de
+        +-----------------------------------+        asignación de memoria  
+        
+         +-------------------------------------------------------------------------+
+         |libre |usada|libre|usada|libre|usada|...  |     |     |     |usada|libre |
+         |      |     |     |     |     |     |     |     |     |     |     |      |
+         +-------------------------------------------------------------------------+
+           ^
+           |
+           +---------- Región de memoria representada por el primer bit. Se debe 
+                    retornar la dirección de memoria de inicio de la región.
+        
+        +------------- La entrada se marca como "no disponible"             
+        |              
+        v  
+        +-----------------------------------+      Mapa de bits actualizado  
+        | 0| 0| 1| 0| 1| 0|..|..|..|..| 0| 1|        
+        +-----------------------------------+          
   
-- Asignar una región de memoria de N bytes: Primero se redondea el tamaño 
-  solicitado a un múltiplo del tamaño de una unidad de asignación. Luego se 
+- Asignar una región de memoria de N bytes: Primero se redondea el tamaño
+  solicitado a un múltiplo del tamaño de una unidad de asignación. Luego se
   busca dentro del mapa de bits un número consecutivo de bits que sumen la
   cantidad de memoria solicitada. Si se encuentra, se marcan todos los bits
-  como no disponibles y Se retorna la dirección física que le corresponde al 
-  primer bit en el mapa de bits. 
-
+  como no disponibles y Se retorna la dirección física que le corresponde
+  al  primer bit en el mapa de bits. 
+  
                   Asignar una región de memoria
                   
             +-------------  Este es el inicio de la región de memoria
             |               disponible
-            v                
+          v                
       +-----------------------------------+        Cada bit en el mapa de bits
       | 1| 0| 1| 1| 1| 1|..|..|..|..| 0| 1|        representa una unidad de
       +-----------------------------------+        asignación de memoria  
-     
+         
       +-------------------------------------------------------------------------+
       |libre |usada|libre|libre|libre|libre|...  |     |     |     |usada|libre |
       |      |     |     |     |     |     |     |     |     |     |     |      |
@@ -114,13 +113,13 @@ La asignación de memoria se puede realizar de dos formas:
                     |
                     +---------- Inicio de la región de memoria. Se retorna la 
                                 dirección que le corresponde al primer bit del
-								mapa.
-
+      						mapa.
+      
                +-------------  La región de memoria se marca como no disponible
                |               
                v                
-        +-----------------------------------+        Se deben marcar los bits
-        | 1| 0| 0| 0| 0| 0|..|..|..|..| 0| 1|        correspondientes como   
+	      +-----------------------------------+        Se deben marcar los bits
+      | 1| 0| 0| 0| 0| 0|..|..|..|..| 0| 1|        correspondientes como   
         +-----------------------------------+        "no disponible"   
 
 ## Liberación de memoria
@@ -144,8 +143,9 @@ correspondiente a la unidad o la región a liberar.
                   ^
                   |
                   +---------- Inicio de la región de memoria a liberar
-    
-  
+
+ 
+
              +-------------  La región de memoria se marca como  disponible
              |               
              v                
