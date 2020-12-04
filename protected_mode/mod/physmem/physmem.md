@@ -102,14 +102,14 @@ La asignación de memoria se puede realizar de dos formas:
             +-------------  Este es el inicio de la región de memoria
             |               disponible
             v                
-     +-----------------------------------+        Cada bit en el mapa de bits
-     | 1| 0| 1| 1| 1| 1|..|..|..|..| 0| 1|        representa una unidad de
-     +-----------------------------------+        asignación de memoria  
+      +-----------------------------------+        Cada bit en el mapa de bits
+      | 1| 0| 1| 1| 1| 1|..|..|..|..| 0| 1|        representa una unidad de
+      +-----------------------------------+        asignación de memoria  
      
-     +-------------------------------------------------------------------------+
-     |libre |usada|libre|libre|libre|libre|...  |     |     |     |usada|libre |
-     |      |     |     |     |     |     |     |     |     |     |     |      |
-     +-------------------------------------------------------------------------+
+      +-------------------------------------------------------------------------+
+      |libre |usada|libre|libre|libre|libre|...  |     |     |     |usada|libre |
+      |      |     |     |     |     |     |     |     |     |     |     |      |
+      +-------------------------------------------------------------------------+
                     ^
                     |
                     +---------- Inicio de la región de memoria. Se retorna la 
