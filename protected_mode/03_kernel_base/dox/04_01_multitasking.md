@@ -30,11 +30,17 @@ identificar algunos campos relevantes:
 - Estado de la tarea, desde el punto de vista del sistema operativo. Algunos
   estados generales son:
   - Listo : La tarea se encuentra en espera de que se le asigne la CPU
-  - Ejecución : La tarea tiene asignada la CPU y se están ejecutando sus instrucciones
-  - Bloqueado: La tarea se encuentra esperando a que suceda un evento para continuar su ejecución
-  - Terminado : La tarea ha terminado la ejecución y está lista para que el sistema operativo libere los recursos asociados a ella
-- Nivel de privilegios de la tarea, que puede estar asociado a los niveles de privilegios del procesador o a una jerarquía de privilegios definida por el sistema operativo
-- Dirección relativa a la sección de código de la tarea en la cual se debe comenzar su ejecución
+  - Ejecución : La tarea tiene asignada la CPU y se están ejecutando sus
+    instrucciones
+  - Bloqueado: La tarea se encuentra esperando a que suceda un evento para
+    continuar su ejecución
+  - Terminado : La tarea ha terminado la ejecución y está lista para que el
+    sistema operativo libere los recursos asociados a ella
+- Nivel de privilegios de la tarea, que puede estar asociado a los niveles
+  de privilegios del procesador o a una jerarquía de privilegios definida
+  por el sistema operativo
+- Dirección relativa a la sección de código de la tarea en la cual se debe
+  comenzar su ejecución
 - Dirección de inicio de la región de memoria asignada a la tarea (base)
 - Tamaño de la tarea (Límite)
 
@@ -55,13 +61,13 @@ memoria del TSS, su tamaño y su nivel de privilegios.
                                                     +--------------------------+
           4 GB                                      |                          |
             +------------------------+              |                          |
-            |                        |              +--------------------------+    
-            |                        |              |                          |  
-            |                        |              |                          |   
-            |                        |              +--------------------------+   
-            |                        |              |                          |   
-            |                        |              |                          |   
-            |                        |              +--------------------------+   
+            |                        |              +--------------------------+
+            |                        |              |                          |
+            |                        |              |                          |
+            |                        |              +--------------------------+
+            |                        |              |                          |
+            |                        |              |                          |
+            |                        |              +--------------------------+
             |                        |              | Descriptor de TSS  DPL=0 |
             |                        |   +----------| Base = TSS_Loc           |
             |                        |   |          +--------------------------+
@@ -198,7 +204,8 @@ Mecanismo para la Creación de una Tarea desde un Archivo Ejecutable
 -------------------------------------------------------------------
 
 
-Para crear una tarea a partir de un archivo ejecutable, se debe tener en cuenta varios aspectos:
+Para crear una tarea a partir de un archivo ejecutable, se debe tener en
+cuenta varios aspectos:
 
 - Formato Ejecutable: Existe una gran cantidad de formatos ejecutables. En estos
 	proyectos se usa el formato ELF, que es el formato por defecto de los
@@ -313,8 +320,8 @@ describe su estructura y los requerimientos para su ejecución.
        |Encabezado ELF          |
        +------------------------+<------+
        |Encabezado de Programa  |<--+   | Tabla de Encabezados de Programa
-       +------------------------+   |   | Describe las secciones del programa que se
-       |Encabezado de Programa  |<----+ | usan en su ejecución
+       +------------------------+   |   | Describe las secciones del programa
+       |Encabezado de Programa  |<----+ | que se usan usan en su ejecución
        +------------------------+<--|-|-+    
        | Sección 1              |<--+ |
        | .text                  |   | |
@@ -327,9 +334,9 @@ describe su estructura y los requerimientos para su ejecución.
        +------------------------+ <----+
        |Encabezado de Sección   |      |
        +------------------------+      | Tabla de Encabezados de Sección
-       |Encabezado de Sección   |      | Describe todas las secciones del programa,
-       +------------------------+      | aún si no se usan en su ejecución.
-       |Encabezado de Sección   |      |
+       |Encabezado de Sección   |      | Describe todas las secciones del
+       +------------------------+      | programa, aún si no se usan en
+       |Encabezado de Sección   |      | su ejecución.
        +------------------------+ <----+
     
 A partir de la información del formato ELF es posible extraer las secciones de
@@ -351,11 +358,11 @@ ilustran en el siguientes esquema.
        |                                |
        |                                |
        |                                |  
-       +--------------------------------+ <-- Tope de la pila para la tarea y fin
-       |                                |     del área de memoria asignada a la 
-       |                                |     tarea                                          
+       +--------------------------------+ <-- Tope de la pila para la tarea y
+       |                                |     fin del área de memoria asignada a
+       |                                |     la tarea
        |   Pila usable por la tarea     |
-       |                                | (la pila crece hacia abajo en la memoria)                         
+       |                                | (la pila crece hacia abajo)
        |                                |
        |--------------------------------| <-- Base de la pila para la tarea
        |  Espacio para asignación       | 
@@ -373,8 +380,8 @@ ilustran en el siguientes esquema.
        |                                |
        |                                |
        +--------------------------------+ <-- Inicio de la región de memoria   
-       | Pila del Sistema Operativo     |     disponible para asignar a las tareas
-       |                                |
+       | Pila del Sistema Operativo     |     disponible para asignar a las
+       |                                |     tareas
        +--------------------------------+
        |                                |
        | Datos del Sistema Operativo    |
@@ -389,7 +396,8 @@ ilustran en el siguientes esquema.
 Si no se usa memoria virtual, la región de memoria de la tarea debe ser un
 espacio continuo del cual se requiere conocer:
 
-- La Base ( dirección de inicio) y Límite (tamaño de la región asignada a la tarea)
+- La Base ( dirección de inicio) y Límite (tamaño de la región asignada a
+  la tarea)
 - Los desplazamientos a partir del inicio de la tarea en los cuales:
 	- Termina su sección de código
 	- Comienza y termina su sección de datos
