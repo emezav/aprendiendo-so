@@ -116,12 +116,12 @@ La asignación de memoria se puede realizar de dos formas:
                                 dirección que le corresponde al primer bit del
 								mapa.
 
-             +-------------  La región de memoria se marca como no disponible
-             |               
-             v                
-     +-----------------------------------+        Se deben marcar los bits
-     | 1| 0| 0| 0| 0| 0|..|..|..|..| 0| 1|        correspondientes como   
-     +-----------------------------------+        "no disponible"   
+               +-------------  La región de memoria se marca como no disponible
+               |               
+               v                
+        +-----------------------------------+        Se deben marcar los bits
+        | 1| 0| 0| 0| 0| 0|..|..|..|..| 0| 1|        correspondientes como   
+        +-----------------------------------+        "no disponible"   
 
 ## Liberación de memoria
 
