@@ -1,5 +1,5 @@
 # Peripheral Component Interconnect
-Este proyecto implementa el código para detectar los dispositivos que se
+Este módulo implementa el código para detectar los dispositivos que se
 encuentran conectados a los buses del sistema mediante la interfaz PCI.
 
 Para este propósito, primero se verifica si el sistema cuenta con uno o más
@@ -173,9 +173,9 @@ siguiente:
                         si Vendor ID = 0xFFFF
                             break //dispositivo no conectado
                         sino
-														//Leer registros 0-16 de b, d, f
+			    //Leer registros 0-16 de b, d, f
                             si el bit 7 del Header Type = 0 //única función
-																//y almacenar información del dispositivo
+				//y almacenar información del dispositivo
                                 break //No es necesario revisar las demás funciones
                             fin si
                         fin si
