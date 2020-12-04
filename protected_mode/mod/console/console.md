@@ -103,5 +103,3 @@ y luego los 8 bits más significativos. Este proceso se describe a continuaión:
 - http://www.osdever.net/FreeVGA/vga/crtcreg.htm Puertos (registros) del
   controlador CRT
 
-*/
-
