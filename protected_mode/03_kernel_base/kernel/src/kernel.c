@@ -20,10 +20,10 @@
 
 void cmain(){
 
-    /* Inicializar y limpiar la consola console.c*/
+    /* Inicializar y limpiar la consola console.c */
     setup_console();
 
-     /* Inicializar la estructura para gestionar la memoria física. physmem.c*/
+     /* Inicializar la estructura para gestionar la memoria física. physmem.c */
     setup_physical_memory();
 
     /* Las subrutinas que se deben ejecutar ANTES de habilitar las
@@ -32,13 +32,16 @@ void cmain(){
     /* Configura la IDT y el PIC.interrupt.c */
     setup_interrupts();
     
-    /* Completa la configuración de la memoria virtual. paging.c*/
+    /* Completa la configuración de la memoria virtual. paging.c */
     setup_paging();
+
+    /* Configurar la gestión de páginas de memoria virtual. kmem.c */
+    setup_kmem();
 
     /* Las subrutinas que se deben ejecutar DESPUES de habilitar las
      * interrupciones se deben invicar en este punto */
      
-    /* Inicializar la informacion del bus PCI */
+    /* Inicializar la informacion del bus PCI. pci.c  */
     setup_pci();
     
 }
