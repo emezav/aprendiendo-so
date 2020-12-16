@@ -106,6 +106,7 @@ void setup_kmem(void){
                     kmem[kmem_count].start,
                     kmem[kmem_count].map.free_slots);
             */
+            
            kmem_count++;
         }
         tmp_start += KMEM_GRANULARITY;
@@ -116,6 +117,7 @@ void setup_kmem(void){
         kmem[0].prev = &kmem[kmem_count - 1];
         kmem_list = &kmem[0];
         current_kmem = kmem_list;
+        /*console_printf("number or memory regions: %d size of each region: %u\n", kmem_count, KMEM_GRANULARITY);*/
     }
 }
 
@@ -157,6 +159,12 @@ unsigned int kmem_get_pages(int count) {
     unsigned int addr;
     int slot;
     memory_region * aux;
+
+
+    //Retornar inmediatamente si se solicita una sola pagina
+    if (count == 1) {
+        return kmem_get_page();
+    }
 
     aux = current_kmem;
 
@@ -228,6 +236,11 @@ unsigned int kmem_allocate_pages(int count, int sparse) {
     unsigned int tmp_page;
     int j;
     unsigned int frame;
+
+    //Retornar inmediatamente si se solicita una sola pagina
+    if (count == 1) {
+        return kmem_allocate_page();
+    }
 
     //Verificar si existen suficientes marcos de pagina disponibles
     if (available_frames() < count) {
