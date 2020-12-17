@@ -192,10 +192,10 @@ int bitmap_free(bitmap * dst, int slot) {
             BITMAP_SET(dst, entry,offset);
             dst->free_slots++;
             dst->last_free = slot;
-      return 0;
+      return 1;
         }
     }
-  return -1;  
+  return 0;  
 }
 
 /**
@@ -219,8 +219,8 @@ int bitmap_free_region(bitmap * dst, int slot, int count) {
             }
         }
         dst->last_free = last_free;
-    return 0;
+    return 1;
     }
-  return -1;
+  return 0;
 }
 

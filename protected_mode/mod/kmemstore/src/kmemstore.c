@@ -110,7 +110,9 @@ void * memstore_alloc(kmemstore * ms) {
 
 }
 
-
+/**
+ * @brief Libera un bloque de memoria del almacén.
+ */
 int  memstore_free(kmemstore * ms, void * ptr) {
   if (kpool_free(ms->pool, ptr)) {
     ms->free++;
@@ -176,4 +178,55 @@ int memstore_grow(kmemstore * ms) {
   }
 
   return 1;
+}
+
+
+/**
+ * @brief Libera los almacenes bloques no usados. 
+ * @param ms Almacen de memoria.
+ */
+void memstore_shrink(kmemstore * ms) {
+  kpool * ant = 0;
+  kpool * p = ms->pool;
+
+  while (p != 0) {
+    ant = p;
+    int is_deleted = 0;
+    //Liberar el almacen si todos los bloques estan sin usar.
+    if (p->free == p->count) {
+      int blocksize = p->blocksize;
+
+      int pages;
+      int count;
+      /* Determinar la cantidad de paginas que usa el almacen de bloques */
+      if (blocksize <= PAGE_SIZE) {
+        //El almacen de bloques usa una sola pagina.
+        pages = 1;
+      }else {
+        //El almacen de bloques usa mas de una pagina.
+        pages = blocksize / PAGE_SIZE;
+        if (blocksize % PAGE_SIZE != 0) {
+          pages++;
+        }
+      }
+      if (kmem_free_pages((unsigned int)p->pool, pages)) {
+        //Quitar la cantidad de bloques de este almacen de bloques
+        ms->free -= p->free;
+        ms->count -= p->count;
+        ant->next = p->next;
+
+        //Si este almacen es el inicio de la lista, actualizar.
+        if (p == ms->pool){
+          ms->pool = p->next;
+        }
+        is_deleted = 1;
+      }
+    }
+    kpool * aux = p;
+    //Avanzar al siguiente almacen
+    p = p->next;
+    if (is_deleted){ 
+      delete_kpool(aux);
+    }
+  }
 }

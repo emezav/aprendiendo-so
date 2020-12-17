@@ -298,8 +298,9 @@ unsigned int kmem_allocate_pages(int count, int sparse) {
 /**
  * @brief Permite liberar una página
  * @param addr Dirección de la página a liberar
+ * @return 1 si exitoso, 0 si error
  */
-void kmem_free(unsigned int addr) {
+int kmem_free(unsigned int addr) {
     int slot;
     unsigned int start;
     memory_region * aux;
@@ -310,14 +311,33 @@ void kmem_free(unsigned int addr) {
     do {
         if (start >= aux->start && start < aux->start + aux->length) {
             slot = (start - aux->start) / PAGE_SIZE;
-            bitmap_free(&aux->map, slot);
-            //Liberar la pagina y el marco de pagina
-            kmem_available_pages++;
-            destroy_page(addr);
-            return;
+            if (bitmap_free(&aux->map, slot)) {
+                //Liberar la pagina y el marco de pagina
+                kmem_available_pages++;
+                destroy_page(addr);
+            }
+            return 1;
         }
         aux = aux->next;
     }while(aux != current_kmem);
+    return 0;
+}
+
+/**
+ * @brief Libera un conjunto de paginas contiguas
+ */
+int kmem_free_pages(unsigned int start, unsigned int count) {
+
+    unsigned int addr = ROUND_DOWN_TO_PAGE(start);
+
+    int ret = 1;
+
+    while (count > 0) {
+        ret = ret & kmem_free(addr);
+        addr += PAGE_SIZE;
+        count--;
+    }
+    return ret;
 }
 
 /**

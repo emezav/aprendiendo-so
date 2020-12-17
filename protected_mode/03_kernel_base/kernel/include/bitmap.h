@@ -63,7 +63,7 @@ int bitmap_allocate_region(bitmap * dst, int count);
 /* @brief Marca un bit como disponible en el mapa de bits. 
  * @param dst Apuntador al descriptor del mapa de bits
  * @param slot Posicion del bit a liberar
- * @return 0 si exitoso, -1 si error 
+ * @return 1 si exitoso, 0 si error 
  */
 int bitmap_free(bitmap * dst, int slot);
 
@@ -71,7 +71,7 @@ int bitmap_free(bitmap * dst, int slot);
  * @param dst Apuntador al descriptor del mapa de bits
  * @param slot Posicion del primer bit de la region a liberar
  * @param count Numero de regiones a liberar
- * @return 0 si exitoso, -1 si error 
+ * @return 1 si exitoso, 0 si error 
  */
 int bitmap_free_region(bitmap * dst, int slot, int count);
 

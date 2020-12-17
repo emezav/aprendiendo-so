@@ -43,4 +43,11 @@ void * memstore_alloc(kmemstore * ms);
 */
 int memstore_free(kmemstore * ms, void * ptr);
 
+
+/**
+ * @brief Libera los almacenes bloques no usados. 
+ * @param ms Almacen de memoria.
+ */
+void memstore_shrink(kmemstore * ms);
+
 #endif /* KPOOL_H_ */

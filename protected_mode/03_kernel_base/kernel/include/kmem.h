@@ -74,12 +74,21 @@ unsigned int kmem_allocate_pages(int count, int sparse);
 /**
  * @brief Permite liberar una página
  * @param addr Dirección de la página a liberar
+ * @return 1 si exitoso, 0 si error.
  */
-void kmem_free(unsigned int addr);
+int kmem_free(unsigned int addr);
+
+/**
+ * @brief Libera un conjunto de paginas contiguas
+ * @param addr Dirección de la página primera página
+ * @param count Número de páginas a liberar
+ * @return 1 si exitoso, 0 si error.
+ */
+int kmem_free_pages(unsigned int start, unsigned int count);
 
 /**
  * @brief Retorna el número de páginas disponibles en la memoria del kernel
- * @return Número de páginas disponibles
+ * @return Número de páginas disponibles.
  */
 int available_pages();
 
