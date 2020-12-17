@@ -8,6 +8,7 @@ adicionando nuevos almacenes de bloques de forma automática.
 
 ## Dependencias
 - kpool
+- paging
 
 ## Subrutina de inicialización
 - Ninguna.
