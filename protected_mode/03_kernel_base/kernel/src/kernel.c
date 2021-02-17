@@ -11,6 +11,7 @@
 #include <asm.h>
 #include <console.h>
 #include <irq.h>
+#include <kmem.h>
 #include <paging.h>
 #include <pci.h>
 #include <pm.h>
