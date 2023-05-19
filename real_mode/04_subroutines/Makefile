@@ -40,14 +40,21 @@ bochsdbg: all
 qemu: all
 	qemu -fda build/floppy.img -boot a
 
+vbox: all
+	-VBoxManage unregistervm  "Aprendiendo_SO" --delete
+	VBoxManage createvm --name="Aprendiendo_SO" --basefolder="./build" --default --register
+	VBoxManage modifyvm "Aprendiendo_SO"  --memory=128 --cpus=1 --firmware=bios --vram 128
+	VBoxManage storagectl "Aprendiendo_SO" --name "Floppy" --add floppy --controller I82078
+	VBoxManage storageattach "Aprendiendo_SO" --storagectl "Floppy" --port 0 --device 0 --type fdd --medium build/floppy.img
+	VBoxManage startvm "Aprendiendo_SO" --type=gui
+
 docs: $(DOCFILES)
 	$(DOXYGEN) dox/Doxyfile
 
 clean:
 	@cd $(BOOTSECTOR_DIR);make clean
 	@rm -f build/floppy.img
-	@-if test -d docs; then \
-	   rm -r -f docs; \
-	   else true; fi
+	@-rm -rf docs
+	@-VBoxManage unregistervm  "Aprendiendo_SO" --delete
 
 #/** @endverbatim */

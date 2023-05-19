@@ -84,8 +84,8 @@ iso: all
 vbox: all
 	-VBoxManage unregistervm  "Aprendiendo_SO" --delete
 	VBoxManage createvm --name="Aprendiendo_SO" --basefolder="./build" --default --register
-	VBoxManage modifyvm "Aprendiendo_SO"  --memory=128 --cpus=2 --pae=on --long-mode=on --firmware=bios --vram 128
-	-rm -f build/disk_image.vdi
+	VBoxManage modifyvm "Aprendiendo_SO"  --memory=128 --acpi=on --ioapic=on --cpus=2 --pae=on --long-mode=on --firmware=bios --vram 128
+	@-rm -f build/disk_image.vdi
 	vboxmanage convertfromraw build/disk_image build/disk_image.vdi --format=vdi
 	VBoxManage storagectl "Aprendiendo_SO" --name "SATA Controller" --add sata --controller IntelAHCI
 	VBoxManage storageattach "Aprendiendo_SO" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium build/disk_image.vdi
