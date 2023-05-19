@@ -38,7 +38,7 @@ bochsdbg: all
 	-$(BOCHSDBG) -q 'boot:a' \
 	'floppya: 1_44=build/floppy.img, status=inserted' 'megs:32' \
 	'display_library:$(BOCHSDISPLAY), options="gui_debug"'
-	
+
 qemu: all
 	qemu -fda build/floppy.img -boot a
 

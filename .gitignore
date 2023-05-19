@@ -2,3 +2,4 @@ docs/
 *.o
 *.img
 *.bak
+disk_image

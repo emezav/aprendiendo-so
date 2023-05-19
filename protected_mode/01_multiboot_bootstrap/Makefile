@@ -16,7 +16,7 @@ arch := $(shell uname -s)
 machine := $(shell uname -m)
 x86found := false
 os := $(shell uname -o)
-         
+
 BOCHSDBG := bochsdbg
 
 BOCHSDISPLAY := x
@@ -48,13 +48,13 @@ all:
 	@dd if=build/first_partition of=build/disk_image bs=512 seek=63
 	@#Borrar la particion actualizada
 	@rm -f build/first_partition
-	
+
 
 bochs: all
 	-bochs -q 'boot:disk' \
 	'ata0-master: type=disk, path="build/disk_image", cylinders=10, heads=16, spt=63'\
 	'megs:32'
-	
+
 
 bochs-cd: iso
 	-bochs -q 'boot:cdrom' \
@@ -65,7 +65,7 @@ bochsdbg: all
 	-$(BOCHSDBG) -q 'boot:disk' \
 	'ata0-master: type=disk, path="build/disk_image", cylinders=10, heads=16, spt=63'\
 	'megs:32' 'display_library:$(BOCHSDISPLAY), options="gui_debug"'
-	
+
 bochsdbg-cd: iso
 	-$(BOCHSDBG) -q 'boot:cdrom' \
 	'ata0-master: type=cdrom, path="build/cd_image.iso", status=inserted'\
@@ -74,22 +74,32 @@ bochsdbg-cd: iso
 
 qemu: all
 	qemu -hda build/disk_image -boot c
-	
+
 qemu-cd: iso
 	qemu -boot d -cdrom build/cd_image.iso
 
 iso: all
 	mkisofs -J -R -b boot/grub/stage2_eltorito -no-emul-boot -boot-load-size 4 -boot-info-table -o build/cd_image.iso build/filesys
-	
+
+vbox: all
+	-VBoxManage unregistervm  "Aprendiendo_SO" --delete
+	VBoxManage createvm --name="Aprendiendo_SO" --basefolder="./build" --default --register
+	VBoxManage modifyvm "Aprendiendo_SO"  --memory=128 --cpus=2 --pae=on --long-mode=on --firmware=bios
+	-rm -f build/disk_image.vdi
+	vboxmanage convertfromraw build/disk_image build/disk_image.vdi --format=vdi
+	VBoxManage storagectl "Aprendiendo_SO" --name "SATA Controller" --add sata --controller IntelAHCI
+	VBoxManage storageattach "Aprendiendo_SO" --storagectl "SATA Controller" --port 0 --device 0 --type hdd --medium build/disk_image.vdi
+	VBoxManage startvm "Aprendiendo_SO" --type=gui
+
+
 docs: $(DOCFILES)
 	$(DOXYGEN) dox/Doxyfile
 
 clean:
 	@cd kernel;make clean
-	@rm -f build/kernel $(KERNEL_OBJS) build/disk_image build/cd_image.iso build/filesys/boot/kernel build/disk_template build/disk_template.gz
-	-@if test -d docs; then \
-	rm -r -f docs; \
-	else true; fi
+	@-rm -f build/kernel $(KERNEL_OBJS) build/disk_image build/disk_image.vdi build/cd_image.iso build/filesys/boot/kernel build/disk_template build/disk_template.gz
+	@-rm -rf docs
+
 
 #/** @endverbatim */
 

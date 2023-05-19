@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Código de inicialización del kernel en C
  *
@@ -32,7 +32,7 @@ void cmain(){
 
     /* Configura la IDT y el PIC.interrupt.c */
     setup_interrupts();
-    
+
     /* Completa la configuración de la memoria virtual. paging.c */
     setup_paging();
 
@@ -41,8 +41,11 @@ void cmain(){
 
     /* Las subrutinas que se deben ejecutar DESPUES de habilitar las
      * interrupciones se deben invicar en este punto */
-     
+
     /* Inicializar la informacion del bus PCI. pci.c  */
     setup_pci();
-    
+
+    /* Imprimir un mensaje por pantalla. */
+    console_printf("Kernel started.\n");
+
 }
