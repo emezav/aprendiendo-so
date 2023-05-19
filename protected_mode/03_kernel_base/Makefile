@@ -98,6 +98,7 @@ clean:
 	@cd kernel;make clean
 	@-rm -f build/kernel $(KERNEL_OBJS) build/disk_image build/disk_image.vdi build/cd_image.iso build/filesys/boot/kernel build/disk_template build/disk_template.gz
 	@-rm -rf docs
+	@-VBoxManage unregistervm  "Aprendiendo_SO" --delete
 
 #/** @endverbatim */
 
