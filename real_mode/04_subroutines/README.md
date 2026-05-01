@@ -1,5 +1,6 @@
 Descripción general del proyecto
 ================================
+
 En modo real se puede definir y usar subrutinas. Vamos a definir algunas
 que luego las usaremos en el código principal del sector de arranque:
 
@@ -21,7 +22,7 @@ Leer un caracter por teclado
 Para leer un caracter por teclado solo se necesita almacenar 0x00 en el
 registro AL e invocar el servicio de la BIOS proprcionado por la
 interrupción 0x16 (servicios de teclado). Este servicio almacena el código
-ASCII en el registro AL, y el código de escaneo en el registro AH. 
+ASCII en el registro AL, y el código de escaneo en el registro AH.
 
     /**
     * Lee un caracter de teclado usando los servicios de teclado de la BIOS
@@ -31,10 +32,10 @@ ASCII en el registro AL, y el código de escaneo en el registro AH.
     * Salida:
     *  ah contiene el Codigo de Escaneo leido
     *  al contiene el caracter ASCII leido
-    * En esta rutina no se crea un marco de pila. El servicio de la 
+    * En esta rutina no se crea un marco de pila. El servicio de la
     * BIOS puede modificar otros registros.
     */
-    getkey: 
+    getkey:
       xor ah, ah   /* ah = 0, servico de video leer un caracter de teclado */
       int 0x16       /* Servicio de video */
       ret
@@ -60,25 +61,25 @@ propósito general se muestra a continuación.
     getkey:
       push bp
       mov bp, sp
-      
+
       push bx
       push cx
       push dx
       push si
       push di
-      
+
       xor ah, ah   /* ah = 0, servico de video leer un caracter de teclado */
       int 0x16       /* Servicio de video */
-      
+
       pop di
       pop si
       pop dx
       pop cx
       pop bx
-      
+
       mov sp, bp
       pop bp
-        
+
       ret
 
 En este caso no se puede usar la instrucción pusha para almacenar los
@@ -107,7 +108,7 @@ Para tratar que la subrutina tenga el menor impacto posible, se almacenarán
 temporalmente en la pila los registros usados y luego se recuperarán antes
 de retornar.
 
-    /** 
+    /**
      * Lee un máximo de caracteres por teclado o hasta leer ENTER (0x0D) a la
      * dirección lógica especificada.
      * Entrada:
@@ -120,7 +121,7 @@ de retornar.
     getline:
       push bp
       mov bp, sp    /* Crear el marco de pila */
-    
+
       push cx       /* Guardar temporalmente algunos registros */
       push dx
       push di
@@ -133,7 +134,7 @@ alamcenará en ES:DI, y el número máximo de caracteres a leer en CX.
     mov ax, [bp + 4]
     mov es, ax
     mov di, [bp + 6]
-  
+
     /* CX = Máximo número de caracteres a leer */
     mov cx, [bp + 8]
 
@@ -145,15 +146,15 @@ anteriormente
     1:
     /* Iteración para leer un caracter */
     call getkey /* Usar la subrutina getkey */
-  
+
     /* El caracter leido se encuentra en AL, almacenar en ES:DI y avanzar DI */
-  
-    /* equivalente a: 
-    mov es:[di], al 
+
+    /* equivalente a:
+    mov es:[di], al
     inc di
     */
     stosb /* DI se incrementa automáticamente */
-  
+
     loop 1b   /* CX = CX - 1, ir a la etiqueta anónima "1" atrás si CX > 0 */
 
 Este ciclo básico permitirá como máximo el número de caracteres
@@ -175,33 +176,33 @@ El código modificado es el siguiente:
     1:
       cmp cx, 0 /* Terminar inmediatamente si cx es <= 0 */
       jle 2f
-    
+
       call getkey /* Usar la subrutina getkey */
-    
+
       /* AL = ASCII leido */
-      cmp al, 0x0D   
+      cmp al, 0x0D
       /* Se leyo enter? Saltar a la etiqueta anónima "3" adelante */
       je 3f
-    
-      /* En caso contrario, imprimir y almacenar el caracter en es:[di] */  
+
+      /* En caso contrario, imprimir y almacenar el caracter en es:[di] */
       mov ah, 0x0E /* Imprimir el caracter */
       int 0x10
-    
-      /* equivalente a: 
-      mov BYTE PTR es:[di], al 
+
+      /* equivalente a:
+      mov BYTE PTR es:[di], al
       inc di
       */
       stosb /* DI se incrementa automáticamente */
-      
+
       inc dx /* Incrementar en 1 el contador */
-      
+
       loop 1b   /* CX = CX - 1, ir a la etiqueta anónima "1" atrás si CX > 0 */
-    
+
     3:
       /* Terminar correctamente la cadena */
       mov al, 0x00
       stosb   /* Almacenar nulo (0x00) en es:di */
-    
+
     2:
       /* Fin de la lectura. */
 
@@ -210,12 +211,12 @@ registros que se han modificado, y almacenar en el registro AX el valor del
 contador del número de caracteres leidos.
 
     mov ax, dx  /* ES:DI apunta al caracter nulo de la cadena */
-  
+
     pop es    /* Recuperar los valores guardados en la pila */
-    pop di      
+    pop di
     pop dx
     pop cx
-    
+
     mov sp, bp    /* Cerrar el marco de pila */
     pop bp
     ret
@@ -227,7 +228,7 @@ Esta subrutina recibe como parámetro la dirección lógica en la cual inicia
 la cadena a imprimir. Mediante una estructura repetitiva, se imprime uno
 por uno los caracteres de la cadena, hasta llegar al caracter nulo.
 
-    /** 
+    /**
      * Imprime una cadena de caracteres terminada en nulo.
      * Entrada:
      *  [bp + 4]: Selector de la dirección lógica de la cadena
@@ -238,32 +239,32 @@ por uno los caracteres de la cadena, hasta llegar al caracter nulo.
     putline:
       push bp
       mov bp, sp    /* Crear el marco de pila */
-      
+
       push ax
       push si
       push ds
-    
+
       /* DS:SI = dirección lógica de la cadena a imprimir */
       mov ax, [bp + 4]
       mov ds, ax
       mov si, [bp + 6]
-    
+
     1:
       /* Equivalente a:
       mov al, BYTE PTR ds:[si]
       inc si
       */
       lodsb
-    
+
       /* AL = ASCII leido */
-      or al, al  
+      or al, al
       /* El caracter es nulo? terminar */
       je 2f
-    
+
       /* En caso contrario, imprimir en la pantalla */
       mov ah, 0x0E
       int 0x10
-    
+
       jmp 1b
     2:
 
@@ -271,14 +272,14 @@ Al finalizar la estructura repetitiva, se recuperan los valores de los
 registros de propósito general y se cierra el marco de pila.
 
     pop ds    /* Recuperar los valores guardados en la pila */
-    pop si      
-    pop ax 
-  
+    pop si
+    pop ax
+
     mov sp, bp    /* Cerrar el marco de pila */
     pop bp
     ret
 
-Uso de las subrutinas 
+Uso de las subrutinas
 ---------------------
 
 El código principal del sector de arranque debe primero configurar los
@@ -288,13 +289,13 @@ pila.
     start:
       /* Configurar CS para que apunte a 0x7C00 */
       ljmp 0x7C0: offset entry_point
-      
+
     entry_point:
-    
+
       /* Configurar el registro de segmento DS */
       mov ax, cs
       mov ds, ax
-    
+
       /* Configurar la pila */
       cli
       mov ax, 0x9000
@@ -314,7 +315,7 @@ la dirección 0x500.
     call getline
     /* Quitar los parámetros de la pila */
     add sp, 6
- 
+
 Se debe recordar que los parámetros se insertan en la pila en el orden
 inverso, para que el último parámetro insertado (en este caso el selector)
 se encuentre en la posición [bp + 4] en la subrutina, luego de configurar
@@ -332,10 +333,10 @@ carro para avanzar una línea en la pantalla.
     mov ah, 0x0E
     mov al, 0x0A
     int 0x10
-    
+
     mov al, 0x0D
     int 0x10
-    
+
     /* Imprimir la cadena terminada en nulo */
     /* Almacenar los parametros en la pila */
     push 0x0000
@@ -347,8 +348,8 @@ carro para avanzar una línea en la pantalla.
 
 
 Compilación y ejecución del proyecto
-==================================
-  
+----------------------------------
+
 La compilación del código y la ejecución del emulador se realiza mediante la
 utilidad *make*. Para ejecutar este proyecto, se debe abrir un *shell* y
 ubicarse en la carpeta del proyecto. Luego se deberá ingresar uno de los
@@ -373,6 +374,7 @@ proyecto para estudiar el proceso que realiza la utilidad *make*.
 
 Depuración paso a paso
 ----------------------
+
 En el archivo bochsrc.txt se ha activado el *Magic break*, por lo cual si se
 incluye la instrucción *xchg bx, bx* en cualquier parte del código, se pausará
 la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
@@ -380,5 +382,6 @@ la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
 
 
 Vea también
-===========
+-----------
+
 - David Jurgens, Help-PC Reference Library http://stanislavs.org/helppc/idx_interrupt.html

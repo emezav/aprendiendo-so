@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Este archivo implementa las primitivas necesarias para el manejo
  * de excepciones en la arquitectura IA-32.

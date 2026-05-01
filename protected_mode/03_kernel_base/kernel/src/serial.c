@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Contiene las primitivas basicas para entrada / salida por
  * el puerto serial COM1
@@ -32,13 +32,13 @@ void setup_serial() {
 int is_transmit_empty() {
    return inb(COM1_PORT + 5) & 0x20;
 }
- 
+
 /**
  * @brief Escribe un caracter en el puerto serial
 */
 void serial_putchar(char c) {
    while (is_transmit_empty() == 0);
- 
+
    outb(COM1_PORT, c);
 }
 

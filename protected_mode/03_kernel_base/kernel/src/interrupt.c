@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Este archivo implementa las primitivas para
  * el manejo de interrupciones en la arquitectura IA-32
  */
@@ -81,7 +81,7 @@ extern unsigned short kernel_code_selector;
 void setup_interrupts(void) {
 
 	int i;
-    
+
     /* Configurar la IDT para que la interrupción N sea atendida por la rutina
      * isrN. Estas rutinas se definen mediante un macro en el archivo start.S.*/
 	for (i = 0; i < MAX_IDT_ENTRIES; i++) {

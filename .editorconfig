@@ -1,0 +1,25 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{bat,cmd}]
+end_of_line = crlf
+
+[*.md]
+trim_trailing_whitespace = false
+
+[Makefile]
+indent_style = tab
+charset = utf-8
+end_of_line = lf
+
+[Doxyfile]
+charset = utf-8
+end_of_line = lf
+
+[*.{c,h,S,ld,dox,sh,py,json,yml,yaml}]
+indent_style = space

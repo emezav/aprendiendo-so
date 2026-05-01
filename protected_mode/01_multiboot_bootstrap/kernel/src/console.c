@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Contiene las primitivas basicas para entrada / salida
  */
@@ -32,7 +32,7 @@
  *   El bit I corresponde a la intensidad del color de fondo (0 = oscuro,
  *   1 = claro) o del color del texto.
  */
-unsigned short * videoptr = 
+unsigned short * videoptr =
         (unsigned short *) (VIDEO_START_ADDR);
 
 /** @brief Byte que almacena los atributos de texto */
@@ -114,7 +114,7 @@ void console_putchar(char c) {
 			}
 		}
 	    /* Escribir el caracter en la memoria de video*/
-        videoptr = (unsigned short *)VIDEO_START_ADDR + 
+        videoptr = (unsigned short *)VIDEO_START_ADDR +
             ((current_line * SCREEN_COLUMNS) + current_column);
 		current_column++;
 		*videoptr = (text_attributes << 8 | c);

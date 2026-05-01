@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
  * @copyright MIT License.
  *

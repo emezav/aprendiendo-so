@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Rutinas para la ejecución de código ensamblador para la arquitectura
  * IA-32
@@ -185,8 +185,8 @@ static __inline__ void outsl(unsigned short port, void * addr, unsigned int coun
  * ret.
  @return old si se pudo realizar la operacion, new si no.
 */
-static __inline__ unsigned char cmpxchgb(unsigned char * lock, 
-        unsigned char old, 
+static __inline__ unsigned char cmpxchgb(unsigned char * lock,
+        unsigned char old,
         unsigned char new) {
 
     unsigned char ret;
@@ -210,7 +210,7 @@ static __inline__ unsigned char cmpxchgb(unsigned char * lock,
  * ret.
  @return old si se pudo realizar la operacion, new si no.
 */
-static __inline__ unsigned short cmpxchgw(unsigned short * lock, 
+static __inline__ unsigned short cmpxchgw(unsigned short * lock,
                 unsigned short old,
                 unsigned short new) {
 
@@ -236,7 +236,7 @@ static __inline__ unsigned short cmpxchgw(unsigned short * lock,
  * ret.
  @return old si se pudo realizar la operacion, new si no.
 */
-static __inline__ unsigned int cmpxchgl(unsigned int * lock, 
+static __inline__ unsigned int cmpxchgl(unsigned int * lock,
                 unsigned int old,
                 unsigned int new) {
 

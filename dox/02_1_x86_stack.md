@@ -1,5 +1,6 @@
-Uso de la pila en x86
+﻿Uso de la pila en x86
 =====================
+
 La pila es un elemento muy importante dentro de la arquitectura x86. Se puede
 usar de forma explícita, y es usada de forma implícita cuando se invoca a
 rutinas (instrucción call) y cuando se gestiona una interrupción.
@@ -15,7 +16,7 @@ registros son:
 La pila tiene la siguiente organización:
 
       Disposición de la pila en x86
-      
+
       +-----------------+
       |                 |
       +-----------------+
@@ -54,7 +55,7 @@ A continuación se presentan las instrucciones básicas para el manejo de la pil
 
 Instrucción push
 -----------------
-                 
+
 La instrucción push almacena un valor inmediato (constante), o el valor de un registro en el tope de la pila. El apuntador al tope de la pila (ESP) se decrementa en el número de bytes almacenados.
 
 La siguiente instrucción en modo real permite almacenar el valor del registro AX en la pila (un word):
@@ -62,19 +63,19 @@ La siguiente instrucción en modo real permite almacenar el valor del registro A
     pushw %ax
 
 
-En sintaxis Intel, simplemente se omite el sufijo 'w': 
+En sintaxis Intel, simplemente se omite el sufijo 'w':
 
     push ax
 
 
 Esta instrucción almacena en la pila el valor de AX (2 bytes), y decrementa el valor de SP en 2. La pila lucirá así:
 
-      +-----------------+    
-      |  valor          |                                       
+      +-----------------+
+      |  valor          |
       +-----------------+ <-- ESP antes de la instrucción push AX
-      |  valor de AX    |  push AX Coloca el valor de AX en la pila (2 bytes) 
-      +-----------------+ <-- ESP = Nuevo tope de la pila luego de push AX 
-      |                 |                                           
+      |  valor de AX    |  push AX Coloca el valor de AX en la pila (2 bytes)
+      +-----------------+ <-- ESP = Nuevo tope de la pila luego de push AX
+      |                 |
       |  Espacio        |
       |  disponible en  |
       |  la pila        |
@@ -88,23 +89,23 @@ Esta instrucción almacena en la pila el valor de AX (2 bytes), y decrementa el 
 La instrucción push permite almacenar en la pila los valores de los registros del procesador y también valores inmediatos.
 
 La siguiente instrucción en modo protegido de 32 bits permite almacenar el valor del registro EAX en la pila (un doubleword, 32 bits):
- 
+
     pushl %eax
 
 
 En sintaxis Intel, simplemente se omite el sufijo 'l':
- 
+
     push eax
 
 
 Esta instrucción almacena en la pila el valor de EAX (4 bytes), y decrementa el valor de ESP en 4. La pila lucirá así:
 
-      +-----------------+    
-      |  valor          |                                       
+      +-----------------+
+      |  valor          |
       +-----------------+ <-- ESP antes de la instrucción push EAX
-      |  valor de EAX   | push EAX coloca el valor de EAX en la pila (4 bytes) 
-      +-----------------+ <-- ESP = Nuevo tope de la pila luego de push EAX 
-      |                 |                                           
+      |  valor de EAX   | push EAX coloca el valor de EAX en la pila (4 bytes)
+      +-----------------+ <-- ESP = Nuevo tope de la pila luego de push EAX
+      |                 |
       |  Espacio        |
       |  disponible en  |
       |  la pila        |
@@ -117,28 +118,28 @@ Esta instrucción almacena en la pila el valor de EAX (4 bytes), y decrementa el
 
 Instrucción pop
 ----------------
-                
+
 Por su parte, la instrucción pop retira un valor de la pila (word, doubleword o quadword según el modo de operación y el sufijo de la instrucción), lo almacena en el registro destino especificado e incrementa SP (ESP o RSP según el modo de operación) en 2, 4 o 8.
 
 Se debe tener en cuenta que luego de sacar un valor de la pila, no se puede garantizar que el valor sacado se conserve en la pila.
 
 Por ejemplo, para sacar un valor del tope de la pila en modo protegido de 32 bits y almacenarlo en el registro EAX, se usa la siguiente instrucción:
- 
+
     popl %eax
 
 En sintaxis Intel:
- 
+
     pop eax
 
 
 Esta instrucción saca del tope de la pila un doubleword (cuatro bytes) y los almacena en el registro EAX, como lo muestra la siguiente figura.
 
-      +-----------------+    
-      |  valor          |                                       
+      +-----------------+
+      |  valor          |
       +-----------------+ <-- ESP después de pop EAX (ESP = ESP + 4)
-      |  valor          | pop EAX : Este valor se almacena en EAX (4 bytes)  
-      +-----------------+ <-- ESP antes de pop EAX 
-      |                 |                                           
+      |  valor          | pop EAX : Este valor se almacena en EAX (4 bytes)
+      +-----------------+ <-- ESP antes de pop EAX
+      |                 |
       |  Espacio        |
       |  disponible en  |
       |  la pila        |
@@ -159,12 +160,12 @@ Instrucción pushf
 
 Esta instrucción toma el valor del registro EFLAGS y lo almacena en la pila.
 
-      +-----------------+    
-      |  valor          |                                       
+      +-----------------+
+      |  valor          |
       +-----------------+ <-- ESP antes de la instrucción pushf
-      | valor de EFLAGS | pushf coloca el valor de EFLAGS en la pila (4 bytes) 
-      +-----------------+ <-- ESP = Nuevo tope de la pila luego de pushf 
-      |                 |                                           
+      | valor de EFLAGS | pushf coloca el valor de EFLAGS en la pila (4 bytes)
+      +-----------------+ <-- ESP = Nuevo tope de la pila luego de pushf
+      |                 |
       |  Espacio        |
       |  disponible en  |
       |  la pila        |
@@ -183,12 +184,12 @@ Instrucción popf
 
 Esta instrucción toma el valor almacenado en el tope de la pila y lo almacena en el registro EFLAGS (32 bits), los 16 bits menos significativos de EFLAGS en modo real y RFLAGS en modo de 64 bits.
 
-      +-----------------+    
-      |  valor          |                                       
+      +-----------------+
+      |  valor          |
       +-----------------+ <-- ESP después de popf (ESP = ESP + 4)
-      |  valor          | popf : Este valor se almacena en EFLAGS (4 bytes)  
-      +-----------------+ <-- ESP antes de popf 
-      |                 |                                           
+      |  valor          | popf : Este valor se almacena en EFLAGS (4 bytes)
+      +-----------------+ <-- ESP antes de popf
+      |                 |
       |  Espacio        |
       |  disponible en  |
       |  la pila        |
@@ -212,8 +213,8 @@ Así, en modo protegido de 32 bits cada valor almacenado en la pila tomará cuat
 
 A continuación se presenta un diagrama del funcionamiento de la instrucción pusha en modo protegido de 32 bits.
 
-      +--------------------+    
-      |  valor             |                                       
+      +--------------------+
+      |  valor             |
       +--------------------+ <-- ESP antes de pusha
       |  valor de EAX      |     |
       +--------------------+     |
@@ -225,12 +226,12 @@ A continuación se presenta un diagrama del funcionamiento de la instrucción pu
       +--------------------+     |
       |  ESP antes de pusha| <---+
       +--------------------+
-      |  valor de EBP      |  
+      |  valor de EBP      |
       +--------------------+
-      |  valor de ESI      |  
+      |  valor de ESI      |
       +--------------------+
-      |  valor de EDI      |  
-      +--------------------+ <-- ESP después de pusha (ESP = ESP - 32) este es 
+      |  valor de EDI      |
+      +--------------------+ <-- ESP después de pusha (ESP = ESP - 32) este es
       |                    |     el nuevo tope de la pila.
       |  Espacio           |
       |  disponible en     |
@@ -252,17 +253,17 @@ Esta instrucción extrae de la pila ocho valores, y los almacena en los registro
 
 El valor de ESP sacado de la pila se descarta.
 
-      +--------------------+    
-      |  valor             |                                       
+      +--------------------+
+      |  valor             |
       +--------------------+ <-- ESP después de popa ( ESP = ESP + 32)
       |  valor             | ---> EAX
-      +--------------------+      
+      +--------------------+
       |  valor             | ---> ECX
-      +--------------------+      
+      +--------------------+
       |  valor             | ---> EDX
-      +--------------------+      
+      +--------------------+
       |  valor             | ---> EBX
-      +--------------------+      
+      +--------------------+
       |  valor             |  (este valor se descarta)
       +--------------------+
       |  valor             | ---> EBP
@@ -270,8 +271,8 @@ El valor de ESP sacado de la pila se descarta.
       |  valor             | ---> ESI
       +--------------------+
       |  valor             | ---> EDI
-      +--------------------+ <-- ESP andtes de pusha 
-      |                    |    
+      +--------------------+ <-- ESP andtes de pusha
+      |                    |
       |  Espacio           |
       |  disponible en     |
       |  la pila           |

@@ -1,5 +1,5 @@
-/** @defgroup bootsector_code Código del sector de arranque
- *  Conjunto de archivos usados por el sector de arranque
+/** @defgroup kernel_code Codigo del Kernel
+ *  Conjunto de archivos usados por el kernel y el sector de arranque
  *  @{
  */
 

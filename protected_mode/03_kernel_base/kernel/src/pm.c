@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Contiene la implementación de las rutinas para la gestión del modo
  * protegido IA-32 y de la Tabla Global de Descriptores (GDT)
  */
@@ -171,7 +171,6 @@ void setup_gdt_descriptor(unsigned short selector , unsigned int base,
  * 					selector.
  * @param dpl		Nivel de privilegios del descriptor
  * @param type		Tipo de descriptor
- * @returns idt_descriptor : Descriptor de idt creado.
  * */
 void setup_idt_descriptor(unsigned char vector, unsigned int selector,
 		unsigned int offset, unsigned char dpl, unsigned char type){
@@ -182,9 +181,8 @@ void setup_idt_descriptor(unsigned char vector, unsigned int selector,
     kernel_idt[vector].selector = (unsigned short)(selector & 0x0000FFFF);
     kernel_idt[vector].type = (unsigned short)(((1<<7) | \
                             ((dpl & 0x03) << 5) | (type & 0x0F)) << 8);
-    kernel_idt[vector].offset_high = (unsigned short)((offset & 0xFFFF0000) 
+    kernel_idt[vector].offset_high = (unsigned short)((offset & 0xFFFF0000)
                     >> 16);
-    
+
 
 }
-

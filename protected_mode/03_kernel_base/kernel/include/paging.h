@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Contiene las definiciones relacionadas con la paginación.
  */
 
@@ -34,7 +34,7 @@
 #define PG_KERNEL 2
 
 /* @brief Bits para una entrada con U/S en 0, presente*/
-#define PG_KERNEL_PRESENT 3 
+#define PG_KERNEL_PRESENT 3
 
 /* @brief Bits para una entrada con U/S en 1, presente */
 #define PG_USER_PRESENT 7
@@ -49,10 +49,10 @@
 #define KERNEL_PD_VADDR (KERNEL_PAGETABLES_VADDR + 0x3FF000)
 
 /** @brief Redondea una dirección dada al inicio de la página */
-#define ROUND_DOWN_TO_PAGE(value) ((int)(value / PAGE_SIZE) * PAGE_SIZE)
+#define ROUND_DOWN_TO_PAGE(value) ((unsigned int)(value) & ~(PAGE_SIZE - 1))
 
 /** @brief Redondea una dirección dada al inicio de la siguiente página */
-#define ROUND_UP_TO_PAGE(value) (((int)(value / PAGE_SIZE) + 1) * PAGE_SIZE)
+#define ROUND_UP_TO_PAGE(value) (((unsigned int)(value) + PAGE_SIZE - 1) & ~(PAGE_SIZE - 1))
 
 /** @brief Excepcion de fallo de pagina. */
 #define PAGE_FAULT_EXCEPTION 14
@@ -87,9 +87,9 @@ extern page_directory kernel_pd;
 void setup_paging();
 
 /** @brief Mapear una página a un marco de páginas en el espacio virtual
- * del kernel 
+ * del kernel
  * @param vaddr Dirección virtual de la página a mapear
- * @param addr Dirección física del marco de página 
+ * @param addr Dirección física del marco de página
  * @return 1 en caso de éxito, 0 si ocurre un error.
  */
 int map_page(unsigned int vaddr, unsigned int addr);

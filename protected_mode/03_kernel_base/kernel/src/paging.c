@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Contiene la implementación de las rutinas relacionadas
  * con la gestión de memoria física mediante un mapa de bits.
  * La memoria se gestiona en unidades de PAGE_SIZE denominadas marcos de
@@ -52,7 +52,7 @@ void setup_paging() {
     /* Luego de mapear el directorio de tablas de página de forma recursiva, lo
      * podemos acceder en la dirección virtual KERNEL_PD_VADDR */
     kernel_pd = (unsigned int *)(KERNEL_PD_VADDR);
-    
+
     /* Ya podemos abandonar completamente el espacio físico!
      * El kernel seguirá en su posición en memoria física, pero se ejecutará
      * completamente en memoria virtual. Por tal razón, se debe quitar el mapeo
@@ -84,7 +84,7 @@ void setup_paging() {
 /**
  * @brief Crea una nueva tabla de páginas vacía y retorna su dirección física.
  * Retorna 0 si no es posible crear la nueva tabla de páginas, dado que jamás se
- * podrá usar el marco 0 de la memoria física. 
+ * podrá usar el marco 0 de la memoria física.
  */
 unsigned int create_new_page_table(int pd_entry) {
     unsigned int frame_addr;
@@ -115,7 +115,7 @@ unsigned int create_new_page_table(int pd_entry) {
     }
 
     return frame_addr;
-    
+
 }
 
 /**
@@ -146,7 +146,7 @@ int map_page(unsigned int vaddr, unsigned int addr) {
     //console_printf("PD entry: %d PT entry: %d\n", pd_entry, pt_entry);
 
     /* Si la tabla de páginas no se encuentra presente, reservar memoria para la
-     * tabla de páginas, inicializar y registrar en el directorio */ 
+     * tabla de páginas, inicializar y registrar en el directorio */
     if (! (kernel_pd[pd_entry] & PG_PRESENT)) {
         if (! (new_addr = create_new_page_table(pd_entry))) {
             //No se pudo crear la tabla de páginas, retornar.
@@ -155,11 +155,11 @@ int map_page(unsigned int vaddr, unsigned int addr) {
         }
     }
 
-    /* Ubicar la tabla de páginas correspondiente y marcar la entrada como 
+    /* Ubicar la tabla de páginas correspondiente y marcar la entrada como
      * usada */
     pt = (page_table)((KERNEL_PAGETABLES_VADDR) + (pd_entry * PAGE_SIZE));
     if (pt[pt_entry] & PG_PRESENT) {
-        //La página ya está mapeada a algún marco en memoria! 
+        //La página ya está mapeada a algún marco en memoria!
         //console_printf("Warning! attempting to map an already mapped page!\n");
         return 0;
     }
@@ -231,7 +231,7 @@ int unmap_page(unsigned int vaddr) {
         pt_frame = kernel_pd[pd_entry] & 0xFFFFF000;
 
         //console_printf("Invalidate page 0x%x => 0x%x\n", (unsigned int)pt, pt_frame);
-        
+
         /* Invalidar la página en el TLB */
         invalidate_page((unsigned int)pt);
 
@@ -309,7 +309,7 @@ int destroy_page(unsigned int vaddr) {
         pt_frame = kernel_pd[pd_entry] & 0xFFFFF000;
 
         //console_printf("Invalidate page table %d => 0x%x\n", pd_entry, pt_frame);
-        
+
         /* Invalidar la página en el TLB */
         invalidate_page((unsigned int)pt);
 
@@ -328,11 +328,11 @@ int destroy_page(unsigned int vaddr) {
 void print_page_table(page_directory pd) {
     int i;
 
-    
+
     console_printf("Page table at 0x%x[0x%x]\n", (unsigned int)pd,
             ROUND_DOWN_TO_PAGE((unsigned int)pd[1023]));
-    
-    
+
+
      /* Imprimir las entradas marcadas como válidas en el directorio de tablas
       * de  página */
     for (i = 0; i < PD_ENTRIES; i++) {

@@ -1,4 +1,4 @@
-Subrutinas
+﻿Subrutinas
 ===========
 
 En los lenguajes de alto nivel, además de bifurcaciones y ciclos, también se usan las rutinas como mecanismos para organizar la funcionalidad de un programa.
@@ -56,23 +56,23 @@ La instrucción call almacena automáticamente en la pila dirección de memoria 
 
 De esta forma, en el momento de llamar a una rutina, la pila se encuentra así:
 
-      +--------------------+    
-      |  valor             |                                       
+      +--------------------+
+      |  valor             |
       +--------------------+ <- ESP antes de insertar los parámetros y de
       | Parámetro N        |    invocar la rutina (call)
-      +--------------------+     
-      | Parámetro N-1      |     
       +--------------------+
-      | .....              |  
+      | Parámetro N-1      |
       +--------------------+
-      | Parámetro 2        |  
+      | .....              |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro 2        |
+      +--------------------+
+      | Parámetro 1        |
       +--------------------+
       | EIP                | -> Dirección de la siguiente instrucción a ejecutar
       | (Dir. de retorno)  |    al retornar de la rutina (dirección de retorno)
-      +--------------------+ <-- ESP después de call                           
-      |                    |                              
+      +--------------------+ <-- ESP después de call
+      |                    |
       |  Espacio           |
       |  disponible en     |
       |  la pila           |
@@ -100,29 +100,29 @@ El siguiente diagrama ilustra el funcionamiento de la instrucción ret.
 Antes de ejecutar la instrucción ret:
 
           EAX
-      +--------------------+    
-      |  valor de retorno  |                                       
       +--------------------+
-      
+      |  valor de retorno  |
+      +--------------------+
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
+
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
       +--------------------+
-      | EIP                | 
-      | (Dir. de retorno)  |   
-      +--------------------+ <-- ESP                         
-      |                    |                              
-      |  Espacio           |    
+      | .....              |
+      +--------------------+
+      | Parámetro 2        |
+      +--------------------+
+      | Parámetro 1        |
+      +--------------------+
+      | EIP                |
+      | (Dir. de retorno)  |
+      +--------------------+ <-- ESP
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
@@ -136,29 +136,29 @@ Antes de ejecutar la instrucción ret:
 Después de ejecutar la instrucción ret:
 
           EAX
-      +--------------------+    
-      |  valor de retorno  |                                       
       +--------------------+
-      
+      |  valor de retorno  |
+      +--------------------+
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
+
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
+      +--------------------+
+      | .....              |
+      +--------------------+
+      | Parámetro 2        |
+      +--------------------+
+      | Parámetro 1        |
       +--------------------+ <-- ESP
-      | EIP                | 
-      | (Dir. de retorno)  |  --> EIP La ejecución continúa en esta dirección  
-      +--------------------+                          
-      |                    |                              
-      |  Espacio           |    
+      | EIP                |
+      | (Dir. de retorno)  |  --> EIP La ejecución continúa en esta dirección
+      +--------------------+
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
@@ -168,7 +168,7 @@ Después de ejecutar la instrucción ret:
       |                    |
       +--------------------+
 
-Dado que al retornar de la rutina los parámetros aún se encuentran en la pila, es necesario avanzar ESP para que apunte a la posición de memoria en la cual se encontraba antes de insertar los parámetros. Para lograr este propósito se adiciona un número de bytes a ESP: 
+Dado que al retornar de la rutina los parámetros aún se encuentran en la pila, es necesario avanzar ESP para que apunte a la posición de memoria en la cual se encontraba antes de insertar los parámetros. Para lograr este propósito se adiciona un número de bytes a ESP:
 add esp, N
 
 
@@ -198,7 +198,7 @@ El concepto de "marco de pila" se explicará tomando como base la plantilla de r
 En los demás modos de operación del procesador el marco de pila funciona en forma similar, pero se deben expandir los registros a sus equivalentes en 32 y 64 bits, y se deberá sumar el número de bytes de acuerdo con el tamaño de los registros.
 
 En sintaxis AT&T:
-    
+
     nombre_rutina:
        pushw %bp   /*Almacenar %bp en la pila*/
        movw %sp, %bp  /*Establecer %bp con el valor de %sp*/
@@ -206,11 +206,11 @@ En sintaxis AT&T:
        ...
        (instrucciones de la rutina)
        ...
-    
+
         /*Cerrar el marco de pila:*/
        movw %bp, %sp  /*Mover %bp a %sp*/
        popw %bp/*Recuperar el valor original de %bp */
-    
+
        ret /* Retornar de la rutina */
 
 En sintaxis Intel:
@@ -222,11 +222,11 @@ En sintaxis Intel:
        ...
        (instrucciones de la rutina)
        ...
-    
+
         /*Cerrar el marco de pila:*/
        mov sp, bp  /*Mover bp a sp*/
        pop bp/*Recuperar el valor original de %bp */
-    
+
        ret  /* Retornar de la rutina*/
 
 Explicación de la plantilla de rutina
@@ -238,38 +238,38 @@ Con la instrucción
 
     pushw %bp   /* Sintaxis AT&T */
 
-ó 
+ó
 
     push bp    /* Sintaxis Intel */
 
 
 La pila queda dispuesta de la siguiente forma:
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
       +--------------------+
-      |  IP                | 
-      | (Dir. de retorno)  |   
+      | .....              |
+      +--------------------+
+      | Parámetro 2        |
+      +--------------------+
+      | Parámetro 1        |
+      +--------------------+
+      |  IP                |
+      | (Dir. de retorno)  |
       +--------------------+
       | Valor de  BP       | Se almacena el valor de BP en la pila
-      +--------------------+ <-- SP                        
-      |                    |                              
-      |  Espacio           |    
+      +--------------------+ <-- SP
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
       |                    |
-      +--------------------+ <---  SS apunta a la base de la pila 
+      +--------------------+ <---  SS apunta a la base de la pila
       |                    |
       |                    |
       +--------------------+
@@ -277,42 +277,42 @@ La pila queda dispuesta de la siguiente forma:
 
 Observe que SP apunta ahora a la posición de memoria en la pila en la cual se almacenó el valor que tenía BP originalmente. Esto permite modificar BP, y recuperar su valor original luego de terminadas las instrucciones de la rutina y antes de retornar al punto desde el cual se invocó la rutina.
 
-La instrucción 
+La instrucción
 
     movw %sp, %bp  /* Sintaxis AT&T */
 
 ó
- 
+
     mov bp, sp /* Sintaxis Intel */
 
 
 Establece a EBP con el mismo valor de SP, con lo cual BP apunta a la misma dirección de memoria a la cual apunta SP:
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
       +--------------------+
-      |  IP                | 
-      | (Dir. de retorno)  |   
+      | .....              |
+      +--------------------+
+      | Parámetro 2        |
+      +--------------------+
+      | Parámetro 1        |
+      +--------------------+
+      |  IP                |
+      | (Dir. de retorno)  |
       +--------------------+
       | Valor de  BP       | Se almacena el valor de BP en la pila
-      +--------------------+ <-- SP  <-- BP                       
-      |                    |                              
-      |  Espacio           |    
+      +--------------------+ <-- SP  <-- BP
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
       |                    |
-      +--------------------+ <---  SS apunta a la base de la pila 
+      +--------------------+ <---  SS apunta a la base de la pila
       |                    |
       |                    |
       +--------------------+
@@ -320,46 +320,46 @@ Establece a EBP con el mismo valor de SP, con lo cual BP apunta a la misma direc
 
 Con esta instrucción se termina el proceso de crear el marco de pila. Ahora es totalmente seguro decrementar el valor de SP con el propósito de crear espacios para las variables locales a la rutina, o de insertar otros valores en la pila.
 
-Por ejemplo, la instrucción 
+Por ejemplo, la instrucción
 
-    subw $4, %sp /* Sintaxis AT&T */  
+    subw $4, %sp /* Sintaxis AT&T */
 
-ó 
+ó
 
     sub sp, 4  /* Sintaxis Intel */
 
 
 Crea un espacio de 4 bytes (2 words) en la pila, que ahora se encontrará así:
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
       +--------------------+
-      |  IP                | 
-      | (Dir. de retorno)  |   
+      | .....              |
       +--------------------+
-      | Valor de  BP       |                                        
-      +--------------------+ <-- BP            
-      | Espacio disponible |  
+      | Parámetro 2        |
       +--------------------+
-      | Espacio disponible |  
-      +--------------------+ <-- SP            
-      |                    |                              
-      |  Espacio           |    
+      | Parámetro 1        |
+      +--------------------+
+      |  IP                |
+      | (Dir. de retorno)  |
+      +--------------------+
+      | Valor de  BP       |
+      +--------------------+ <-- BP
+      | Espacio disponible |
+      +--------------------+
+      | Espacio disponible |
+      +--------------------+ <-- SP
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
       |                    |
-      +--------------------+ <---  SS apunta a la base de la pila 
+      +--------------------+ <---  SS apunta a la base de la pila
       |                    |
       |                    |
       +--------------------+
@@ -367,12 +367,12 @@ Crea un espacio de 4 bytes (2 words) en la pila, que ahora se encontrará así:
 
 Observe que ESP se decrementa, pero BP sigue apuntando al inicio del marco de pila. Por esta razón, el puntero BP se denomina Base Pointer (puntero base), ya que con respecto a él es posible acceder tanto los parámetros enviados a la rutina, como las variables locales creadas en ésta.
 
-Por ejemplo, la instrucción 
+Por ejemplo, la instrucción
 
     movw 4(%bp), %ax /* Sintaxis AT&T */
 
 ó
- 
+
     mov ax, WORD PTR [ bp + 4 ] /* Sintaxis Intel */
 
 
@@ -380,46 +380,46 @@ Mueve el contenido de la memoria en la posición SS:[BP + 4] al registro AX, es 
 
 A continuación se presenta de nuevo el estado actual de la pila, para visualizar los diferentes desplazamientos a partir del registro BP.
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+ <-- BP + 2*N      
-      | Parámetro N-1      |     
+      +--------------------+
+      |  valor             |
+      +--------------------+
+      | Parámetro N        |
+      +--------------------+ <-- BP + 2*N
+      | Parámetro N-1      |
       +--------------------+ ...
-      | .....              |  
+      | .....              |
       +--------------------+ <-- BP + 8
-      | Parámetro 2        |  
+      | Parámetro 2        |
       +--------------------+ <-- BP + 6
-      | Parámetro 1        |  
+      | Parámetro 1        |
       +--------------------+ <-- BP + 4
-      |  IP                | 
-      | (Dir. de retorno)  |   
+      |  IP                |
+      | (Dir. de retorno)  |
       +--------------------+ <-- BP + 2
-      | Valor de  BP       |                                        
-      +--------------------+ <-- BP            
-      | Espacio disponible |  
+      | Valor de  BP       |
+      +--------------------+ <-- BP
+      | Espacio disponible |
       +--------------------+ <-- BP - 1
-      | Espacio disponible |  
-      +--------------------+ <-- SP  <-- BP - 4        
-      |                    |                              
-      |  Espacio           |    
+      | Espacio disponible |
+      +--------------------+ <-- SP  <-- BP - 4
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
       |                    |
-      +--------------------+ <---  SS apunta a la base de la pila 
+      +--------------------+ <---  SS apunta a la base de la pila
       |                    |
       |                    |
       +--------------------+
 
 
-De esta forma, la instrucción 
+De esta forma, la instrucción
 
     movw %ax, -2(%bp) /* Sintaxis AT&T */
 
 ó
- 
+
     mov WORD PTR [ bp - 2 ], ax /* Sintaxis Intel */
 
 
@@ -434,44 +434,44 @@ Cerrar el marco de Pila
 
 
 Al finalizar la rutina se deberá cerrar el marco de pila creado. La instrucción
- 
+
      movw %bp, %sp /* Sintaxis AT&T */
 
-ó 
+ó
     mov sp, bp  /* Sintaxis Intel */
 
 
 Cierra el espacio creado para las variables locales, al apuntar SP a la misma dirección de memoria en la pila a la que BP. Luego de esta instrucción la pila lucirá así:
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
       +--------------------+
-      |  IP                | 
-      | (Dir. de retorno)  |   
+      | .....              |
       +--------------------+
-      | Valor de  BP       |                                        
-      +--------------------+ <-- BP  <-- SP  
-      |                    |  
+      | Parámetro 2        |
       +--------------------+
-      |                    |  
+      | Parámetro 1        |
+      +--------------------+
+      |  IP                |
+      | (Dir. de retorno)  |
+      +--------------------+
+      | Valor de  BP       |
+      +--------------------+ <-- BP  <-- SP
+      |                    |
+      +--------------------+
+      |                    |
       +--------------------+ <-- SP antes de cerrar el marco de pila
-      |                    |                              
-      |  Espacio           |    
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
       |                    |
-      +--------------------+ <---  SS apunta a la base de la pila 
+      +--------------------+ <---  SS apunta a la base de la pila
       |                    |
       |                    |
       +--------------------+
@@ -479,48 +479,48 @@ Cierra el espacio creado para las variables locales, al apuntar SP a la misma di
 
 En este momento ya no es seguro acceder a los valores almacenados en el espacio para variables locales.
 
-Ahora se deberá recuperar el valor original de BP antes de crear el marco de pila: 
+Ahora se deberá recuperar el valor original de BP antes de crear el marco de pila:
 
     popw %bp /* Sintaxis AT&T */
 
-ó 
+ó
     pop bp /* Sintaxis Intel */
 
 
 Con ello la pila se encontrará en el siguiente estado:
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
       +--------------------+
-      |  IP                | 
-      | (Dir. de retorno)  |   
+      | .....              |
+      +--------------------+
+      | Parámetro 2        |
+      +--------------------+
+      | Parámetro 1        |
+      +--------------------+
+      |  IP                |
+      | (Dir. de retorno)  |
       +--------------------+ <-- SP
       | Valor de  BP       | --> Este valor sale de la pila y se almacena en BP
-      +--------------------+     
-      |                    |                              
-      |  Espacio           |    
+      +--------------------+
+      |                    |
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
       |                    |
-      +--------------------+ <---  SS apunta a la base de la pila 
+      +--------------------+ <---  SS apunta a la base de la pila
       |                    |
       |                    |
       +--------------------+
 
 
 Ahora SP apunta a la dirección de retorno de la rutina (donde debe continuar la ejecución). La instrucción
- 
+
     ret
 
 
@@ -528,37 +528,37 @@ Toma de la pila la dirección de retorno (la dirección de memoria de la instruc
 
 Note que luego de retornar de la rutina, la pila se encontrará en el siguiente estado:
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ 
-      | Parámetro N        |   
-      +--------------------+     
-      | Parámetro N-1      |     
       +--------------------+
-      | .....              |  
+      |  valor             |
       +--------------------+
-      | Parámetro 2        |  
+      | Parámetro N        |
       +--------------------+
-      | Parámetro 1        |  
+      | Parámetro N-1      |
+      +--------------------+
+      | .....              |
+      +--------------------+
+      | Parámetro 2        |
+      +--------------------+
+      | Parámetro 1        |
       +--------------------+ <-- SP  (los parámetros continúan en la pila)
       | IP                 | --> Este valor sale de la pila y se almacena en IP
-      +--------------------+                             
-      |  Espacio           |    
+      +--------------------+
+      |  Espacio           |
       |  disponible en     |
       |  la pila           |
       |                    |
       |                    |
-      +--------------------+ <---  SS apunta a la base de la pila 
+      +--------------------+ <---  SS apunta a la base de la pila
       |                    |
       |                    |
       +--------------------+
 
 
 Por esta razón es necesario avanzar SS en un valor igual al número de bytes que se enviaron como parámetro a la rutina. Si se enviaron N parámetros a la pila, el numero de bytes que se deberán sumar a sp son 2 * N (En modo real cada parámetro ocupa un word = 2 bytes).
- 
+
     addw $M, %sp /* Sintaxis AT&T */
-    
-ó 
+
+ó
 
     add sp, M /* Sintaxis Intel */
 
@@ -566,16 +566,16 @@ Donde M representa el número de bytes a desplazar SP.
 
 Con estas instrucciones la pila se encontrará en el mismo estado que antes de invocar la rutina:
 
-      +--------------------+    
-      |  valor             |                                       
+      +--------------------+
+      |  valor             |
       +--------------------+ <- ESP (tope de la pila)
       |                    |
       |                    |
       |                    |
       |                    |
-      |                    |    
-      |                    |     
-      |                    |                              
+      |                    |
+      |                    |
+      |                    |
       |  Espacio           |
       |  disponible en     |
       |  la pila           |
@@ -604,11 +604,11 @@ En sintaxis AT&T
        Por ejemplo, para obtener el primer parámetro de la pila sería:
        mov 8(%ebp), %eax
        ...
-    
+
         /*Cerrar el marco de pila:*/
        movw %ebp, %esp  /*Mover %ebp a %esp*/
        popw %ebp/*Recuperar el valor original de %ebp */
-    
+
        ret /* Retornar de la rutina */
 
 En sintaxis Intel
@@ -622,9 +622,9 @@ En sintaxis Intel
        Por ejemplo, para obtener el primer parámetro de la pila sería:
        mov eax, [ebp + 8]
        ...
-    
+
         /*Cerrar el marco de pila:*/
        mov esp, ebp  /*Mover ebp a esp*/
        pop ebp/*Recuperar el valor original de ebp */
-    
+
        ret  /* Retornar de la rutina*/

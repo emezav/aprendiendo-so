@@ -1,22 +1,22 @@
 # Fundamentos de programación de sistemas de arquitectura x86
 
-Este software está compuesto por un conjunto de proyectos de 
+Este software está compuesto por un conjunto de proyectos de
 programación que pueden ser compilados y ejecutados de forma
-independiente. Para facilitar su estudio, los proyectos se 
-encuentran construidos de forma acumulativa, explorando alguna 
+independiente. Para facilitar su estudio, los proyectos se
+encuentran construidos de forma acumulativa, explorando alguna
 característica de los sistemas X86 o implementando de forma básica
 alguna funcionalidad de un sistema operativo (por ejemplo la gestión de memoria
-virtual, implementación de multi tarea, llamadas al sistema, 
+virtual, implementación de multi tarea, llamadas al sistema,
 lectura/escritura de disco, entrada por teclado, etc.).
 
-A partir de los proyectos base se puede modificar o adaptar el código 
-proporcionado para implementar otras funcionalidades o 
+A partir de los proyectos base se puede modificar o adaptar el código
+proporcionado para implementar otras funcionalidades o
 características, que permitan comprender con mayor profundidad los
 sistemas con procesadores x86 y los fundamentos de los sistemas operativos.
 
-# Organización de los proyectos de programación en modo real
+## Organización de los proyectos de programación en modo real
 
-Los proyectos de programación  en modo real se encuentran en la carpeta 
+Los proyectos de programación  en modo real se encuentran en la carpeta
 __real_mode__, y poseen la siguiente estructura de directorios:
 
 - __build__: En esta carpeta se almacena la imagen de disco floppy que es
@@ -27,7 +27,7 @@ __real_mode__, y poseen la siguiente estructura de directorios:
     compilar y crear el sector de arranque.
 - __bootsect/src__: Contiene el archivo de código fuente en ensamblador del
     sector de arranque.
-- __bootsect/include__: Contiene los archivos de cabecera (.h) usados en el 
+- __bootsect/include__: Contiene los archivos de cabecera (.h) usados en el
   código del sector de arranque.
 - __util__: Contiene scripts de utilidad que son usados cuando se crea la
   imagen de disco floppy.
@@ -40,20 +40,20 @@ En los proyectos más avanzados de modo real se encuentra también la carpeta
 __kernel__, en la cual se almacena el código y los archivos de encabezado que
 al compilarlos permiten obtener un mini-kernel, que será cargado por el sector
 de arranque (es decir, por el código del archivo bootsect/src/bootsect.S).
-La estructura de directorios dentro de la carpeta __kernel__ sigue la misma 
+La estructura de directorios dentro de la carpeta __kernel__ sigue la misma
 disposición:
 
-- __kernel/build__: Contiene el archivo binario que se obtiene al compilar el 
+- __kernel/build__: Contiene el archivo binario que se obtiene al compilar el
   kernel.
 - __kernel/src__: Contiene el código fuente del kernel.
 - __kernel/include__: Contiene los archivos de cabecera que se usan en el
   código del kernel.
-                          
-# Organización de los proyectos de programación en modo protegido de 32 bits
+
+## Organización de los proyectos de programación en modo protegido de 32 bits
 
 Los proyectos de programación en modo protegido de 32 bits siguen una estructura
 similar a los proyectos de modo real. Cada uno de ellos cuenta con las
-siguientes carpetas: 
+siguientes carpetas:
 
 - __build__: En esta carpeta se almacena la imagen de disco que es
   cargada por los emuladores.
@@ -61,14 +61,14 @@ siguientes carpetas:
   documentación.
 - __docs__: Contiene la documentación del proyecto, generada en formato html y
   latex.
-- __kernel/build__: Contiene el archivo binario que se obtiene al compilar el 
+- __kernel/build__: Contiene el archivo binario que se obtiene al compilar el
   kernel.
 - __kernel/src__: Contiene el código fuente del kernel.
 - __kernel/include__: Contiene los archivos de cabecera que se usan en el
   código del kernel.
-  
-  
-# Compilación y ejecución de los proyectos
+
+
+## Compilación y ejecución de los proyectos
 
 Cada proyecto cuenta con un Makefile que facilita el proceso de compilación,
 ejecución y documentación. El proceso es el siguiente:
@@ -77,7 +77,7 @@ ejecución y documentación. El proceso es el siguiente:
   Windows mediante MinGW/Msys.
 - Navegar al directorio del proyecto que se desea ejecutar
 - Ejecutar el comando _make_ como se explica a continuación:
-    - __make all__: (Regla por defecto). Compila el código fuente y crea la 
+    - __make all__: (Regla por defecto). Compila el código fuente y crea la
       imagen de disco.
     - __make clean__: Elimina los archivos resultado de la compilación y la
       documentación generada.
@@ -94,9 +94,9 @@ ejecución y documentación. El proceso es el siguiente:
 
 En los proyectos de modo protegido el kernel puede ser también ejecutado con
 los siguientes comandos:
-- __make qemu-cd__: Compila el proyecto y crea una imagen de CD que incluye el 
+- __make qemu-cd__: Compila el proyecto y crea una imagen de CD que incluye el
   kernel, y luego inicia el emulador qemu con la imagen de CD.
-- __make bochs-cd__: Compila el proyecto y crea una imagen de CD que incluye el 
+- __make bochs-cd__: Compila el proyecto y crea una imagen de CD que incluye el
   kernel, y luego inicia el emulador bochs con la imagen de CD.
 - __make qemu-uefi32__: Compila el proyecto y crea la imagen de disco para
   sistemas UEFI de 32 bits, y luego inicia el emulador qemu con la imagen de
@@ -105,14 +105,47 @@ los siguientes comandos:
   sistemas UEFI de 64 bits, y luego inicia el emulador qemu con la imagen de
   disco.
 
-# Requerimientos
+## Trabajo con IDE y proyectos autocontenidos
 
-Para editar, compilar y ejecutar los proyectos es necesario contar con los 
+En esta serie, cada proyecto debe entenderse como una unidad autocontenida.
+Si se usa VS Code con la extension C/C++, conviene seleccionar la
+configuracion de IntelliSense correspondiente al proyecto activo para evitar
+mezclar encabezados homonimos entre proyectos o con headers del sistema.
+
+Flujo recomendado en VS Code:
+
+- Abrir la paleta de comandos con `Ctrl+Shift+P`
+- Ejecutar `C/C++: Select a Configuration...`
+- Elegir la configuracion del proyecto activo, por ejemplo
+  `protected_mode/04_irq_console`
+
+Notas:
+
+- Estas configuraciones viven en `.vscode/c_cpp_properties.json`
+- El workspace completo del repositorio sigue disponible; lo que cambia es el
+  contexto que usa IntelliSense para resolver includes y definiciones
+- En Windows, la configuracion del workspace usa
+  `C:/cross-gcc/bin/i386-elf-gcc.exe` como compilador de referencia para
+  IntelliSense
+- Para probar proyectos de `protected_mode` con trazas seriales, la rutina
+  recomendada es ejecutar `make qemu` y luego revisar `build/serial.log` del
+  proyecto
+- En Windows, para ejecutar proyectos desde terminal conviene usar
+  `mingw32-make` o `mingw32-make qemu` en lugar de `make` cuando la variante
+  apoyada en MSYS falle dentro del sandbox
+- Aunque ese cross-compiler incluye headers internos de GCC, la regla de esta
+  serie es no depender de funcionalidades externas al codigo de cada proyecto;
+  por eso se debe seguir trabajando en modo freestanding y resolviendo
+  funciones como `strcmp` desde los archivos locales del proyecto
+
+## Requerimientos
+
+Para editar, compilar y ejecutar los proyectos es necesario contar con los
 siguientes programas / utilidades:
 
 - Editor de texto o IDE: Permite la edición de código. Un IDE permite además
   compilar y ejecutar los ejemplos de forma más ágil. En caso de no contar con
-  un IDE, se puede usar un editor de texto como Vim, Emacs, Notepad, etc. 
+  un IDE, se puede usar un editor de texto como Vim, Emacs, Notepad, etc.
   Por ejemplo, se puede usar Eclipse o Netbeans.
 - Compilador, Ensamblador y Linker (Requerido): Se requiere el compilador GNU de
   C (**gcc**), el ensamblador (**as**) y el Linker (**ld**), en una versión que
@@ -125,7 +158,7 @@ siguientes programas / utilidades:
   como **make**, **dd**, **hexdump**, **addr2line**, y **rm**. Estas utilidades
   se encuentran disponibles en Linux por defecto, y existen versiones similares
   para otros sistemas operativos. Por ejemplo en Windows estas utilidades se
-  pueden instalar como parte de MinGW/Msys o Cygwin. 
+  pueden instalar como parte de MinGW/Msys o Cygwin.
 - Utilidad GZIP (Requerida): permite comprimir archivos. Disponible por defecto
   en Linux, se puede instalar en otros sistemas operativos.
 - Emulador de CPU o Máquina Virtual (Requerido): Un kernel de sistema operativo
@@ -142,10 +175,10 @@ siguientes programas / utilidades:
   formato HTML o RTF gracias al software **Doxygen**. Este software se encuentra
   disponible para Linux y Windows.
 
-# Aviso de responsabilidad / disclaimer
+## Aviso de responsabilidad / disclaimer
 
-Este software ha sido construido a partir de la interpretación de 
-los documentos documentos proporcionados por Intel y AMD, la documentación 
+Este software ha sido construido a partir de la interpretación de
+los documentos documentos proporcionados por Intel y AMD, la documentación
 recopilada de otras fuentes (libros, internet, etc.), y la experiencia adquirida
 en la enseñanza de la asignatura Sistemas Operativos en un entorno
 universitario. Representa el trabajo personal del autor, quien hace su mejor
@@ -161,4 +194,4 @@ cual se encuentra señalado de forma explícita de ser el caso.
 
 El software y la documentación se ofrecen sin ningún tipo de garantía implícita
 o explícita, por lo cual el autor no se hace responsable por cualquier daño o
-perjuicio causado por el uso parcial o total del material aquí dispuesto. 
+perjuicio causado por el uso parcial o total del material aquí dispuesto.

@@ -1,7 +1,9 @@
-Generalidades de la arquitectura x86
+﻿Generalidades de la arquitectura x86
 ======================================
+
 Reseña histórica
 ----------------
+
 La compañía Intel, creadora de la arquitectura x86 y principal fabricante de
 procesadores que la implementan, decidió diseñarlos de tal forma que el código
 desarrollado para computadores de hace 30 o más años (el 80386 o el 80486) pueda
@@ -32,7 +34,7 @@ da con el lanzamiento del procesador 80386 (386) a mediados de los años 80.
 Contaba con registros de propósito general de 32 bits, lo cual le permitía desde
 el punto de vista teórico referenciar hasta 4 GB (2^32 bytes) de memoria. No
 obstante, debido a las limitaciones tecnológicas para fabricar memorias con esta
-capacidad, se usaban memorias de capacidad mucho menor. 
+capacidad, se usaban memorias de capacidad mucho menor.
 
 El procesador 386 contaba con un modo de operación especial, el Modo Virtual
 8086, que ofrecía compatibilidad a los programas desarrollados para procesadores
@@ -58,7 +60,7 @@ instrucciones en diferentes niveles de ejecución al mismo tiempo. También
 implementaba una memoria caché de primer nivel dentro del procesador, con lo
 cual se aumentaba la posibilidad de ejecutar una instrucción en un ciclo de
 reloj. Adicionalmente, incluía una unidad de punto flotante y capacidades para
-el manejo de la energía. 
+el manejo de la energía.
 
 A principios de los años 90 apareció el procesador Pentium, que por su diseño
 mejoró notablemente las capacidades del 486. Los aspectos más notables de los
@@ -73,7 +75,7 @@ el negocio fabricando procesadores compatibles con Intel, creó una
 especificación llamada AMD64. El éxito de esta especificación consistió en
 mantener total compatibilidad hacia atrás con la arquitectura x86 de Intel, pero
 adicionar nuevas características entre las que sobresale la expansión a 64 bits
-de los registros de los sistemas x86. 
+de los registros de los sistemas x86.
 
 El primer procesador en implementar la arquitectura AMD64 fue el ADM K8, lanzado
 en el año 2004. Un año después, Intel lanzaría los procesadores Pentium 4, los
@@ -94,7 +96,7 @@ arquitecturas x86 y x86-64. Por ejemplo, algunos procesadores actuales poseen
 múltiples núcleos con registros de 32 bits o múltiples núcleos con registros de
 64 bits.  Un procesador Intel Core 2 Duo cuenta con dos núcleos con registros de
 32 bits, y un procesador Xeon generalmente incluye varios núcleos con registros
-de 64 bits. 
+de 64 bits.
 
 Los procesadores de generación actual de Intel Core (Core I3, Core I5 y Core I7)
 también implementan arquitecturas x86 en sus modelos de entrada y x64-64 en sus
@@ -103,7 +105,8 @@ Sempron, cuyos diferentes modelos implementan la arquitectura x86 y AMD64,
 Athlon, FX, que implementan la arquitectura AMD64.
 
 Modos de Operación
-==================
+------------------
+
 Todos los procesadores x86 inician en un modo de operación denominado modo real
 de direcciones (Real Address Mode), o simplemente modo real, en el cual se
 comportan procesadores 8086 con algunas extensiones que le permiten habilitar su
@@ -135,7 +138,7 @@ De acuerdo con el manual de Intel, los modos de operación existentes son:
 	protegido, el procesador requiere una serie de estructuras de datos que
 	deben ser configuradas por software antes de activarlo.
 - Modo de mantenimiento del sistema: En este modo se puede pasar a un entorno de
-	ejecución limitado, para realizar tareas de mantenimiento o depuración. 
+	ejecución limitado, para realizar tareas de mantenimiento o depuración.
 - Modo Virtual 8086: Este es un sub-modo al cual se puede acceder cuando el
 	procesador opera en modo protegido. Permite ejecutar código desarrollado
 	para 8086 en un entorno multi-tarea y protegido.
@@ -202,8 +205,8 @@ los registros de los controladores de dispositivos de entrada / salida
 como el teclado, los discos o el mouse (Ver figura).
 
                  Espacio de direcciones de E/S
-                 
-                       65535           
+
+                       65535
     +----------------+
     |                |
     |                |               Controlador de           Dispositivo
@@ -316,11 +319,11 @@ RDX     |    EDX  |   DX    |   DH   |    DL
 
 
 64 bits | 32 bits | 16 bits
---------|---------|--------- 
-RSI     |    ESI  |   SI    
-RDI     |    EDI  |   DI    
-RSP     |    ESP  |   SP    
-RBP     |    EBP  |   BP    
+--------|---------|---------
+RSI     |    ESI  |   SI
+RDI     |    EDI  |   DI
+RSP     |    ESP  |   SP
+RBP     |    EBP  |   BP
 
 A nivel de programación, es posible acceder a cada uno de estos
 sub-registros de acuerdo con el modo de operación. Por ejemplo, para
@@ -341,10 +344,10 @@ Y EBP se disponen de la misma forma que ESI.
     |                                    |                 |         |        |
     |                                    |                 |         |        |
     +------------------------------------+-----------------+---------+--------+
-                                                           |-- AH ---|-- Al --|     
+                                                           |-- AH ---|-- Al --|
                                                            |------- AX -------|
-                                         |---------------- EAX ---------------| 
-    |-------------------------------   RAX  ----------------------------------|                     
+                                         |---------------- EAX ---------------|
+    |-------------------------------   RAX  ----------------------------------|
 
 
                Subdivisión de los registros ESI, EDI, ESP y EBP
@@ -354,8 +357,8 @@ Y EBP se disponen de la misma forma que ESI.
     |                                    |                 |                  |
     +------------------------------------+-----------------+------------------+
                                                            |------- SI -------|
-                                         |---------------- ESI ---------------| 
-    |-------------------------------   RSI  ----------------------------------|                     
+                                         |---------------- ESI ---------------|
+    |-------------------------------   RSI  ----------------------------------|
 
 Formato de almacenamiento de datos
 ----------------------------------
@@ -370,13 +373,13 @@ registro y en la memoria.
 El número 0x7C00 almacenado en un registro se ve así:
 
     Número en formato hexadecimal: 0x7C00
-                             
+
                   Número almacenado en un registro
              Bit más                                      Bit menos
              significativo                              significativo
                 15                                              0
     +-----------------------------------------------------------+
-    | 0| 0| 0| 0| 0| 1| 1| 1| 1| 1| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0| 
+    | 0| 0| 0| 0| 0| 1| 1| 1| 1| 1| 0| 0| 0| 0| 0| 0| 0| 0| 0| 0|
     +-----------------------------------------------------------+
                                                     |--- 0 -----|
                                         |--- 0 -----|
@@ -388,10 +391,10 @@ El mismo número almacenado en memoria se ve así:
 
                Número almacenado en memoria
                Cada dirección de memoria almacena un byte (8 bits)
-               
+
                +-----------------------+
                |  |  |  |  |  |  |  |  |                   ^
-               +-----------------------+                   |  Dirección de 
+               +-----------------------+                   |  Dirección de
                |  |  |  |  |  |  |  |  |                   |  incremento
                +-----------------------+                   |  en la memoria
                |  |  |  |  |  |  |  |  |                   |
@@ -401,7 +404,7 @@ El mismo número almacenado en memoria se ve así:
        = 0x7C  | 0| 1| 1| 1| 1| 1| 0| 0|   <-- Dirección mayor de memoria
                +-----------------------+
        = 0x00  | 0| 0| 0| 0| 0| 0| 0| 0|   <-- Dirección menor de memoria
-               +-----------------------+           
+               +-----------------------+
 
 
 Registros principales
@@ -508,11 +511,11 @@ una . Esta tabla deberá ser configurada por el cargador de arranque o
 por el código inicial del kernel.
 
 Organización de la Memoria
-==========================
+--------------------------
 
 La memoria en los procesadores de arquitectura x86 se puede organizar
 y manejar en tres formas básicas: Modo Segmentado, Modo Real de
-Direcciones y Modo Plano Estas tres organizaciones permiten referenciar el 
+Direcciones y Modo Plano Estas tres organizaciones permiten referenciar el
 espacio **lineal** de direcciones.. A continuación se muestran los detalles de
 cada uno de estos modos.
 
@@ -548,12 +551,12 @@ proceso.
     Dirección Lógica                           Espacio lineal de direcciones
      +-------+  +---------------+         4 GB +--------------------+
      | sel   |  |  offset       |              |                    |
-     +-------+  +---------------+              |                    | 
+     +-------+  +---------------+              |                    |
       selector    desplazamiento               |                    |
-        |              |                       |                    | 
         |              |                       |                    |
-        |              |                       |--------------------|--+         
-        |              |                       |                    |  |    
+        |              |                       |                    |
+        |              |                       |--------------------|--+
+        |              |                       |                    |  |
         |              |                       |   Segmento de      |  | Tamaño
         |              |                       |   Memoria          |  | del
         |              |                       |                    |  | segmento
@@ -576,7 +579,7 @@ Modo Real de Direcciones
 El modo real de direcciones es un caso especial del modo segmentado, que
 se usa cuando el procesador se encuentra operando en Modo Real. Se usa
 para ofrecer compatibilidad con programas desarrollados para
-generaciones anteriores de procesadores, que abarcan hasta 8086. 
+generaciones anteriores de procesadores, que abarcan hasta 8086.
 
 En modo real de direcciones el espacio lineal de direcciones se
 encuentra dividido en segmentos con un tamaño máximo de 64 Kilobytes.
@@ -589,7 +592,7 @@ Las direcciones lógicas en modo real también están conformadas por un
 selector y un offset. Tanto el selector como el desplazamiento tienen un
 tamaño de 16 bits. Con el fin de permitir el acceso a un espacio de
 direcciones lineal mayor, el selector almacena la dirección de inicio
-del segmento dividida en 16. 
+del segmento dividida en 16.
 
 Para traducir una dirección lógica a
 lineal, el procesador toma el valor del selector y lo multiplica
@@ -602,12 +605,12 @@ lógica a lineal en el modo real de direcciones.
      Dirección Lógica                           Espacio lineal de direcciones
      +-------+  +---------------+         1 MB +--------------------+
      |base/16|  |   offset      |              |                    |
-     +-------+  +---------------+              |                    | 
+     +-------+  +---------------+              |                    |
       selector    desplazamiento               |                    |
-        |              |                       |                    | 
         |              |                       |                    |
-        |              |                       |--------------------|--+         
-        |              |                       |                    |  |    
+        |              |                       |                    |
+        |              |                       |--------------------|--+
+        |              |                       |                    |  |
         |              |                       |   Segmento de      |  | Tamaño
         |              |                       |   Memoria          |  | del
         |              |                       |                    |  | segmento
@@ -645,23 +648,24 @@ lógica es igual a la dirección lineal (Ver figura).
       selector    desplazamiento               |                    | |
         |              |                       |                    | |
         |              |                       |                    | |
-        |              |                       |                    | |          
-        |              |                       |                    | |     
+        |              |                       |                    | |
+        |              |                       |                    | |
         |              |                       |   Segmento de      | |  Tamaño
         |              |                       |   Memoria          | |  del
         |              |   offset              |                    | |  segmento
         |              +---------------------> | Dirección Lineal   | |    =
-        |                                      |  = offset          | |  Tamaño 
-        |              +                       |        ^           | |  del 
+        |                                      |  = offset          | |  Tamaño
+        |              +                       |        ^           | |  del
         |             base = 0                 |        |           | |  espacio
         |                                      |        |           | |  lineal
-        |   En el modo plano (flat), el        |        |           | |  de      
+        |   En el modo plano (flat), el        |        |           | |  de
         |   segmento tiene como base 0 y como  |        |           | |direcciones
-        |   límite el tamaño del espacio       |        |           | |     
-        |   lineal de direcciones.             |        |           | |     
-        |                                      |        |           | |     
+        |   límite el tamaño del espacio       |        |           | |
+        |   lineal de direcciones.             |        |           | |
+        |                                      |        |           | |
         +----------------------------------->0 +--------------------+-+
 
 Ver también
-======
+------
+
 - [Manuales de Intel](http://www.intel.com/content/www/us/en/processors/architectures-software-developer-manuals.html)

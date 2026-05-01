@@ -27,7 +27,7 @@
 kernel_start:
 
 /* Saltar el encabezado del kernel. Esta instrucción ocupa 3 bytes */
-jmp kernel_main 
+jmp kernel_main
 
 /** Encabezado del kernel */
 .align 4
@@ -68,15 +68,15 @@ kernel_main:
   add sp, 4
 
   jmp kernel_finished
- 
+
  /* Espera activa. */
 kernel_finished:
   hlt /* Detener el procesador hasta que ocurra una interrupción */
   /* Detener de nuevo el procesador. */
-  jmp kernel_finished    
+  jmp kernel_finished
 
 
-/** 
+/**
  * Imprime una cadena de caracteres terminada en nulo.
  * Entrada:
  *  [bp + 4]: Selector de la dirección lógica de la cadena
@@ -87,7 +87,7 @@ kernel_finished:
 putline:
   push bp
   mov bp, sp    /* Crear el marco de pila */
-  
+
   push ax
   push si
   push ds
@@ -105,7 +105,7 @@ putline:
   lodsb
 
   /* AL = ASCII leido */
-  or al, al  
+  or al, al
   /* El caracter es nulo? terminar */
   je 2f
 
@@ -119,8 +119,8 @@ putline:
 2:
 
   pop ds    /* Recuperar los valores guardados en la pila */
-  pop si      
-  pop ax 
+  pop si
+  pop ax
 
   mov sp, bp    /* Cerrar el marco de pila */
   pop bp

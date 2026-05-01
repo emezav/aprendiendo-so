@@ -1,11 +1,12 @@
 Descripción general del proyecto
 ================================
+
 La tarea más importante del sector de arranque consiste en iniciar la carga
 del sistema operativo. Para realizar esta labor cuenta con los servicios de
 disco proporcionados por la BIOS.
 
 Compilación y ejecución del proyecto
-==================================
+----------------------------------
 
 La compilación del código y la ejecución del emulador se realiza mediante la
 utilidad *make*. Para ejecutar este proyecto, se debe abrir un *shell* y
@@ -31,6 +32,7 @@ proyecto para estudiar el proceso que realiza la utilidad *make*.
 
 Depuración paso a paso
 ----------------------
+
 En el archivo bochsrc.txt se ha activado el *Magic break*, por lo cual si se
 incluye la instrucción *xchg bx, bx* en cualquier parte del código, se pausará
 la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
@@ -38,5 +40,6 @@ la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
 
 
 Vea también
-===========
+-----------
+
 - David Jurgens, Help-PC Reference Library http://stanislavs.org/helppc/idx_interrupt.html

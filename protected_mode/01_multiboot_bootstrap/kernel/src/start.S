@@ -27,7 +27,7 @@
  * archivo ejecutable. Ver archivi link.ld */
 
 /* Usar sintaxis Intel, si prefijo para los registros */
-.intel_syntax noprefix 
+.intel_syntax noprefix
 .section .startcode
 .code32				/* 32 bits - Modo protegido */
 
@@ -47,7 +47,7 @@
  * especificación Multiboot*/
  /* El encabezado multiboot debe estar alineado a 4 bytes */
 .align 4
-multiboot_header:		
+multiboot_header:
  /* Número mágico. Requerido. */
 .long MULTIBOOT_HEADER_MAGIC
  /* Flags. Requerido. */
@@ -69,13 +69,13 @@ start:
   mov esp, OFFSET kernel_stack_end
 
   /* Pasar el control a la rutina 'cmain' en el archivo kernel.c */
-  call cmain 
+  call cmain
 
   /* La función cmain() retorna a este punto. Se debe entrar en un ciclo
   infinito, para que el procesador no siga ejecutando instrucciones al finalizar
   la ejecución del kernel. */
 
-kernel_finished:	
+kernel_finished:
     hlt
 	jmp kernel_finished /* Ciclo infinito */
 

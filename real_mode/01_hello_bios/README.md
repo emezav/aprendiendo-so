@@ -1,11 +1,13 @@
 Descripción general del proyecto
 ================================
+
 En este proyecto se ilustra el uso básico de los servicios de la BIOS
 para imprimir por pantalla, y de los servicios de teclado para esperar por una
 pulsación de tecla.
 
 Estructura del código
 ----------------------
+
 El código de este proyecto se encuentra dentro de archivo bootsect.S.
 Su estructura es muy sencilla: Se hace uso de los servicios de video de la BIOS,
 específicamente los servicios para imprimir un caracter, cambiar la posición de
@@ -24,6 +26,7 @@ realizado es el siguiente:
 
 Servicios de la BIOS
 -------------------------------
+
 Antes de pasar el control de la ejecución al sector de arranque (copiado a la
 dirección de memoria 0x7C00), la BIOS configura una serie de rutinas de manejo
 de interrupción para los diferentes dispositivos, y configura la Tabla de
@@ -100,7 +103,7 @@ La BIOS escribirá el caracter 'A' en la posición actual del cursor y avanzará
 una posición hacia la derecha.
 
 Compilación y ejecución del proyecto
-==================================
+----------------------------------
 
 La compilación del código y la ejecución del emulador se realiza mediante la
 utilidad *make*. Para ejecutar este proyecto, se debe abrir un *shell* y
@@ -126,6 +129,7 @@ proyecto para estudiar el proceso que realiza la utilidad *make*.
 
 Depuración paso a paso
 ----------------------
+
 En el archivo bochsrc.txt se ha activado el *Magic break*, por lo cual si se
 incluye la instrucción *xchg bx, bx* en cualquier parte del código, se pausará
 la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
@@ -133,5 +137,6 @@ la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
 
 
 Vea también
-===========
+-----------
+
 - David Jurgens, Help-PC Reference Library http://stanislavs.org/helppc/idx_interrupt.html

@@ -4,7 +4,10 @@
 
 KERNEL_DIR = kernel
 
-DOCFILES = $(wildcard dox/*.dox)
+DOCFILES = $(wildcard dox/*.dox) \
+           $(wildcard dox/*.md) \
+           $(wildcard ../../dox/*.dox) \
+           $(wildcard ../../dox/*.md)
 
 GCC=gcc
 LD=ld
@@ -16,8 +19,9 @@ arch := $(shell uname -s)
 machine := $(shell uname -m)
 x86found := false
 os := $(shell uname -o)
-         
+
 BOCHSDBG := bochsdbg
+SERIAL_LOG := build/serial.log
 
 BOCHSDISPLAY := x
 ifeq "$(os)" "Msys"
@@ -48,13 +52,15 @@ all:
 	@dd if=build/first_partition of=build/disk_image bs=512 seek=63
 	@#Borrar la particion actualizada
 	@rm -f build/first_partition
-	
+
 
 bochs: all
+	@-rm -f $(SERIAL_LOG)
 	-bochs -q 'boot:disk' \
 	'ata0-master: type=disk, path="build/disk_image", cylinders=10, heads=16, spt=63'\
-	'megs:32'
-	
+	'megs:32' \
+	'com1: enabled=1, mode=file, dev=$(SERIAL_LOG)'
+
 
 bochs-cd: iso
 	-bochs -q 'boot:cdrom' \
@@ -62,10 +68,12 @@ bochs-cd: iso
   'megs: 32'
 
 bochsdbg: all
+	@-rm -f $(SERIAL_LOG)
 	-$(BOCHSDBG) -q 'boot:disk' \
 	'ata0-master: type=disk, path="build/disk_image", cylinders=10, heads=16, spt=63'\
-	'megs:32' 'display_library:$(BOCHSDISPLAY), options="gui_debug"'
-	
+	'megs:32' 'display_library:$(BOCHSDISPLAY), options="gui_debug"' \
+	'com1: enabled=1, mode=file, dev=$(SERIAL_LOG)'
+
 bochsdbg-cd: iso
 	-$(BOCHSDBG) -q 'boot:cdrom' \
 	'ata0-master: type=cdrom, path="build/cd_image.iso", status=inserted'\
@@ -74,7 +82,7 @@ bochsdbg-cd: iso
 
 qemu: all
 	qemu -hda build/disk_image -boot c
-	
+
 qemu-cd: iso
 	qemu -boot d -cdrom build/cd_image.iso
 
@@ -96,7 +104,7 @@ docs: $(DOCFILES)
 
 clean:
 	@cd kernel;make clean
-	@-rm -f build/kernel $(KERNEL_OBJS) build/disk_image build/disk_image.vdi build/cd_image.iso build/filesys/boot/kernel build/disk_template build/disk_template.gz
+	@-rm -f build/kernel $(KERNEL_OBJS) build/disk_image build/disk_image.vdi build/cd_image.iso build/filesys/boot/kernel build/disk_template build/disk_template.gz $(SERIAL_LOG)
 	@-rm -rf docs
 	@-VBoxManage unregistervm  "Aprendiendo_SO" --delete
 

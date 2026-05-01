@@ -1,0 +1,29 @@
+# Archivos excluidos del export publico (git archive / publish.sh)
+.agents          export-ignore
+.codex           export-ignore
+.vscode          export-ignore
+**/DESIGN.md     export-ignore
+**/HISTORY.md    export-ignore
+**/NEXT.md       export-ignore
+
+# Politica canonica de texto en el repo
+*               text=auto
+
+# Codigo, documentacion y scripts versionados en UTF-8 con LF
+*.c             text eol=lf working-tree-encoding=UTF-8
+*.h             text eol=lf working-tree-encoding=UTF-8
+*.S             text eol=lf working-tree-encoding=UTF-8
+*.ld            text eol=lf working-tree-encoding=UTF-8
+*.md            text eol=lf working-tree-encoding=UTF-8
+*.dox           text eol=lf working-tree-encoding=UTF-8
+*.sh            text eol=lf working-tree-encoding=UTF-8
+*.py            text eol=lf working-tree-encoding=UTF-8
+*.json          text eol=lf working-tree-encoding=UTF-8
+*.yml           text eol=lf working-tree-encoding=UTF-8
+*.yaml          text eol=lf working-tree-encoding=UTF-8
+Makefile        text eol=lf working-tree-encoding=UTF-8
+Doxyfile        text eol=lf working-tree-encoding=UTF-8
+
+# Scripts nativos de Windows
+*.bat           text eol=crlf working-tree-encoding=UTF-8
+*.cmd           text eol=crlf working-tree-encoding=UTF-8

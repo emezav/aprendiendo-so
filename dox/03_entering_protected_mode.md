@@ -1,4 +1,4 @@
-Entrar a Modo Protegido
+﻿Entrar a Modo Protegido
 =======================
 
 El manual de intel "Intel Architecture Software Developer's Manual , Volume 3:

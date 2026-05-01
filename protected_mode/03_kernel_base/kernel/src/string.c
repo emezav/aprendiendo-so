@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Este archivo implementa algunas rutinas para la gestion de direcciones
  * de memoria y cadenas de caracteres.
@@ -111,7 +111,7 @@ int strcmp(const char *a, const char *b) {
 int strncmp(const char *a, const char *b, int n) {
     for (; n > 0 && *a != 0 && *b != 0 && *a == *b; a++, b++, n--);
 
-    if (n == 0) { 
+    if (n == 0) {
         return 0;
     }else {
         return *b - *a;
@@ -172,7 +172,7 @@ int nexttok(char * source, char * destination, char delim, int offset) {
     int nchars;
 
     c=0;
-    
+
     nchars = 0;
 
     if (src == 0) {
@@ -195,7 +195,7 @@ int nexttok(char * source, char * destination, char delim, int offset) {
     while ( (c=src[offset++]) != 0 && c != delim) { //Sacar el valor
           *dst++ = c;
           nchars++;
-    }    
+    }
 
     if (nchars > 0) { //Terminar correctamente la cadena de destino
       *dst = 0;

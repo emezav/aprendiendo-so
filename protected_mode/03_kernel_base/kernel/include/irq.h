@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Este archivo define las rutinas publicas para la gestion de
  * solicitudes de interrupcion (IRQ) de los dispositivos de Entrada / Salida

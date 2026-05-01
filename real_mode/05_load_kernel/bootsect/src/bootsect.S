@@ -4,22 +4,22 @@
  * @author Erwin Meza Vega
  * @copyright MIT License
  * @brief Sector de Arranque para sistemas x86 con BIOS.
- * @description 
+ * @description
  * En este proyecto se muestra la definición y el uso de subrutinas.
 */
 
-.intel_syntax noprefix 
-.code16     
+.intel_syntax noprefix
+.code16
 
 #include <bootsect.h>
 
-.section .text 
+.section .text
 
 .global start
 start:
   /* Configurar CS para que apunte a 0x7C00 */
   ljmp 0x7C0: offset entry_point
-  
+
 entry_point:
 
   /* Configurar el registro de segmento DS */
@@ -89,7 +89,7 @@ read_kernel:
   add WORD PTR [kernel_selector], 0x20
   /* lba_sector = lba_sector + 1 */
   inc WORD PTR [lba_sector]
-  
+
   /* Decrementar CX y saltar a read_kernel, si CX > 0*/
   loop read_kernel
 
@@ -108,7 +108,7 @@ read_kernel:
 
 
   /* La ejecución no debería llegar a este punto. Sin embargo, entrar una
-   * espera activa si este evento se produce. 
+   * espera activa si este evento se produce.
    */
 
 finished:
@@ -119,7 +119,7 @@ finished:
 /**
 * Lee un sector de un disco floppy, haciendo uso de los servicios de disco
 * de la BIOS (int 0x13).
-* Entrada: 
+* Entrada:
 *   [bp + 4]: sector lba a leer (i).
 *   [bp + 6]: selector de la dirección lógica a la cual se lee el sector
 *   [bp + 8]: desplazamiento en el cual se desea leer el sector (offset)
@@ -131,14 +131,14 @@ finished:
 * +---------------------------------------------------+
 * En LBA, los sectores se enumeran de 0 a n-1, donde n es el número de
 * sectores del disco.
-* 
+*
 * Los discos generalmente utilizan una geometria basada en Cilindros,
 * Sectores y Cabezas (C/H/S). Esta es la geometría por defecto que usa la
 * BIOS para leer y escribir en el disco.
 
 * A partir del sector LBA 'i' especificado, esta rutina calcula el sector,
 * el cilindro y la cabeza en la cual se encuentra el sector en un disco
-* floppy. 
+* floppy.
 */
 read_lba_from_floppy:
   push bp    /* Crear el marco de pila */

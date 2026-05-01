@@ -24,19 +24,19 @@ ifeq "$(os)" "Cygwin"
 	BOCHSDISPLAY := win32
 endif
 
-all: 
+all:
 	@cd $(BOOTSECTOR_DIR);make
 	@cp -f $(BOOTSECTOR_DIR)/build/bootsect build/floppy.img
 
 bochs: all
 	-bochs -q 'boot:a' \
 	'floppya: 1_44=build/floppy.img, status=inserted' 'megs:32'
-	
+
 bochsdbg: all
 	-$(BOCHSDBG) -q 'boot:a' \
 	'floppya: 1_44=build/floppy.img, status=inserted' 'megs:32' \
 	'display_library:$(BOCHSDISPLAY), options="gui_debug"'
-	
+
 qemu: all
 	qemu -fda build/floppy.img -boot a
 

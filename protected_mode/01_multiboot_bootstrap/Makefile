@@ -4,7 +4,10 @@
 
 KERNEL_DIR = kernel
 
-DOCFILES = $(wildcard dox/*.dox)
+DOCFILES = $(wildcard dox/*.dox) \
+           $(wildcard dox/*.md) \
+           $(wildcard ../../dox/*.dox) \
+           $(wildcard ../../dox/*.md)
 
 GCC=gcc
 LD=ld
@@ -103,5 +106,4 @@ clean:
 
 
 #/** @endverbatim */
-
 

@@ -6,7 +6,10 @@ BOOTSECTOR_DIR = bootsect
 KERNEL_DIR = kernel
 
 DOXYGEN=doxygen
-DOCFILES = $(wildcard dox/*.dox) $(wildcard dox/*.md)
+DOCFILES = $(wildcard dox/*.dox) \
+           $(wildcard dox/*.md) \
+           $(wildcard ../../dox/*.dox) \
+           $(wildcard ../../dox/*.md)
 
 #Detectar el tipo de sistema
 arch := $(shell uname -s)
@@ -25,7 +28,7 @@ ifeq "$(os)" "Cygwin"
 	BOCHSDISPLAY := win32
 endif
 
-all: 
+all:
 	@cd $(BOOTSECTOR_DIR);make
 	@cd $(KERNEL_DIR);make
 	@cat $(BOOTSECTOR_DIR)/build/bootsect $(KERNEL_DIR)/build/kernel > build/floppy.img
@@ -33,7 +36,7 @@ all:
 bochs: all
 	-bochs -q 'boot:a' \
 	'floppya: 1_44=build/floppy.img, status=inserted' 'megs:32'
-	
+
 bochsdbg: all
 	-$(BOCHSDBG) -q 'boot:a' \
 	'floppya: 1_44=build/floppy.img, status=inserted' 'megs:32' \

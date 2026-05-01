@@ -1,6 +1,6 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
  * @copyright GNU Public License.
  * @brief En este archivo se definen los tipos y las funciones relacionados

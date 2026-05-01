@@ -1,5 +1,17 @@
 docs/
 *.o
+*.d
 *.img
 *.bak
+*.iso
+*.vdi
 disk_image
+disk_template
+**/build/disk_template.gz
+bx_enh_dbg.txt
+bx_enh_dbg.ini
+OLD_CODE/
+serial.log
+**/kernel/build/kernel
+**/build/filesys/boot/kernel
+*.elf

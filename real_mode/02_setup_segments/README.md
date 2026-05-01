@@ -1,16 +1,17 @@
 Descripción general del proyecto
 ================================
+
 En este proyecto se ilustra la configuración de los registros de segmento
 de código, datos y pila en modo real.
 
 Una vez que el sector de arranque ha recibido el control de la ejecución,
-debe configurar los registros de segmento de forma que pueda acceder 
+debe configurar los registros de segmento de forma que pueda acceder
 correctamente a la memoria para leer o escribir datos, y también para usar
 la pila.
 
 Cuando el procesador se encuentra operando en modo real hace uso de un tipo
 especial de segmentación de la memoria. Todas las direcciones lógicas
-usadas en el programa cuentan con dos elementos: 
+usadas en el programa cuentan con dos elementos:
 
 - Un selector, que almacena la dirección lineal de inicio (base) del
   segmento de memoria dividida en 16.
@@ -18,8 +19,8 @@ usadas en el programa cuentan con dos elementos:
 
 La unidad de gestión de memoria toma el valor almacenado en el selector y
 lo multiplica automáticamente por 16, con lo cual obtiene la base del
-segmento. A este resultado le suma el desplazamiento para obtener la 
-dirección lineal correspondiente. 
+segmento. A este resultado le suma el desplazamiento para obtener la
+dirección lineal correspondiente.
 
 Dado que en modo real no es posible activar la memoria virtual, la
 dirección lineal obtenida equivale a la misma dirección física en RAM.
@@ -45,21 +46,21 @@ sean relativos al inicio del mismo. Esto se realiza mediante las directivas
 señaladas en el archivo de configuración de ld que se usa para compilar el
 sector de arranque:
 
-    
-    ENTRY(start); 
+
+    ENTRY(start);
     OUTPUT_FORMAT(binary);
-    /* dirección relativa al inicio del bootsector*/ 
+    /* dirección relativa al inicio del bootsector*/
     phys = 0x0;
     SECTIONS {
-       . = phys; 
-       .text : { 
-         *(.text)		  
-         . = phys + 510;	
-    
+       . = phys;
+       .text : {
+         *(.text)
+         . = phys + 510;
+
          BYTE (0x55)
          BYTE (0xAA)
-       } = 0x90 
-       /DISCARD/ : { 
+       } = 0x90
+       /DISCARD/ : {
 	       *(.data)
 	       *(.rodata)
 	       *(.bss)
@@ -70,20 +71,20 @@ sector de arranque:
 Configuración del registro de segmento de código
 -------------------------------------------------
 
-El registro de segmento de código CS puede ser modificado mediante una 
+El registro de segmento de código CS puede ser modificado mediante una
 instrucción JMP FAR (LJMP), en la cual se especifica un selector y un
 desplazamiento:
 
-    .global start                  
+    .global start
     /**
-    * Símbolo que marca el inicio del código del sector de arranque 
+    * Símbolo que marca el inicio del código del sector de arranque
     */
     start:
-    
+
       /* La ejecución comienza en este punto, con CS = 0x0000 e IP = 0x7C00 */
       /* CS = 0x7C0, IP = desplazamiento de entry_point */
       ljmp 0x7C0 : OFFSET entry_point
-    
+
     entry_point:
       /* La ejecución continúa en este punto, con CS = 0x07C0 e IP = 0x0005 */
 
@@ -102,20 +103,20 @@ que apunte al inicio del sector de arranque en memoria.
 Dado que el registro CS ya contiene 0x07C0, es posible tomar este valor y
 copiarlo en el registro de datos DS, usando al registro AX como
 intermediario:
-    
-    .global start                  
+
+    .global start
     /**
-    * Símbolo que marca el inicio del código del sector de arranque 
+    * Símbolo que marca el inicio del código del sector de arranque
     */
     start:
-    
+
       /* La ejecución comienza en este punto, con CS = 0x0000 e IP = 0x7C00 */
       /* CS = 0x7C0, IP = desplazamiento de entry_point */
       ljmp 0x7C0 : OFFSET entry_point
-    
+
     entry_point:
       /* La ejecución continúa en este punto, con CS = 0x07C0 e IP = 0x0005 */
-      
+
       /* AX = CS */
       mov ax, cs
       /* DS = AX */
@@ -134,8 +135,9 @@ registros de segmento ES, FS y GS.
 
 Configuración de la pila
 -------------------------
+
 Antes de continuar, también es necesario configurar adecuadamente la pila.
-Como se explicó en capítulos anteriores, la pila es un elemento 
+Como se explicó en capítulos anteriores, la pila es un elemento
 fundamental en la arquitectura x86 que se usa implícitamente para gestionar
 las interrupciones y cuando se implementan e invocan subrutinas.
 
@@ -176,7 +178,7 @@ configura la pila en su nueva ubicación.
 
 
 Compilación y ejecución del proyecto
-==================================
+----------------------------------
 
 La compilación del código y la ejecución del emulador se realiza mediante la
 utilidad *make*. Para ejecutar este proyecto, se debe abrir un *shell* y
@@ -202,6 +204,7 @@ proyecto para estudiar el proceso que realiza la utilidad *make*.
 
 Depuración paso a paso
 ----------------------
+
 En el archivo bochsrc.txt se ha activado el *Magic break*, por lo cual si se
 incluye la instrucción *xchg bx, bx* en cualquier parte del código, se pausará
 la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
@@ -209,5 +212,6 @@ la ejecución cuando se usa el emulador bochs con el depurador gráfico activado
 
 
 Vea también
-===========
+-----------
+
 - David Jurgens, Help-PC Reference Library http://stanislavs.org/helppc/idx_interrupt.html

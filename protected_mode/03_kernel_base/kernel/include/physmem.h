@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Contiene las definiciones relacionadas con las gestión de memoria
  * física.
  */
@@ -49,7 +49,7 @@ void setup_physical_memory(void);
  */
 unsigned int allocate_frame(void);
 
-/** 
+/**
  * @brief Busca una región de memoria contigua libre dentro del mapa de bits
  * de memoria.
  * @param length Tamaño de la región de memoria a asignar.

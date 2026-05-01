@@ -1,4 +1,4 @@
-IDT y gestión de interrupciones
+﻿IDT y gestión de interrupciones
 ==================================
 
 Una interrupción es una señal que rompe con el flujo normal del procesador, y
@@ -31,7 +31,7 @@ La siguiente tabla resume las diferentes interrupciones definidas en x86.
     |             | Esta excepción no genera código de error.
     |-------------|--------------------------------------------------
     |  1  0x01    | (Reservada)
-    |             | Esta excepción no genera código de error.  
+    |             | Esta excepción no genera código de error.
     |
     |  2  0x02    | Nonmaskable interrupt:
     |             | Ocurre debido a una interrupcion de hardware que no se puede
@@ -73,12 +73,12 @@ La siguiente tabla resume las diferentes interrupciones definidas en x86.
     |
     |  9  0x09    | Coprocessor segment overrun:
     |             | Ocurre cuando se detecta una violación de página o segmento
-    |             | mientras se transfiere la porción media de un operando de 
+    |             | mientras se transfiere la porción media de un operando de
     |             | coprocesador al NPX.
     |             | Esta excepción no genera código de error.
     |
     | 10  0xA     | Invalid TSS:
-    |             | Ocurre si el TSS es inválido al tratar de cambiar de tarea (Task 
+    |             | Ocurre si el TSS es inválido al tratar de cambiar de tarea (Task
     |             |  switch).
     |             | Esta excepción genera código de error.
     |
@@ -102,17 +102,17 @@ La siguiente tabla resume las diferentes interrupciones definidas en x86.
     |             | - Exceder el límite de segmento cuando se referencia una tabla de
     |             |   descriptores
     |             | - Transferir el control a un segmento que no es ejecutable
-    |             | - Escribir en un segmento de datos de sólo lectura o en un 
+    |             | - Escribir en un segmento de datos de sólo lectura o en un
     |             |   segmento de código
     |             | - Leer de un segmento marcado como sólo de ejecución
-    |             | - Cargar en SS un selector que referencia a un segmento de sólo 
+    |             | - Cargar en SS un selector que referencia a un segmento de sólo
     |             |   lectura
     |             | - Cargar SS, DS, ES, FS, o GS con un selector que referencia a un
     |             |   descriptor de tipo "sistema"
-    |             | - Cargar DS, ES, FS, o GS con un selector que referencia a un 
+    |             | - Cargar DS, ES, FS, o GS con un selector que referencia a un
     |             |   descriptor de segmento marcado como ejecutable que además no se
     |             |   puede leer
-    |             | - Cargar en SS un selector que referencia un descriptor  de 
+    |             | - Cargar en SS un selector que referencia un descriptor  de
     |             |   segmento ejecutable
     |             | - Acceder a la memoria por medio de DS, ES, FS, o GS cuando estos
     |             |   registros de segmento contienen un selector nulo
@@ -120,9 +120,9 @@ La siguiente tabla resume las diferentes interrupciones definidas en x86.
     |             | - Violar las reglas de privilegios
     |             | - Cargar CR0 con los bits PG=1 y PE=0 (habilitar la paginación y
     |             |      no habilitar el modo protegido)
-    |             | - Lanzar una interrupción o una excepción a través de un trap 
-    |             |   gate desde Modo Virtual 8086 a un privilegio (DPL) diferente 
-    |             |   de cero 
+    |             | - Lanzar una interrupción o una excepción a través de un trap
+    |             |   gate desde Modo Virtual 8086 a un privilegio (DPL) diferente
+    |             |   de cero
     |             | Esta excepción genera código de error.
     |
     | 14  0xE     | Page fault:
@@ -143,25 +143,25 @@ La siguiente tabla resume las diferentes interrupciones definidas en x86.
     |             | pin de entrada ERROR#.
     |
     | 17  0x11    | Alignment Check
-    |             | Ocurre cuando se realiza una referencia de datos en la memoria a 
+    |             | Ocurre cuando se realiza una referencia de datos en la memoria a
     |             | una región no alineada.
     |             | Esta excepción genera código de error.
-    | 
+    |
     | 18  0x12    | Machine Check
     |             | Depende del modelo y las características del procesador.
     |             | Esta excepción no genera código de error.
-    |          
+    |
     | 19  0x23    | SIMD Floating-Point Exception
     |             | Ocurre cuando existe un error en las instrucciones SSE/SSE2/SSE3.
     |             | Esta excepción no genera código de error.
-    |          
+    |
     |
     | 20  0x24    | Reservadas por Intel.
     |  hasta      |
     | 31  0x1F    | Estas excepciones no generan código de error.
     |             |
-    |             
-    |              
+    |
+    |
     | 32  0x20    | Interrupción externa o interrupción invocada mediante la
     |  hasta      | instrucción INT N
     | 255 0xFF    | Estas interrupciones no generan código de error
@@ -203,9 +203,9 @@ memoria:
         |                              |   | | |
         +------------------------------+   | | |
         | Descriptor de Interrupción   |<------+
-        | 255                          |   | |  
-        +------------------------------+   | |  
-        | ...                          |   | |  
+        | 255                          |   | |
+        +------------------------------+   | |
+        | ...                          |   | |
         |                              |   | |
         +------------------------------+   | |
         | Descriptor de Interrupción   |<----+
@@ -219,7 +219,7 @@ memoria:
         |                              |
         |                              |
         |                              |
-        +------------------------------+         
+        +------------------------------+
 
 La IDT está conformada por 256 descriptores, uno para cada interrupción. Cada
 descriptor ocupa 8 bytes, y puede ser de uno de los siguientes tipos:
@@ -264,7 +264,8 @@ rutina de manejo de interrupción.
 
 Carga de la IDT
 ---------------
-Para cargar la IDT se utiliza la instrucción de ensamblador 
+
+Para cargar la IDT se utiliza la instrucción de ensamblador
 
 lidt ptr_addr
 
@@ -273,14 +274,14 @@ procesador. ptr_addr corresponde a la dirección de memoria en la cual se
 encuentra una estructura de datos que describe la IDT. Esta estructura de datos
 se denomina 'puntero a la IDT', 'IDT Pointer'.
 
-El puntero al IDT tiene el siguiente formato: 
+El puntero al IDT tiene el siguiente formato:
 
     47                  15              0
      +----------------------------------+
      |      base         |    límite    |
      +----------------------------------+
 
-en donde: 
+en donde:
 - base : dirección lineal de la IDT, que corresponde a la dirección de memoria
 	de la IDT.
 - límite : tamaño de la IDT en Bytes. Si la IDT tiene 256 entradas y el tamaño
@@ -313,18 +314,18 @@ Cuando ocurre una interrupción que no tiene código de error, la pila se
 encontrará en el siguiente estado en el momento  de pasar el control a la rutina
 de manejo de interrupción:
 
-      +--------------------+    
-      |  valor             |                                       
-      +--------------------+ <- SS: ESP antes de ocurrir la interrupción
-      | EFLAGS             |    
-      +--------------------+     
-      | CS                 |     
       +--------------------+
-      | EIP                |  
-      +--------------------+ <- SS: ESP al momento de pasar el control a la 
+      |  valor             |
+      +--------------------+ <- SS: ESP antes de ocurrir la interrupción
+      | EFLAGS             |
+      +--------------------+
+      | CS                 |
+      +--------------------+
+      | EIP                |
+      +--------------------+ <- SS: ESP al momento de pasar el control a la
       | Espacio            |   rutina de manejo de interrupción
       | disponible en la   |
-      | pila               |  
+      | pila               |
       |                    |
       |                    |
       +--------------------+ <---  Base de la pila
@@ -340,8 +341,8 @@ primero SS y ESP, y luego almacena EFLAGS, CS e IP en la pila.
 
     +--------------------------+
     | valor en la pila         | Pila del código (o tarea) antes de ocurrir la
-    |--------------------------| interrupción o excepción                  
-    | valor en la pila         |            
+    |--------------------------| interrupción o excepción
+    | valor en la pila         |
     +--------------------------+  <-- OLD SS: OLD ESP -----+
                                                            |
                                                            |
@@ -360,24 +361,25 @@ primero SS y ESP, y luego almacena EFLAGS, CS e IP en la pila.
 
 Interrupción con código de error
 ------------------------------------
+
 Cuando ocurre una interrupción que tiene código de error asociado, la pila se
 encontrará en el siguiente estado antes de pasar el control a la rutina de
 manejo de interrupción:
 
-      +--------------------+    
-      |  valor             |                                       
+      +--------------------+
+      |  valor             |
       +--------------------+ <- SS: ESP antes de ocurrir la interrupción
-      | EFLAGS             |    
-      +--------------------+     
-      | CS                 |     
+      | EFLAGS             |
       +--------------------+
-      | EIP                |     
+      | CS                 |
       +--------------------+
-      | Código de error    |  
-      +--------------------+ <- SS: ESP al momento de pasar el control a la 
+      | EIP                |
+      +--------------------+
+      | Código de error    |
+      +--------------------+ <- SS: ESP al momento de pasar el control a la
       | Espacio            |        rutina de manejo de interrupción
       | disponible en la   |
-      | pila               |  
+      | pila               |
       |                    |
       |                    |
       +--------------------+ <---  Base de la pila
@@ -393,8 +395,8 @@ almacena primero SS y ESP, y luego almacena EFLAGS, CS e IP en la pila.
 
     +--------------------------+
     | valor en la pila         | Pila del código (o tarea) antes de ocurrir la
-    |--------------------------| interrupción o excepción                  
-    | valor en la pila         |            
+    |--------------------------| interrupción o excepción
+    | valor en la pila         |
     +--------------------------+  <-- OLD SS: OLD ESP -----+
                                                            |
                                                            |

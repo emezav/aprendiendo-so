@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Contiene las definiciones relacionadas con el Modo Protegido IA-32.
  */
 
@@ -19,7 +19,7 @@
 /** @brief Dirección virtual del kernel en memoria */
 #define KERNEL_VIRT_ADDR KERNEL_PHYS_ADDR + KERNEL_VIRT_OFFSET
 
-/* @brief Tamaño de la pila del kernel */ 
+/* @brief Tamaño de la pila del kernel */
 #define KERNEL_STACK_SIZE 0x4000
 
 /* @brief Final de la memoria disponible por debajo del primer MB de memoria */
@@ -308,7 +308,6 @@ void install_interrupt_handler(unsigned char index, interrupt_handler handler);
  * 					selector.
  * @param dpl		Nivel de privilegios del descriptor
  * @param type		Tipo de descriptor
- * @returns idt_descriptor : Descriptor de idt creado.
  * */
 void setup_idt_descriptor(unsigned char vector, unsigned int selector,
 		unsigned int offset, unsigned char dpl, unsigned char type);

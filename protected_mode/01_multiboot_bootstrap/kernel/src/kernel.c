@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Código de inicialización del kernel en C
  *
@@ -12,6 +12,9 @@
 #include <stdlib.h>
 #include <console.h>
 
+/**
+ * @brief Inicializa la consola del kernel y muestra el mensaje de arranque.
+ */
 void cmain(){
     bochs_break();
     setup_console();

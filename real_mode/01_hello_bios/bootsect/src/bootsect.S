@@ -4,7 +4,7 @@
  * @author Erwin Meza Vega
  * @copyright MIT License
  * @brief Sector de Arranque para sistemas x86 con BIOS.
- * @description 
+ * @description
  * Este código ilustra el uso básico de los servicios de la BIOS. El proceso
  * general es el siguiente:
 
@@ -24,16 +24,16 @@
 
 */
 
-.intel_syntax noprefix 
+.intel_syntax noprefix
 
-.code16     
+.code16
 
-.section .text 
+.section .text
 
 .global start
 
 /**
-* Símbolo que marca el inicio del código del sector de arranque 
+* Símbolo que marca el inicio del código del sector de arranque
 */
 start:
 
@@ -72,7 +72,7 @@ start:
 
 
 	/* Mover el cursor al inicio de la pantalla */
-	mov ah, 0x02 
+	mov ah, 0x02
 	xor bh, bh /* Página 0 */
 	xor dx, dx  /* dh (fila) = 0, dl (columna) = 0 */
 	int 0x10 /* int 0x10, ah = 0x02 Set cursor position */
@@ -88,7 +88,7 @@ cls:
 	loop cls /* Loop: Decrementar cx y saltar a 'cls' mientras cx > 0*/
 
 	/* Mover de nuevo el cursor al inicio de la pantalla */
-	mov ah, 0x02 
+	mov ah, 0x02
 	xor bh, bh /* Página 0 */
 	xor dx, dx  /* dh (fila) = 0, dl (columna) = 0 */
 	int 0x10 /* int 0x10, ah = 0x02 Set cursor position */
@@ -115,12 +115,12 @@ cls:
 	xor bx, bx
 	int 0x10
 
-	/* Fin. */ 
+	/* Fin. */
 
 finished:
 
 	hlt /* Detener el procesador hasta que ocurra una interrupción */
-  
+
   /* Detener de nuevo el procesador. */
 
  jmp finished

@@ -1,17 +1,17 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
- * @brief Contiene la implementación de las rutinas relacionadas
- * con la gestión de memoria virtual del kernel mediante un mapa de bits.
+ * @copyright GNU Public License.
+ * @brief Contiene la implementacion de las rutinas relacionadas
+ * con la gestion de memoria virtual del kernel mediante un mapa de bits.
  */
 #include <stdlib.h>
 #include <kmem.h>
 
 /** @brief Mapa de bits de la memoria lineal del kernel. */
-unsigned int 
-    kernel_memory_bitmap[KMEM_MAXPAGES / BITS_PER_BITMAP_ENTRY] 
+unsigned int
+    kernel_memory_bitmap[KMEM_MAXPAGES / BITS_PER_BITMAP_ENTRY]
     __attribute__((aligned(4096)));
 
 /** @brief Lista de regiones de memoria virtual */
@@ -29,19 +29,20 @@ int kmem_count;
 /** @brief Numero total de paginas disponibles */
 int kmem_available_pages;
 
-/* Variable definida en start.S que almacena la dirección física en la cual
- * terminan las tablas de página iniciales del kernel */
+/* Variable definida en start.S que almacena la direccion fisica en la cual
+ * terminan las tablas de pagina iniciales del kernel */
 extern unsigned int kernel_initial_pagetables_end;
 
-/** @brief Mapa de bits de memoria virtual del kernel
+/**
+ * @brief Mapa de bits de memoria virtual del kernel
  * @details Esta variable almacena el apuntador del inicio del mapa de bits
- * que permite gestionar las unidades de memoria. */
- unsigned int * kmem_bitmap;
+ * que permite gestionar las unidades de memoria.
+ */
+unsigned int * kmem_bitmap;
 
 /**
  * @brief Inicializa la memoria virtual del kernel
  */
-
 void setup_kmem(void){
 
     int i;
@@ -60,7 +61,7 @@ void setup_kmem(void){
 
     //Inicio de la memoria virtual disponible
     //Donde terminan las tablas de pagina  iniciales + 1 pagina
-    tmp_start = kernel_initial_pagetables_end + PAGE_SIZE + KERNEL_VIRT_OFFSET; 
+    tmp_start = kernel_initial_pagetables_end + PAGE_SIZE + KERNEL_VIRT_OFFSET;
 
     /*console_printf("Available virtual memory starts at 0x%x\n", tmp_start);*/
 
@@ -68,7 +69,7 @@ void setup_kmem(void){
     tmp_end = KMEM_LIMIT - KMEM_RESERVED;
 
     //Mapa de bits
-    tmp_ptr = (unsigned int*)&kernel_memory_bitmap; 
+    tmp_ptr = (unsigned int*)&kernel_memory_bitmap;
 
     do {
         if (tmp_start < tmp_end) {
@@ -80,8 +81,8 @@ void setup_kmem(void){
                 kmem[kmem_count -1].next = &kmem[kmem_count];
             }
             if (tmp_start + KMEM_GRANULARITY < tmp_end) {
-                kmem[kmem_count].length = 
-                    KMEM_GRANULARITY;    
+                kmem[kmem_count].length =
+                    KMEM_GRANULARITY;
             }else {
                 kmem[kmem_count].length = tmp_end - tmp_start;
             }
@@ -96,17 +97,17 @@ void setup_kmem(void){
             tmp_ptr += slots / BITS_PER_BITMAP_ENTRY;
 
             /* Redondear al siguiente apuntador de entero sin signo si
-                * es necesario */
+             * es necesario */
             if (slots % BITS_PER_BITMAP_ENTRY != 0) {
                 tmp_ptr++;
             }
-            
+
             /*
-            console_printf("0x%x (%d)\n", 
+            console_printf("0x%x (%d)\n",
                     kmem[kmem_count].start,
                     kmem[kmem_count].map.free_slots);
             */
-            
+
            kmem_count++;
         }
         tmp_start += KMEM_GRANULARITY;
@@ -121,10 +122,6 @@ void setup_kmem(void){
     }
 }
 
-/**
- * @brief Busca y reserva una página libre dentro de la memoria del kernel
- * @return Dirección de inicio de la página
- */
 unsigned int kmem_get_page() {
     unsigned int addr;
     int slot;
@@ -147,14 +144,10 @@ unsigned int kmem_get_page() {
         }
         aux = aux->next;
     }while(aux != current_kmem);
-    
+
     return 0;
 }
 
-/**
- * @brief Busca una región continua de páginas libres en la memoria del kernel
- * @return Dirección de inicio de la página
- */
 unsigned int kmem_get_pages(int count) {
     unsigned int addr;
     int slot;
@@ -173,7 +166,7 @@ unsigned int kmem_get_pages(int count) {
     }
 
     do {
-        if (aux->map.free_slots != 0 && 
+        if (aux->map.free_slots != 0 &&
                 aux->map.free_slots >= count) {
             slot = bitmap_allocate_region(&aux->map, count);
             if (slot >= 0) {
@@ -184,14 +177,10 @@ unsigned int kmem_get_pages(int count) {
         }
         aux = aux->next;
     }while(aux != current_kmem);
-    
+
     return 0;
 }
 
-/**
- * @brief Busca una página y un marco libre y realiza el mapeo
- * @return Dirección de inicio de la página
- */
 unsigned int kmem_allocate_page(void){
     unsigned int frame;
     unsigned int page;
@@ -220,12 +209,6 @@ unsigned int kmem_allocate_page(void){
     return 0;
 }
 
-/**
- * @brief Busca y mapea una región continua de páginas libres
- * @param count Numero de paginas a buscar y mapear
- * @param sparse KMEM_SPARSE | KMEM_CONTIGUOUS  
- * @return Dirección de inicio de la página
- */
 unsigned int kmem_allocate_pages(int count, int sparse) {
     int i;
     unsigned int page;
@@ -259,7 +242,7 @@ unsigned int kmem_allocate_pages(int count, int sparse) {
     if (sparse == KMEM_SPARSE) {
         //Mapear las paginas a marcos (no necesariamente adyacentes)
         for (i = 0 ;
-                i < count && done == 1; 
+                i < count && done == 1;
                 i++, tmp_page += PAGE_SIZE){
             tmp_frame = allocate_frame();
             if (!map_page(tmp_page, tmp_frame)) {
@@ -273,8 +256,8 @@ unsigned int kmem_allocate_pages(int count, int sparse) {
         if (frame) {
             tmp_frame = frame;
             done = 1;
-            for (i = 0; 
-                    i < count && done == 1; 
+            for (i = 0;
+                    i < count && done == 1;
                     i++, tmp_page += PAGE_SIZE, tmp_frame += FRAME_SIZE){
                 if (!map_page(tmp_page, tmp_frame)) {
                     done = 0;
@@ -294,12 +277,6 @@ unsigned int kmem_allocate_pages(int count, int sparse) {
     return 0;
 }
 
-
-/**
- * @brief Permite liberar una página
- * @param addr Dirección de la página a liberar
- * @return 1 si exitoso, 0 si error
- */
 int kmem_free(unsigned int addr) {
     int slot;
     unsigned int start;
@@ -323,9 +300,6 @@ int kmem_free(unsigned int addr) {
     return 0;
 }
 
-/**
- * @brief Libera un conjunto de paginas contiguas
- */
 int kmem_free_pages(unsigned int start, unsigned int count) {
 
     unsigned int addr = ROUND_DOWN_TO_PAGE(start);
@@ -340,12 +314,6 @@ int kmem_free_pages(unsigned int start, unsigned int count) {
     return ret;
 }
 
-/**
- * @brief Retorna el número de páginas disponibles en la memoria del kernel
- * @return Número de páginas disponibles
- */
 int available_pages() {
     return kmem_available_pages;
 }
-
-

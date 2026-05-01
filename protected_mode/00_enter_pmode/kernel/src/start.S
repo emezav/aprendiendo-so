@@ -24,7 +24,7 @@
 kernel_start:
 
 /* Saltar el encabezado del kernel. Esta instrucción ocupa 3 bytes */
-jmp kernel_main 
+jmp kernel_main
 
 /*Encabezado del kernel: el byte 4 contiene un word con la longitud
   del kernel en sectores. */
@@ -64,9 +64,9 @@ cli
 /* Esperar hasta no hayan datos para el 8042 */
 1:
 /* al = valor del registro de estado del 8042 */
-in al, 0x64  
+in al, 0x64
 /* input register has data for 8042?*/
-test al, 0x02 
+test al, 0x02
 jnz 1b
 
 xchg bx, bx
@@ -76,9 +76,9 @@ mov al, 0xD0 /*0xd0 = Read output port: el valor del puerto
 out 0x64, al
 
 1:
-in al, 0x64  
+in al, 0x64
 /* output register (0x60) has data for system?*/
-test al, 0x01 
+test al, 0x01
 jz 1b
 
 /* al = valor del puerto de salida */
@@ -100,7 +100,7 @@ out 0x64, al
 1:
 in al, 0x64
 test al, 2 /* input register ( 0x60 / 0x64 ) has data for 8042? */
-jnz 1b  
+jnz 1b
 
 mov al, ah /* al = bit A20 activado */
 out 0x60, al /*Escribir el siguiente byte en 0x60 para habilitar A20 */

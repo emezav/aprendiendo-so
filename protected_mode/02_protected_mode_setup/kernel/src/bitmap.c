@@ -1,6 +1,6 @@
 #include <bitmap.h>
 
-/** 
+/**
  * @brief Inicializa un mapa de bits.
  */
 int bitmap_init(bitmap * dst, unsigned int * data, int total_slots) {
@@ -8,30 +8,30 @@ int bitmap_init(bitmap * dst, unsigned int * data, int total_slots) {
     int i;
     int slot;
     int offset;
-    
+
     unsigned int initval = ~(0);
-    
-    dst->data = data;   
+
+    dst->data = data;
     dst->total_slots = total_slots;
     dst->total_entries = total_slots / BITS_PER_BITMAP_ENTRY;
-    
+
     dst->free_slots = total_slots;
     dst->last_free = -1;
-    
+
     /* Mark BITS_PER_BITMAP_ENTRY entries at once */
     for (i = 0; i < dst->total_entries; i++) {
         data[i] = initval;
-    }   
-    
-    /* Mark remaining entries, 
+    }
+
+    /* Mark remaining entries,
      * if total_slots is not multiple of BITS_PER_BITMAP_ENTRY */
-    slot = i * BITS_PER_BITMAP_ENTRY;   
+    slot = i * BITS_PER_BITMAP_ENTRY;
     while (slot < total_slots) {
         offset = slot % BITS_PER_BITMAP_ENTRY;
         data[i] |= (1 << offset);
         slot++;
     }
-    
+
     return 0;
 }
 
@@ -41,14 +41,14 @@ int bitmap_init(bitmap * dst, unsigned int * data, int total_slots) {
 int bitmap_test(bitmap * dst, int slot) {
     unsigned int entry;
     int offset;
-    
+
     if (slot < 0 || slot >= dst->total_slots) {
         return 0;
     }
-    
+
     entry = slot / BITS_PER_BITMAP_ENTRY;
     offset = slot % BITS_PER_BITMAP_ENTRY;
-    
+
     return (BITMAP_TEST(dst, entry, offset));
 
 }
@@ -57,23 +57,23 @@ int bitmap_test(bitmap * dst, int slot) {
  * @brief Busca y limpia un bit disponible en el mapa de bits.
  */
 int bitmap_allocate(bitmap * dst){
-    unsigned int slot;  
+    unsigned int slot;
     unsigned int entry;
-    unsigned int start_entry;   
-    int offset; 
-    
+    unsigned int start_entry;
+    int offset;
+
     if (dst->free_slots == 0) {return -1;}
-        
-    slot = dst->last_free;  
-        
-    if (slot >= 0 && slot < dst->total_slots) { 
+
+    slot = dst->last_free;
+
+    if (slot >= 0 && slot < dst->total_slots) {
         //Start at next set slot
         entry = slot / BITS_PER_BITMAP_ENTRY;
         offset = slot % BITS_PER_BITMAP_ENTRY;
-        
+
         if (BITMAP_TEST(dst, entry, offset)) {
             /* Allocate slot! */
-            BITMAP_SET(dst, entry, offset);
+            BITMAP_CLEAR(dst, entry, offset);
             dst->free_slots--;
             return slot;
         }
@@ -81,20 +81,20 @@ int bitmap_allocate(bitmap * dst){
         //Start at the beginnig of the bitmap
         slot = -1;
     }
-    
+
     /* Walk the bitmap */
     slot = (slot + 1) % dst->total_slots;
-    
+
     entry = slot / BITS_PER_BITMAP_ENTRY;
-    
+
     start_entry = entry;
-    
+
     do {
         if (dst->data[entry] != 0) {
             //Found entry with at least one bit set!
             offset = 0;
-            while (offset < BITS_PER_BITMAP_ENTRY) {                
-                if (BITMAP_TEST(dst, entry, offset)) {                  
+            while (offset < BITS_PER_BITMAP_ENTRY) {
+                if (BITMAP_TEST(dst, entry, offset)) {
                     /* Allocate slot! */
                     BITMAP_CLEAR(dst, entry, offset);
                     dst->free_slots--;
@@ -104,50 +104,50 @@ int bitmap_allocate(bitmap * dst){
             }
         }
         //Advance to next entry
-        entry = (entry + 1) % dst->total_entries;       
-    }while (entry != start_entry);  
-    
-    return -1;  
+        entry = (entry + 1) % dst->total_entries;
+    }while (entry != start_entry);
+
+    return -1;
 }
 
 /**
  * @brief Busca y limpia una region bit en el mapa de bits.
  */
 int bitmap_allocate_region(bitmap * dst, int count){
-    unsigned int slot;  
+    unsigned int slot;
     unsigned int entry;
-    unsigned int start_entry;   
-    int offset; 
+    unsigned int start_entry;
+    int offset;
     int s;
     int result;
-    
+
     //Check for available slots
     if (count > dst->free_slots) {
         return -1;
     }
-    
+
     slot = dst->last_free;
-    
-    if (slot < 0 || slot >= dst->total_slots) { 
+
+    if (slot < 0 || slot >= dst->total_slots) {
         //Start at the beginnig of the bitmap
         slot = 0;
     }
-    
+
     /* Walk the bitmap */
-    entry = slot / BITS_PER_BITMAP_ENTRY;   
+    entry = slot / BITS_PER_BITMAP_ENTRY;
     start_entry = entry;
-    
+
     do {
         if (dst->data[entry] != 0) {
             //Found entry with at least one bit set!
             offset = 0;
-            while (offset < BITS_PER_BITMAP_ENTRY 
+            while (offset < BITS_PER_BITMAP_ENTRY
                     && BITMAP_TEST(dst, entry, offset) == 0) {
                 offset++;
             }
-            
+
             slot = (entry * BITS_PER_BITMAP_ENTRY) + offset;
-            
+
             if (slot + count < dst->total_slots) {
                 result = 1;
                 for (s = slot; s < slot + count; s++) {
@@ -171,14 +171,14 @@ int bitmap_allocate_region(bitmap * dst, int count){
             }
         }else {
             //Advance to next entry
-            entry = (entry + 1) % dst->total_entries;       
+            entry = (entry + 1) % dst->total_entries;
         }
-    }while (entry != start_entry);  
-    
-    return -1;  
+    }while (entry != start_entry);
+
+    return -1;
 }
 
-/** 
+/**
  @brief Marca un bit como disponible en el mapa de bits.
  */
 int bitmap_free(bitmap * dst, int slot) {
@@ -195,7 +195,7 @@ int bitmap_free(bitmap * dst, int slot) {
       return 1;
         }
     }
-  return 0;  
+  return 0;
 }
 
 /**
@@ -223,4 +223,3 @@ int bitmap_free_region(bitmap * dst, int slot, int count) {
     }
   return 0;
 }
-

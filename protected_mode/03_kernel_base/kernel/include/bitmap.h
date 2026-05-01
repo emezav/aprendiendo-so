@@ -1,12 +1,12 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Gestion de mapas de bits
  * física.
  */
- 
+
 #ifndef BITMAP_H
 #define BITMAP_H
 
@@ -16,11 +16,11 @@
 #define BITMAP_TEST(dst, entry, offset) (dst->data[entry] & (1<<offset))
 
 /** @brief Descriptor de mapa de bits */
-typedef struct {	
+typedef struct {
   /** @brief apuntador al mapa de bits */
-	unsigned int * data; 
+	unsigned int * data;
   /** @brief Bits totales del mapa */
-	int total_slots; 
+	int total_slots;
   /** @brief Entradas totales del mapa */
 	int total_entries;
   /** @brief Ultimo bit marcado como libre */
@@ -30,15 +30,15 @@ typedef struct {
 }bitmap;
 
 /** @brief Inicializa un mapa de bits.
- *  @param dst Apuntador al descriptor de mapa de bits  
+ *  @param dst Apuntador al descriptor de mapa de bits
  *  @param data Region de memoria del mapa de bits
  *  @param total_bits total de bits
- *  @return 0 
+ *  @return 0
  */
-int bitmap_init(bitmap * dst, 
-									unsigned int * data, 
+int bitmap_init(bitmap * dst,
+									unsigned int * data,
 									int total_bits);
-                  
+
 /* @brief Verifica el valor de un bit en el mapa de bits
  * @param dst Apuntador al descriptor del mapa de bits
  * @param slot Posicion del bit a verificar
@@ -56,22 +56,22 @@ int bitmap_allocate(bitmap * dst);
 /* @brief Busca y limpia una region bit en el mapa de bits.
  * @param dst Apuntador al descriptor del mapa de bits
  * @param count Numero de bits continuos a buscar
- * @return Posicion del primer bit de la region, -1 si no hay dispnible 
+ * @return Posicion del primer bit de la region, -1 si no hay dispnible
  */
 int bitmap_allocate_region(bitmap * dst, int count);
 
-/* @brief Marca un bit como disponible en el mapa de bits. 
+/* @brief Marca un bit como disponible en el mapa de bits.
  * @param dst Apuntador al descriptor del mapa de bits
  * @param slot Posicion del bit a liberar
- * @return 1 si exitoso, 0 si error 
+ * @return 1 si exitoso, 0 si error
  */
 int bitmap_free(bitmap * dst, int slot);
 
-/* @brief Marca una region como disponible en el mapa de bits. 
+/* @brief Marca una region como disponible en el mapa de bits.
  * @param dst Apuntador al descriptor del mapa de bits
  * @param slot Posicion del primer bit de la region a liberar
  * @param count Numero de regiones a liberar
- * @return 1 si exitoso, 0 si error 
+ * @return 1 si exitoso, 0 si error
  */
 int bitmap_free_region(bitmap * dst, int slot, int count);
 

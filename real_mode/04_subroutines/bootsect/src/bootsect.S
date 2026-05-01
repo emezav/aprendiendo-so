@@ -4,20 +4,20 @@
  * @author Erwin Meza Vega
  * @copyright MIT License
  * @brief Sector de Arranque para sistemas x86 con BIOS.
- * @description 
+ * @description
  * En este proyecto se muestra la definición y el uso de subrutinas.
 */
 
-.intel_syntax noprefix 
-.code16     
+.intel_syntax noprefix
+.code16
 
-.section .text 
+.section .text
 
 .global start
 start:
   /* Configurar CS para que apunte a 0x7C00 */
   ljmp 0x7C0: offset entry_point
-  
+
 entry_point:
 
   /* Configurar el registro de segmento DS */
@@ -30,7 +30,7 @@ entry_point:
   mov ss, ax
   mov sp, 0xFC00
   sti
-  
+
   /* Leer hasta 80 caracteres a la dirección 0x50: 0x0000 = 0x500 */
   /* Almacenar los párametros en la pila */
   push 80
@@ -44,10 +44,10 @@ entry_point:
   mov ah, 0x0E
   mov al, 0x0A
   int 0x10
-  
+
   mov al, 0x0D
   int 0x10
-  
+
   /* Imprimir la cadena terminada en nulo */
   /* Almacenar los párametros en la pila */
   push 0x0000
@@ -56,7 +56,7 @@ entry_point:
   call putline
   /* Quitar los parámetros de la pila */
   add sp, 6
-  
+
 finished:
   hlt /* Detener el procesador hasta que ocurra una interrupción */
   /* Detener de nuevo el procesador. */
@@ -69,15 +69,15 @@ finished:
 *  Ninguna
 * Salida:
 *  AL contiene el caracter ASCII leido
-* En esta rutina no se crea un marco de pila. El servicio de la 
+* En esta rutina no se crea un marco de pila. El servicio de la
 * BIOS puede modificar otros registros.
 */
-getkey: 
+getkey:
   xor ah, ah   /* ah = 0, servico de video leer un caracter de teclado */
   int 0x16     /* Servicio de video */
   ret
 
-/** 
+/**
  * Lee un máximo de caracteres por teclado o hasta leer ENTER (0x0D) a la
  * dirección lógica especificada.
  * Entrada:
@@ -114,22 +114,22 @@ getline:
   call getkey /* Usar la subrutina getkey */
 
   /* AL = ASCII leido */
-  cmp al, 0x0D   
+  cmp al, 0x0D
   /* Se leyo enter? Saltar a la etiqueta anónima "3" adelante */
   je 3f
 
-  /* En caso contrario, imprimir y almacenar el caracter en es:[di] */  
+  /* En caso contrario, imprimir y almacenar el caracter en es:[di] */
   mov ah, 0x0E /* Imprimir el caracter */
   int 0x10
 
-  /* equivalente a: 
-  mov BYTE PTR es:[di], al 
+  /* equivalente a:
+  mov BYTE PTR es:[di], al
   inc di
   */
   stosb /* DI se incrementa automáticamente */
-  
+
   inc dx /* Incrementar en 1 el contador */
-  
+
   loop 1b   /* CX = CX - 1, ir a la etiqueta anónima "1" atrás si CX > 0 */
 
 3:
@@ -139,20 +139,20 @@ getline:
 
 2:
   /* Fin de la lectura. */
-  
+
   mov ax, dx  /* ES:DI apunta al caracter nulo de la cadena */
 
   pop es    /* Recuperar los valores guardados en la pila */
-  pop di      
+  pop di
   pop dx
   pop cx
   pop bx
-  
+
   mov sp, bp    /* Cerrar el marco de pila */
   pop bp
   ret
 
-/** 
+/**
  * Imprime una cadena de caracteres terminada en nulo.
  * Entrada:
  *  [bp + 4]: Selector de la dirección lógica de la cadena
@@ -163,7 +163,7 @@ getline:
 putline:
   push bp
   mov bp, sp    /* Crear el marco de pila */
-  
+
   push ax
   push si
   push ds
@@ -181,7 +181,7 @@ putline:
   lodsb
 
   /* AL = ASCII leido */
-  or al, al  
+  or al, al
   /* El caracter es nulo? terminar */
   je 2f
 
@@ -195,8 +195,8 @@ putline:
 2:
 
   pop ds    /* Recuperar los valores guardados en la pila */
-  pop si      
-  pop ax 
+  pop si
+  pop ax
 
   mov sp, bp    /* Cerrar el marco de pila */
   pop bp

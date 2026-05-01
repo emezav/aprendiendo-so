@@ -1,4 +1,4 @@
-BIOS - Basic Input-Output System
+﻿BIOS - Basic Input-Output System
 ================================
 
 La BIOS es un componente vital dentro de los computadores personales. Es
@@ -35,7 +35,7 @@ los cuales los más importantes en la actualidad son el orden de los
 dispositivos de arranque y el soporte para virtualización.
 
 Papel de la BIOS en el inicio de un Sistema Operativo
-=====================================================
+-----------------------------------------------------
 
 Luego del chequeo inicial, la BIOS configura el primer MegaByte de
 memoria con una serie de tablas y estructuras de datos necesarias para
@@ -47,7 +47,7 @@ de memoria RAM cuando la BIOS comienza su ejecución.
 
             +----------------------+ 0xFFFFF
             |                      |
-            | Área de ROM          | En esta área se encuentra el código de la 
+            | Área de ROM          | En esta área se encuentra el código de la
             | (BIOS, VGA, etc.)    | BIOS y se encuentra mapeada la memoria de
             |                      | video.
             |                      |
@@ -80,14 +80,13 @@ de memoria RAM cuando la BIOS comienza su ejecución.
             | BIOS (BDA)           |
             |                      |
        0x3FF+----------------------+
-            |                      | 
-            |                      | 
-            | Tabla de Descriptores| 
-            | de Interrupción      | 
-            | (Configurada por la  |  
-            |  BIOS)               | 
-         0  +----------------------+ 
-
+            |                      |
+            |                      |
+            | Tabla de Descriptores|
+            | de Interrupción      |
+            | (Configurada por la  |
+            |  BIOS)               |
+         0  +----------------------+
 
 
 La disposición del área de ROM se presenta en la siguiente tabla:
@@ -131,7 +130,7 @@ interrupción 0x10 permite tener acceso a una serie de servicios de video
 permite acceder a los servicios de disco.
 
 Carga del Sector de Arranque
-============================
+----------------------------
 
 Una vez que ha concluido su configuración inicial, la BIOS busca los
 dispositivos configurados en los que se presume se encuentra el sistema
@@ -161,7 +160,7 @@ muestra la posición del código del sector de arranque en memoria.
 
             +----------------------+ 0xFFFFF
             |                      |
-            | Área de ROM          | 
+            | Área de ROM          |
             | (BIOS, VGA, etc.)    |
             |                      |
             |                      | 0xA0000
@@ -176,14 +175,14 @@ muestra la posición del código del sector de arranque en memoria.
             |                      |
             |                      |
             |   Memoria RAM        |  Aproximadamente 600 KB de memoria
-            |   disponible         |                              
+            |   disponible         |
             |                      |
             |                      |
             |                      |
             |                      |
             |                      | 0x7E00
-     0x7DFF +----------------------+ 
-            | Código del sector de |   
+     0x7DFF +----------------------+
+            | Código del sector de |
             | arranque (512 bytes) |
             +----------------------+ 0x7C00
             |                      |
@@ -196,11 +195,11 @@ muestra la posición del código del sector de arranque en memoria.
             | BIOS (BDA)           |
             |                      |
     0x3FF   +----------------------+
-            | Tabla de Descriptores| 
-            | de Interrupción      | 
-            | (Configurada por la  |  
-            |  BIOS)               | 
-    0       +----------------------+ 
+            | Tabla de Descriptores|
+            | de Interrupción      |
+            | (Configurada por la  |
+            |  BIOS)               |
+    0       +----------------------+
 
 Luego la BIOS le pasa el control de la ejecución al código del sector de
 arranque, por medio de una instruccion jmp (Salto). Este salto puede
@@ -226,8 +225,8 @@ desde la cual se cargó el sector de arranque, el cual puede ser:
 El código del sector de arranque deberá considerar este valor para
 continuar con la carga del sistema operativo.
 
-Carga del Sistema Operativo 
-===========================
+Carga del Sistema Operativo
+---------------------------
 
 Generalmente un sector de arranque deberá contener el código para
 continuar con la carga del componente central de un sistema operativo
@@ -257,7 +256,7 @@ interfaz gráfica. Luego iniciará una serie de tareas que permitirán
 iniciar sesión e interactuar con el sistema operativo.
 
 Uso de la BIOS en los Sistemas Operativos Actuales
-==================================================
+--------------------------------------------------
 
 Una vez cargados, los sistemas operativos modernos hacen poco o ningún
 uso de la BIOS. No obstante, algunos aspectos de programación del
@@ -270,7 +269,7 @@ para acceder a algunos servicios que implementa la BIOS y cuya
 implementación directa puede ser muy difícil.
 
 Cargadores de Arranque
-======================
+----------------------
 
 La mayoría de sistemas operativos actuales dejan la responsabilidad de
 su carga a programas especiales denominados Cargadores de Arranque.
@@ -288,7 +287,7 @@ Linux instalado como el sistema operativo que ya se encontraba instalado
 en el sistema.
 
 Cargador de Arranque GRUB
-=========================
+-------------------------
 
 Grub es un programa complejo, que consta de varias partes. El código
 inicial de GRUB se inserta en el primer sector del disco (en el sector
@@ -306,7 +305,7 @@ almacenados en el disco. Dependiendo de la selección del usuario, se
 carga el sistema operativo requerido.
 
 Universal Extensible Firmware Interface - UEFI
-==============================================
+----------------------------------------------
 
 UEFI es una especificación que define una interfaz estándar entre un firmware y
 un sistema operativo, que fue concebida para superar las limitaciones de la
@@ -329,7 +328,7 @@ Algunas ventajas de de UEFI sobre las BIOS tradicionales son:
 - Soporte de red.
 
 Uso básico de los servicios de la BIOS
-=======================================
+---------------------------------------
 
 Para usar los servicios de la BIOS en modo real, el código debe establecer
 primero los registros del procesador en unos valores específicos para cada
@@ -350,7 +349,7 @@ La BIOS ofrece una serie de servicios de video por medio de la interrupción
 
 Establecer el modo de video
 ---------------------------
-    
+
         AH = 0x00
         AL = modo de video
 
@@ -363,7 +362,7 @@ Algunos modos de video válidos para cualquier tarjeta de video VGA son:
           = 0x03  Modo texto de 25 filas, 80 columnas, 16 colores
           = 0x04  Modo grafico de 320x200 pixels, 4 colores por pixel
           = 0x0D  Modo grafico de 320x200 pixels, 16 colores por pixel
-          = 0x0E  Modo grafico de 640x200 pixels, 16 colores por pixel          
+          = 0x0E  Modo grafico de 640x200 pixels, 16 colores por pixel
           = 0x11  Modo grafico de 640x480 pixels, blanco y negro
           = 0x12  Modo grafico de 640x480 pixels, 16 colores por pixel
           = 0x13  Modo grafico de 320x200 pixels, 256 colores por pixel
@@ -435,13 +434,13 @@ código de escaneo (Scan Code). Tambien si existe una tecla presionada, el
 bit ZF (Zero Flag) del registro FLAGS se establece en 0.
 
 Leer el estado de 'shift'
-------------------------- 
+-------------------------
 
         AH = 0x02
 
 La BIOS establece los bits del registro AL con el siguiente formato:
 
-        ¦7¦6¦5¦4¦3¦2¦1¦0¦  
+        ¦7¦6¦5¦4¦3¦2¦1¦0¦
         ¦ ¦ ¦ ¦ ¦ ¦ ¦ +---- right shift está presionado
         ¦ ¦ ¦ ¦ ¦ ¦ +----- left shift está presionado
         ¦ ¦ ¦ ¦ ¦ +------ CTRL está presionado
@@ -463,16 +462,16 @@ Leer sectores de disco
 ----------------------
 
        AH = 0x02
-       AL = Numero de sectores a leer 
+       AL = Numero de sectores a leer
        CH = numero de la pista / cilindro  * ver nota
        CL = numero del sector * ver nota
-       DH = numero de la cabeza 
-       DL = numero del drive (0x00=floppy A:, 0x01=floppy B:, 80h=disco primario, 
+       DH = numero de la cabeza
+       DL = numero del drive (0x00=floppy A:, 0x01=floppy B:, 80h=disco primario,
                                81h=disco  secundario)
        ES:BX = Apuntador a la posición de memoria en la cual se leen los datos
 
  El formato del registro CX (CH:CL) es el siguiente:
-    
+
        ¦F¦E¦D¦C¦B¦A¦9¦8¦7¦6¦5-0¦  CX
        ¦ ¦ ¦ ¦ ¦ ¦ ¦ ¦ ¦ ¦  +-----  Numero del sector (6 bits)
        ¦ ¦ ¦ ¦ ¦ ¦ ¦ ¦ +---------  2 bits mas significativos de la pista / cilindro
@@ -494,7 +493,7 @@ supone que la lectura nunca falla. En caso que la lectura falle, el código
 entra en un ciclo infinito.
 
 Ejemplos de uso de servicios de la BIOS
-=======================================
+---------------------------------------
 
 Los siguientes ejemplos asumen que el código se está ejecutando en modo
 real (por ejemplo este código es ejecutado por un sector de arranque
@@ -521,7 +520,7 @@ Leer un carácter del teclado
 
 
 Leer el segundo sector del floppy
------------------------------------- 
+------------------------------------
 
 Con el siguiente código se puede ller el segundo sector del floppy
 (cilindro 0, pista 0, sector 2) a la dirección de memoria 0x1000
@@ -529,16 +528,16 @@ Con el siguiente código se puede ller el segundo sector del floppy
       mov AX, 0x100
       mov ES, AX /* ES = 0x100*/
       mov BX, 0x0000  /* BX = 0, por lo tanto ES:BX apunta a 0x1000 */
-      
+
       mov AH, 0x2   /*  Servicio de disco: leer un sector */
       mov AL, 1 /* Número de sectores a leer: 1 */
-      
+
       mov CH, 0x00 /* Pista / cilindro =  0 */
       mov DH, 0x00 /* Cabeza = 0*/
       mov CL, 0x02 /* Sector número 2 */
-      
+
       mov DL, 0x00 /* Drive 0x00 = floppy, 0x80 = disco primario */
-     
+
       int 0x13
 
 

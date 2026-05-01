@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  *
  * @brief Contiene la implementacion de las rutinas necesarias para
  * manejar las solicitudes de interrupcion (IRQ) de los dispositivos de
@@ -155,7 +155,7 @@ void install_irq_handler(int number, irq_handler handler){
 
 /**
  * @brief Permite quitar un  manejador de IRQ.
- * 	@return void*/
+ */
 void uninstall_irq_handler(int number) {
 
 	if (number < MAX_IRQ_ROUTINES) {
@@ -189,7 +189,7 @@ void irq_dispatcher(interrupt_state * state) {
 	if (index >= 8) {
 		outb(SLAVE_PIC_COMMAND_PORT, EOI);
 	}
-  
+
 	outb(MASTER_PIC_COMMAND_PORT, EOI);
 
 	/* Buscar la rutina que maneja la interrupcion */

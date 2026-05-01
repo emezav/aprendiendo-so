@@ -1,8 +1,8 @@
 /**
  * @file
- * @ingroup kernel_code 
+ * @ingroup kernel_code
  * @author Erwin Meza <emezav@gmail.com>
- * @copyright GNU Public License. 
+ * @copyright GNU Public License.
  * @brief Contiene la implementación de las rutinas relacionadas
  * con la gestión de memoria física mediante un mapa de bits.
  * La memoria se gestiona en unidades de FRAME_SIZE denominadas marcos de
@@ -17,8 +17,8 @@
 #include <stdlib.h>
 
 /** @brief Mapa de bits de la memoria fisica. */
-unsigned int 
-    physical_memory_bitmap[PHYSMEM_MAXFRAMES / BITS_PER_BITMAP_ENTRY] 
+unsigned int
+    physical_memory_bitmap[PHYSMEM_MAXFRAMES / BITS_PER_BITMAP_ENTRY]
     __attribute__((aligned(4096)));
 
 /** @brief Lista de regiones fisicas de memoria */
@@ -86,12 +86,12 @@ void setup_physical_memory(void){
     /* Dado que ya se habilitó la memoria virtual, se debe usar la
      * dirección virtual en la cual se encuentra mapeada la estructura de
      * información multiboot. */
-	multiboot_info_t * info = (multiboot_info_t *)(multiboot_info_location 
+	multiboot_info_t * info = (multiboot_info_t *)(multiboot_info_location
             + KERNEL_VIRT_OFFSET);
 
     /* Almacena la dirección de memoria final del ultimo modulo cargado, o
      * 0 si no se cargaron modulos. */
-	unsigned int mods_end; 
+	unsigned int mods_end;
 
 	/* si flags[3] = 1, se especificaron módulos que deben ser cargados junto
 	 * con el kernel y justo después del mismo. */
@@ -134,7 +134,7 @@ void setup_physical_memory(void){
 
 	/** Existe un mapa de memoria válido creado por GRUB? */
 	if (test_bit(info->flags, 6)) {
-        
+
 		memory_map_t *mmap;
 
         /* Calcular la dirección virtual del mapa de memoria*/
@@ -211,7 +211,7 @@ void setup_physical_memory(void){
 	if (memory_start > 0 && memory_length > 0) {
 
         /*
-        console_printf("Memory start at: 0x%x, length:0x%x\n", 
+        console_printf("Memory start at: 0x%x, length:0x%x\n",
                 memory_start, memory_length);
         */
 
@@ -255,7 +255,7 @@ void setup_physical_memory(void){
                     physmem[physmem_count -1].next = &physmem[physmem_count];
                 }
                 if (tmp_start + PHYSMEM_GRANULARITY < tmp_end) {
-                    physmem[physmem_count].length = 
+                    physmem[physmem_count].length =
                         PHYSMEM_GRANULARITY;
                 }else {
                     physmem[physmem_count].length = tmp_end - tmp_start;
@@ -274,7 +274,7 @@ void setup_physical_memory(void){
                 }
 
                 /*
-                console_printf("0x%x (%d)\n", 
+                console_printf("0x%x (%d)\n",
                         physmem[physmem_count].start,
                         physmem[physmem_count].map.free_slots);
                 */
@@ -305,7 +305,7 @@ unsigned int allocate_frame() {
     memory_region * aux;
 
     aux = current_physmem;
-    
+
     if (physmem_available_frames == 0) {
         return 0;
     }
@@ -321,11 +321,11 @@ unsigned int allocate_frame() {
         }
         aux = aux->next;
     }while(aux != current_physmem);
-    
+
     return 0;
 }
 
-/** 
+/**
 * @brief Reserva una región de memoria contigua libre dentro del mapa de bits
 * de memoria.
 */
@@ -348,7 +348,7 @@ unsigned int allocate_frame_region(unsigned int length) {
     aux = current_physmem;
 
     do {
-        if (aux->map.free_slots != 0 && 
+        if (aux->map.free_slots != 0 &&
                 aux->map.free_slots >= frame_count) {
             slot = bitmap_allocate_region(&aux->map, frame_count);
             if (slot >= 0) {
@@ -359,7 +359,7 @@ unsigned int allocate_frame_region(unsigned int length) {
         }
         aux = aux->next;
     }while(aux != current_physmem);
-    
+
     return 0;
 }
 

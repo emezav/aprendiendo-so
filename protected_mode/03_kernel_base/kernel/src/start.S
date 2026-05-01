@@ -27,7 +27,7 @@
  * archivo ejecutable. Ver archivi link.ld */
 
 /* Usar sintaxis Intel, si prefijo para los registros */
-.intel_syntax noprefix 
+.intel_syntax noprefix
 
 /* Macro para generar una entrada de la Tabla de Descriptores Globales - GDT. */
 /* Cada entrada ocupa exactamente 8 bytes (64 bits). Consulte la sección 3.4.5
@@ -37,16 +37,16 @@
  * G (incrementos de bytes o de 4096 bytes) */
 .macro gdt_entry present=0,base=0,limit=0,type=0,dpl=0,code_or_data=0,DB=0,G=0
 	/* Limite 0..15 */
-	.word \limit & 0x0000FFFF		
+	.word \limit & 0x0000FFFF
 	/* Base 0..15 */
-	.word \base & 0x0000FFFF  		
+	.word \base & 0x0000FFFF
 	/* Base 16..23 */
-	.byte (\base >> 16) & 0xFF	
+	.byte (\base >> 16) & 0xFF
    /* P = 1, DPL, Code or Data , DPL,*/
 	.byte ( ((\present & 1) << 7) | \
   		((\dpl & 0x03) << 5) | \
   		((\code_or_data & 1) << 4) |\
-  		((\type & 0x0F))) 
+  		((\type & 0x0F)))
 	/* Limite 16 - 19, AVL = 0, L = 0, opsize (16/32 bits), G*/
 	.byte ((\limit >> 16 & 0x00000F) | \
 		  ((\DB & 1) << 6) | \
@@ -58,8 +58,8 @@
 /*
 * Macro: isr_no_error_code
 * Este macro permite crear las  rutinas de servicio para
-* interrupciones que Intel x86 que no generan codigo de error.  
-* Estas son: Las excepciones Intel con vectores 0-7, 9 y 16-32 y  
+* interrupciones que Intel x86 que no generan codigo de error.
+* Estas son: Las excepciones Intel con vectores 0-7, 9 y 16-32 y
 * las interrupciones con vectores 33 en adelante. Con el fin de
 * mantener un marco de pila constante con las rutinas de servicio
 * de interrupcion que si generan codigo de error, se inserta un
@@ -126,7 +126,7 @@
  * especificación Multiboot*/
  /* El encabezado multiboot debe estar alineado a 4 bytes */
 .align 4
-multiboot_header:		
+multiboot_header:
  /* Número mágico. Requerido. */
 .long MULTIBOOT_HEADER_MAGIC
  /* Flags. Requerido. */
@@ -137,7 +137,7 @@ multiboot_header:
 .global start
 start:
 /* Código inicial que se encarga de mapear la ubicación física del kernel a la
-* posición KERNEL_VIRT_ADDR  = KERNEL_PHYS_ADDR + KERNEL_VIRT_OFFSET 
+* posición KERNEL_VIRT_ADDR  = KERNEL_PHYS_ADDR + KERNEL_VIRT_OFFSET
 *
 * IMPORTANTE: Dado que el kernel se compila para estar ubicado en la parte alta
 * de la memoria virtual (en la ubicación definida por la variable
@@ -159,7 +159,7 @@ start:
   /* EBX = Dirección física de la Estructura de Información Multiboot */
 
   mov [ multiboot_info_location - KERNEL_VIRT_OFFSET ], ebx
-  
+
   /* Configurar una pila temporal mientras se habilita la memoria virtual */
   mov esp, OFFSET kernel_stack_end - KERNEL_VIRT_OFFSET
 
@@ -181,7 +181,7 @@ start:
 
    push OFFSET no_multiboot_loader - KERNEL_VIRT_OFFSET
    call kdebug
-	
+
   /* La rutina kdebug no debería retornar, no obstante se se saca el
   * parámetro de la pila como si se hubiera retornado correctamente  y se salta
   * a kernel_kernel_finished para "bloquear" el kernel. */
@@ -191,7 +191,7 @@ start:
 
 loader_is_multiboot:
 
- 
+
   /* Ahora debemos usar la información pasada por el cargador de arranque para
    * configurar las estructuras de datos requeridas para habilitar la memoria
    * virtual (paginación). */
@@ -204,7 +204,7 @@ loader_is_multiboot:
  * contiene el campo FLAGS (Ver Especificación Multiboot, Sección Boot
  * Information Format). En este campo se puede verificar si el cargador de
  * arranque proporciona el mapa de la memoria física del computador. */
-  
+
   /* EBX = Dirección física de la Estructura de Información Multiboot */
   mov ebx, [ multiboot_info_location - KERNEL_VIRT_OFFSET ]
 
@@ -235,6 +235,7 @@ memory_map_is_present:
 
   /* EBX = dirección física de la a Estructura de Información Multiboot. */
   mov ebx, [ multiboot_info_location - KERNEL_VIRT_OFFSET ]
+  mov esi, ebx
 
   /* EAX = primer word (32 bits) de la Estructura de Información Multiboot
    * (FLAGS) */
@@ -275,14 +276,14 @@ memory_map_is_present:
   /* Número de módulos cargados, 20 bytes a partir del inicio de la Estructura
    * de Información Multiboot. */
   mov ecx, [esi + 20]
-  
+
   /* Verificar si el conteo es cero. */
   or ecx, ecx
   jz calculate_page_tables
 
   /* Ubicación de la tabla de módulos, 24 bytes a partir del inicio de la
    * Estructura de Información Multibot.*/
-  mov ebx, [esi + 24] 
+  mov ebx, [esi + 24]
 
   /* Iterar por las entradas, buscando el elemento mod_end de cada módulo (ver
    * Especificación Multiboot). Almacenar el mayor mod_end en EDX */
@@ -293,7 +294,7 @@ memory_map_is_present:
 read_module_info:
   mov eax, [ebx + 4]
   cmp eax, edx
-  /* Pasar a la siguente entrada si el atributo mod_end es menor o igual al 
+  /* Pasar a la siguente entrada si el atributo mod_end es menor o igual al
   valor almacenado en EDX*/
   jle next_module_entry
 
@@ -315,7 +316,7 @@ next_module_entry:
 
   /* Se cargaron módulos. Redondear el mayor mod_end al sigiente límite de
    * página, si es necesario */
-  or edx, 0xFFF
+  test edx, 0xFFF
   jz no_need_to_round
 
   /* Los 12 bits inferiores de la dirección son diferentes de cero, hay residuo
@@ -347,7 +348,7 @@ no_need_to_round:
   mov eax, [total_kernel_pages - KERNEL_VIRT_OFFSET]
 
   add eax, edx
-  
+
   /* Y Almacenar el valor actualizado en la variable total_kernel_pages */
   mov [total_kernel_pages - KERNEL_VIRT_OFFSET ], eax
 
@@ -383,7 +384,7 @@ calculate_page_tables:
 
   /* Almacenar el valor actualizado en la variable del kernel */
   mov [total_kernel_pages - KERNEL_VIRT_OFFSET ], eax
-  
+
   /* Ya se conoce cuantas páginas ocupa el kernel (y posiblemente los módulos),
    * y el número de páginas necesarias para mapear el primer MB de memoria, el
    * kernel, los módulos, el directorio de tablas de página y las tablas de
@@ -418,19 +419,19 @@ calculate_page_tables:
 
   /* ECX = número de tablas de página necesarias para mapear el primer MB de
    * memoria, el kernel, los módulos adicionales, el directorio de tablas de
-   * página y las tablas de página. */ 
+   * página y las tablas de página. */
   mov ecx, DWORD PTR [kernel_page_tables - KERNEL_VIRT_OFFSET]
 
  /*
    Limpiar el espacio de las tablas de página kernel.
    Las tablas de página comienzan en kernel_pd_addr + 0x1000
   */
-  
+
  /* Obtener la ubicación del directorio de tablas de página en EAX y sumar
   * 4096 (0x1000) para ubicarnos en la siguiente página. */
   mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
   add eax, 0x1000
-  
+
 flush_page_tables:
   /* Limpiar la tabla de páginas*/
   push eax
@@ -456,7 +457,7 @@ flush_page_tables:
    /* Se mapean las direcciones físicas a partir de 0x000000 */
    xor eax, eax
    /* Adicionar flags 00000000000000000011 = R/W = 1, P = 1*/
-   or eax, 3 
+   or eax, 3
 
 init_pagetables:
   stosd [edi], eax
@@ -474,7 +475,7 @@ init_pagetables:
    * memoria, el kernel, los módulos adicionales el directorio de tablas de
    * página y las tablas de página. */
   mov ecx, DWORD PTR [kernel_page_tables - KERNEL_VIRT_OFFSET ]
-   
+
   /* EAX = Dirección física del directorio de tablas de página */
   mov eax, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
 
@@ -484,7 +485,7 @@ init_pagetables:
   /* EAX = Ubicación de la primera tabla de página: EAX + 4096 (0x1000) */
   add eax, 0x1000
   /* Adicionar flags 00000000000000000011 = R/W = 1, P = 1*/
-  or eax, 3 
+  or eax, 3
 
 map_kernel_in_low_memory:
    stosd [edi], eax
@@ -495,12 +496,12 @@ map_kernel_in_low_memory:
    * memoria, el kernel, los módulos adicionales el directorio de tablas de
    * página y las tablas de página. */
   mov ecx, DWORD PTR [kernel_page_tables - KERNEL_VIRT_OFFSET ]
-   
+
   /* EAX = Dirección física del directorio de tablas de página */
   mov edi, [kernel_pd_addr - KERNEL_VIRT_OFFSET]
 
   /* Configurar las entradas correspondientes del directorio a las tablas
-   * de página que apuntan a la posición del kernel en memoria virtual */ 
+   * de página que apuntan a la posición del kernel en memoria virtual */
 
    /* EBX = Desplazamiento en el espacio virtual de direcciones en el cual se
 	* mapeará el primer MB de memoria, el kernel y las tablas de página. */
@@ -527,9 +528,9 @@ map_kernel_in_low_memory:
 
   /* EAX = Ubicación de la primera tabla de página: EAX + 4096 (0x1000) */
    add eax, 0x1000
-   
+
    /* Adicionar flags 00000000000000000011 = R/W = 1, P = 1*/
-   or eax, 3 
+   or eax, 3
 
 map_kernel_in_high_memory:
    stosd [edi], eax
@@ -583,7 +584,7 @@ after_gdt_is_loaded:
     * KERNEL_VIRT_ADDR.  A partir de este punto, todas las direcciones de
     * variable (OFFSET) son válidas y apuntan a la ubicación del kernel en
     * memoria virtual.
-    
+
    /* EAX = dirección (virtual) de la etiqueta on_virtual_memory */
    lea eax, [on_virtual_memory]
 
@@ -598,15 +599,15 @@ on_virtual_memory:
 
  /* Configurar la pila en la nueva posición del kernel */
   mov esp, OFFSET kernel_stack_end
-  
+
   /* Pasar el control a la rutina 'cmain' en el archivo kernel.c */
-  call cmain 
+  call cmain
 
   /* La función cmain() retorna a este punto. Se debe entrar en un ciclo
   infinito, para que el procesador no siga ejecutando instrucciones al finalizar
   la ejecución del kernel. */
 
-kernel_finished:	
+kernel_finished:
     hlt
 	jmp kernel_finished /* Ciclo infinito */
 
@@ -1270,7 +1271,7 @@ isr_table:
 .long isr254
 .long isr255
 
-/** 
+/**
 * Imprime un mensaje en la última línea de la pantalla  y bloquea el
 * kernel.
 * Entrada: [ebp + 8] : Dirección del mensaje a imprimir
@@ -1288,7 +1289,7 @@ kdebug:
 
   xor edi, edi
   mov edi, 0xB8000
-  
+
   /* Avanzar el cursor a la primera columna de la última línea en la pantalla */
   /* 24 líneas * 80 columnas * 2 bytes por caracter = 3840 */
   add edi, 3840
@@ -1371,7 +1372,7 @@ LGDT.
 */
 kernel_gdt_pointer:
    /* Tamano de la GDT - 1: . (dirección actual) - (dirección del gdt) - 1 */
-   .word . - kernel_gdt - 1 
+   .word . - kernel_gdt - 1
  /* Dirección LINEAL de 32 bits en la cual se encuentra la GDT.
  La GDT se carga DESPUÉS de habilitar la paginación, por lo cual la dirección
  lineal proporcionada es la ubicación de la GDT EN MEMORIA VIRTUAL.

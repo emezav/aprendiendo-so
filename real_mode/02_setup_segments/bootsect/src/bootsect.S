@@ -4,7 +4,7 @@
  * @author Erwin Meza Vega
  * @copyright MIT License
  * @brief Sector de Arranque para sistemas x86 con BIOS.
- * @description 
+ * @description
  * Este código ilustra la configuración de los registros de segmento en
  * modo real. El proceso es el siguiente:
 
@@ -12,17 +12,17 @@
    para que el segmento de código inicie en la dirección lineal 0x7C00
 2. Configurar los registros de segmento de datos DS, ES, FS y GS para que
    los segmentos de datos también inicien en la dirección lineal 0x7C00
-3. Configurar los registros SS y ESP para que el segmento de pila tenga 
+3. Configurar los registros SS y ESP para que el segmento de pila tenga
    como base 0x90000, con un tamaño inicial de 0xFC00. De esta forma, el
    tope de la pila se encontrará en la dirección lineal 0x9FC00.
 */
 
-.intel_syntax noprefix 
-.code16     
+.intel_syntax noprefix
+.code16
 
-.section .text 
+.section .text
 
-.global start                  
+.global start
 start:
 
   /* La ejecución comienza en este punto, con CS = 0x0000 e IP = 0x7C00 */
@@ -31,7 +31,7 @@ start:
 
 entry_point:
   /* La ejecución continúa en este punto, con CS = 0x07C0 e IP = 0x0005 */
-  
+
   /* AX = CS */
   mov ax, cs
   /* DS = AX */
@@ -52,11 +52,11 @@ entry_point:
   mov sp, 0xFC00
   /* Habilitar de nuevo interrupciones */
   sti
-  
+
   /* El tope de la pila se encuentra ahora en 0x9FC00 */
 
 finished:
   hlt /* Detener el procesador hasta que ocurra una interrupción */
-  
+
   /* Detener de nuevo el procesador. */
  jmp finished

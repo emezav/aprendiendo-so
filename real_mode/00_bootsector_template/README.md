@@ -18,6 +18,7 @@ inicia el computador (emulador).
 
 El papel de la BIOS en sistemas x86
 -----------------------------------
+
 En computadores x86 equipados con BIOS, o en sistemas con UEFI en los cuales se
 habilita el modo de compatibilidad, la BIOS toma el control de la ejecución del
 procesador cuando se enciende o reinicia el computador. Su tarea consiste en
@@ -41,7 +42,7 @@ hasta encontrar un sector de arranque válido. Si no lo encuentra detiene su
 ejecución.
 
 Modo real en sistemas con UEFI
-===========================
+---------------------------
 
 La BIOS ha sido reemplazada de forma progresiva en los sistemas x86 por un
 firmware más sofisticado, llamado UEFI (Unified Extensible Firmware Interface).
@@ -58,7 +59,7 @@ habilite el modo de BIOS heredado y el código se copie en una memoria USB o un
 CD usando una utilidad especial.
 
 Compilación y ejecución del proyecto
-==================================
+----------------------------------
 
 La compilación del código y la ejecución del emulador se realiza mediante la
 utilidad *make*. Para ejecutar este proyecto, se debe abrir un *shell* y
@@ -83,7 +84,8 @@ Puede revisar el archivo __Makefile__ que se encuentra en el directorio del
 proyecto para estudiar el proceso que realiza la utilidad *make*.
 
 Descripción general del proyecto
-================================
+--------------------------------
+
 Este proyecto sirve como plantilla para crear código que se ejecutará en modo
 real.  El código en ensamblador del archivo bootsect/src/bootsect.S se compilará
 para crear un *sector de arranque* válido que ocupará exactamente 512 bytes, y
@@ -98,7 +100,7 @@ diskette (cuyo sector de arranque contiene el código compilado). La siguiente
 figura ilustra el formato de la imagen de disco creada.
 
          Imagen de Floppy
-         
+
             +--- Primer sector de la imagen de disco (sector de arranque)
             |
             v
@@ -121,12 +123,12 @@ sector de arranque recibe el control por parte de la BIOS.
 
           Primer MegaByte de Memoria RAM luego de inicializar la BIOS
           y luego de cargar el código del sector de arranque
-    
+
             +----------------------+ 0xFFFFF
             |                      |
             | Área de ROM          | En esta área se encuentra el código de la BIOS,
             | (BIOS, VGA, etc.)    | y se encuentra mapeada la Memoria de Video.
-            |                      | 
+            |                      |
             |                      |
             |                      | 0xA0000
     0x9FFFF +----------------------+
@@ -138,11 +140,11 @@ sector de arranque recibe el control por parte de la BIOS.
             |                      |
             |                      |
             |   Memoria RAM        |  Aproximadamente 30 KB de memoria disponible
-            |   disponible         |                              
+            |   disponible         |
             |                      |
             |                      |
             |                      | 0x7E00
-     0x7DFF +----------------------+ 
+     0x7DFF +----------------------+
             | Código del sector de |  <-- La BIOS carga el código del sector de
             | arranque (512 bytes) |      arranque aquí
             +----------------------+ 0x7C00
@@ -159,13 +161,13 @@ sector de arranque recibe el control por parte de la BIOS.
             | BIOS (BDA)           |
             |                      |
        0x3FF+----------------------+
-            |                      | 
-            |                      | 
-            | Tabla de Descriptores| 
-            | de Interrupción      | 
-            | (Configurada por la  |  
-            |  BIOS)               | 
-         0  +----------------------+ 
+            |                      |
+            |                      |
+            | Tabla de Descriptores|
+            | de Interrupción      |
+            | (Configurada por la  |
+            |  BIOS)               |
+         0  +----------------------+
 
 Una vez que ha recibido el control de la BIOS, se puede usar los servicios
 configurados por la BIOS para realizar algunas tareas, como imprimr por

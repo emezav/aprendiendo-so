@@ -1,4 +1,4 @@
-
+﻿
 Fundamentos de lenguaje ensamblador
 ====================================
 
@@ -28,7 +28,7 @@ AT&T e Intel difieren en varios aspectos, entre ellos:
 	para byte, movw para word, movl para long). En sintaxis Intel sólo se debe
 	especificar el sufijo en aquellas instrucciones cuyos operandos son
 	direcciones de memoria o cuando existe ambiguedad en el tamaño de los
-	operandos.  
+	operandos.
 
 
 Referencia implícita a los registros de segmento
@@ -51,15 +51,14 @@ Por ejemplo, la instrucción
     mov al, [addr]
 
 
-Es interpretada por el procesador como 
+Es interpretada por el procesador como
 
     mov al, ds:[addr]
 
-Y la instrucción 
+Y la instrucción
 
 
-
-Es intepretada por el procesador como: 
+Es intepretada por el procesador como:
 
     mov word ptr es:[di], word ptr ds:[si]
     inc si
@@ -103,7 +102,7 @@ acceder a los 32 bits de los registros y en modo de 64 bits se puede tener
 acceso a los 64 bits de los registros.
 
 Instrucciones para el movimiento de datos
-=========================================
+-----------------------------------------
 
 INSTRUCCIÓN mov (move)
 ----------------------
@@ -112,7 +111,7 @@ Permite mover (copiar) datos entre dos registros, de un valor inmediato a un
 registro o de un valor inmediato a una posición de memoria.
 
 En sintaxis AT&T:
-                 
+
 De inmediato a registros
 
     movb $0x10, %ah /* Mover el byte (valor inmediato) 0x10 a %ah */
@@ -132,16 +131,16 @@ De registros a registros
 
 
 De registros a memoria
-    
-    movb %al, (%si) /* Mover el byte almacenado en %al a la posición 
+
+    movb %al, (%si) /* Mover el byte almacenado en %al a la posición
        de memoria  apuntada por %si */
-    movb %al, 4(%si) /* Mover el byte almacenado en %al a la posición 
+    movb %al, 4(%si) /* Mover el byte almacenado en %al a la posición
     de memoria apuntada por (%si + 4)*/
-    movb %al, -2(%si) /* Mover el byte almacenado en %al a la posición 
+    movb %al, -2(%si) /* Mover el byte almacenado en %al a la posición
        de memoria apuntada por (%si - 2) */
     movw %ax, (%si) /* Mover el word almacenado en %ax a la posición
      de memoria  apuntada por %si */
-    movl %eax, (%esi) /* 32 bits */ 
+    movl %eax, (%esi) /* 32 bits */
     movq %rax, (%rsi) /* 64 bits */
 
 
@@ -149,8 +148,8 @@ De memoria a registros
 
     movb (%si), %al  /* Mover el byte de la posición de memoria
      apuntada por (%si) a %al */
-    movb 4($si), %al /* Mover el byte de la posición de memoria 
-       apuntada por (%si + 4) a %al */ 
+    movb 4($si), %al /* Mover el byte de la posición de memoria
+       apuntada por (%si + 4) a %al */
     movb -2($si), %al /* Mover el byte de la posición de memoria
      apuntada por (%si - 2) a %al */
 
@@ -178,36 +177,36 @@ De registros a registros
 
 De registros a memoria
 
-    mov BYTE PTR [ si ], al /* Mover el byte almacenado en al a la 
+    mov BYTE PTR [ si ], al /* Mover el byte almacenado en al a la
         posicion de memoria apuntada por si */
-    movb [ si ], al      /* Equivalente a la instrucción anterior. 
+    movb [ si ], al      /* Equivalente a la instrucción anterior.
           Observe el sufijo ‘w’ en la instrucción. */
-    
-    mov BYTE PTR [ si + 4 ], al /* Mover el byte almacenado en %al a 
+
+    mov BYTE PTR [ si + 4 ], al /* Mover el byte almacenado en %al a
        la posición de memoria apuntada por (si + 4)*/
-           
-    mov BYTE PTR [ si - 2 ], al /* Mover el byte almacenado en %al a 
+
+    mov BYTE PTR [ si - 2 ], al /* Mover el byte almacenado en %al a
     la posición de memoria apuntada por (si - 2) */
-    
+
     mov WORD PTR [ si ], ax /* Mover el word almacenado en ax a la
-    posición de memoria apuntada por (si) */  
-    
-    mov DWORD PTR [ esi ], eax /* 32 bits */ 
-    mov QWORD PTR [ rsi ], rax /* 64 bits */ 
+    posición de memoria apuntada por (si) */
+
+    mov DWORD PTR [ esi ], eax /* 32 bits */
+    mov QWORD PTR [ rsi ], rax /* 64 bits */
 
 
 De memoria a registros
 
-    mov al, BYTE PTR [ si ]   /* Mover el byte de la posición de 
+    mov al, BYTE PTR [ si ]   /* Mover el byte de la posición de
     memoria apuntada por (si) a %al */
     movw al, [ si ]   /* Equivalente a la instrucción anterior */
-    
-    mov al, BYTE PTR [ si + 4] /* Mover el byte de la posición de 
-    memoria apuntada por (si + 4) a al */ 
-    
-    mov al, BYTE PTR [ si - 2 ] /* Mover el byte de la posición de 
+
+    mov al, BYTE PTR [ si + 4] /* Mover el byte de la posición de
+    memoria apuntada por (si + 4) a al */
+
+    mov al, BYTE PTR [ si - 2 ] /* Mover el byte de la posición de
     memoria apuntada por (si - 2) a al */
-    
+
     mov ax, WORD PTR [ si ]   /* Mover un word */
     mov eax, DWORD PTR [ esi ]   /* 32 bits (doubleword)*/
     mov rax, QWORD PTR [ rsi ]   /* 64 bits (quadword) */
@@ -222,8 +221,8 @@ los dos apuntadores, luego de la copia (Ver Repeticiones).
 
 En sintaxis AT&T
 
-    movsb (%si), (%di) /* Copia un byte de la posición de memoria apuntada  
-                           por el registro %si a la posición de memoria 
+    movsb (%si), (%di) /* Copia un byte de la posición de memoria apuntada
+                           por el registro %si a la posición de memoria
                            apuntada por el registro %di */
     movsw (%si), (%di) /* Copia un word de (%si) a (%di) */
     movsl (%esi), (%edi) /* Copia un dobuleword de (%esi) a (%edi) */
@@ -249,30 +248,30 @@ En sintaxis AT&T
 
     lodsb /* También es valido lodsb %al, (%si) */
     /* Almacena un byte de la posición de memoria apuntada por (%si)en en el registro %al */
-      
-    lodsw /* Almacena un word de la posición de memoria apuntada por 
+
+    lodsw /* Almacena un word de la posición de memoria apuntada por
      (%si) en el registro %ax */
-    
+
     lodsl /* 32 bits */
-    
+
     lodsq /* 64 bits */
 
 
 En sintaxis Intel
 
-    lods al, BYTE PTR [ si ]    /* Almacena un byte de la posición de memoria 
+    lods al, BYTE PTR [ si ]    /* Almacena un byte de la posición de memoria
                                apuntada por (si) en  el registro al */
     lodsb    /* Equivalente a la instrucción anterior. La sintaxis abreviada también es válida */
-      
+
     lods ax, WORD PTR [ si ] /* Almacena un word de la posición de
                                 memoria apuntada por (si) en el registro ax */
-                                
+
     lodsw   /* Equivalente a la instrucción anterior. */
-    
+
     lodsl /* 32 bits */
-    
+
     lodsq /* 64 bits */
-    
+
     INSTRUCCIÓN stos (store string)
 
 
@@ -284,26 +283,26 @@ En sintaxis AT&T
     /* Almacena el valor de %al a la posición de memoria apuntada por (%di)  */
     stosw /* Almacena el valor de %ax a la posición de memoria
      apuntada por (%di) */
-    
+
     stosl /* 32 bits */
-    
+
     stosq /* 64 bits */
 
 
 En sintaxis Intel
 
     stos BYTE PTR [ di ], al
-       /* Almacena el valor de al a la posición de memoria 
+       /* Almacena el valor de al a la posición de memoria
       apuntada por   (di) */
-    
+
     stosb   /* También es válida la instrucción abreviada */
-      
-    stos WORD PTR [ di ], ax  /* Almacena el valor de ax a la posición 
+
+    stos WORD PTR [ di ], ax  /* Almacena el valor de ax a la posición
     de memoria apuntada por  (di) */
     stosw  /* Equivalente a la instrucción anterior. */
-    
+
     stosl /* 32 bits */
-    
+
     stosq /* 64 bits */
 
 
@@ -316,10 +315,10 @@ Por ejemplo, las siguiente secuencia de instrucciones en sintaxis AT&T  copia el
 
 En la primera forma se realizan 256 iteraciones (0x100) para copiar byte a byte, y en la segunda solo se requieren 128 iteraciones (0x80), ya que cada vez se copia un word (dos bytes) cada vez.
 
-    movw $0x100, %cx 
+    movw $0x100, %cx
     rep stosb /* 16 bits, copiar byte a byte, incrementar %di en 1*/
-    
-    movw $0x80, %cx 
+
+    movw $0x80, %cx
     rep stosw /* 16 bits, copiar word a word, incrementar %di en 2 */
 
 
@@ -327,10 +326,9 @@ en sintaxis Intel:
 
     mov cx, 0x100
     rep stosb BYTE PTR [ di ], al /* 16 bits, copiar byte a byte */
-    
+
     mov cx, 0x80
     rep stosw WORD PTR [ di ], ax /* 16 bits, copiar word a word */
-
 
 
 Dirección de incremento
@@ -343,9 +341,9 @@ Esto se puede garantizar invocando la instrucción cld (clear direction flag) co
 
 Por el contrario, la instrucción std (set direction flag) causa que las instrucciones decrementen automáticamente los registros ESI o EDI según sea el caso.
 
- 
+
 Saltos
-=======
+-------
 
 Para evitar la linealidad de la ejecución, el procesador dispone de instrucciones que permiten 'saltar' (cambiar el valor de EIP), para poder continuar la ejecución del programa en otro sitio diferente dentro del código. A continuación se describe de forma resumida las instrucciones más usadas para realizar saltos dentro del código.
 
@@ -384,7 +382,7 @@ En sintaxis AT&T:
     ljmp seg, offset
 
 En sintaxis Intel:
- 
+
     ljmp seg:offset
 
 
@@ -396,26 +394,26 @@ Esto se logra mediante la siguiente estructura de código:
 
     start:
        ljmp 0x7C0 : OFFSET entry_point
-    
-    
+
+
     entry_point: /* La ejecución continúa en este punto, pero CS = 0x7C0. */
        //demás instrucciones
-       
-       
+
+
        //..
-       
+
        jmp finished
-       
+
     finished: /* Ciclo infinito dentro del código del sector de arranque */
-       jmp finished 
+       jmp finished
 
 Instrucciones de salto condicional
-------------------------------------- 
+-------------------------------------
 
 
 Instrucciones jz, jnz, je, jne, jle, jge, jc. Estas instrucciones generalmente vienen precedidas por instrucciones que realizan manipulación de registros o posiciones de memoria, y que alteran el contenido del registro EFLAGS (alguno o varios de sus bits).
 
-La sintaxis de todas estas instrucciones es la misma: 
+La sintaxis de todas estas instrucciones es la misma:
 
     jz label
     jnz label
@@ -436,7 +434,7 @@ Saltos condicionales y comparaciones
 -------------------------------------
 
 Uno de los usos más comunes de las instrucciones de salto condicional es comparar si un operando es mayor o menor que otro para ejecutar código diferente de acuerdo con el resultado. Para ello, las instrucciones de salto condicional van precedidas de instrucciones de comparación:
- 
+
     cmp fuente, destino  /*(AT&T)*/
 
 
@@ -459,7 +457,7 @@ En el siguiente ejemplo se almacena el valor inmediato 100 en el registro AL y
 luego se realiza una serie de comparaciones con otros valores inmediatos y
 valores almacenados en otros registros.
 
-En sintaxis AT&T: 
+En sintaxis AT&T:
 
       movb $100, %al /* A los valores inmediatos en decimal  no se les antepone '0x'
             como a los hexa*/
@@ -468,36 +466,36 @@ En sintaxis AT&T:
       /* Otras instrucciones, que se ejecutan si el valor de %al no es mayor que 50
        (en este caso no se ejecutan, %al = 100 > 50 */
       jmp continuar
-     /* Este salto es necesario, ya que de otro modo el procesador 
-      ejecutará las instrucciones anteriores y las siguientes 
+     /* Este salto es necesario, ya que de otro modo el procesador
+      ejecutará las instrucciones anteriores y las siguientes
       también, lo cual es un error de lógica*/
       es_mayor:
        /*  La ejecución continua aquí si el valor de %al (100) es mayor  que 50*/
       continuar:
-         /*  Fin de la comparación. El código de este punto hacia 
+         /*  Fin de la comparación. El código de este punto hacia
       Abajo se ejecutará para cualquier valor de %al */
 
 
-En sintaxis Intel: 
+En sintaxis Intel:
 
        mov al, 100  /* A los valores inmediatos en decimal  no se les antepone '0x'
                      como a los hexa*/
       cmpb al, 50 /* Esta instrucción compara el valor de %al  con  50*/
       jg es_mayor
-      /* Otras instrucciones, que se ejecutan si el valor de %al no es mayor que 50 
+      /* Otras instrucciones, que se ejecutan si el valor de %al no es mayor que 50
        (en este caso no se ejecutan, %al = 100 > 50 */
       jmp continuar
-     /* Este salto es necesario, ya que de otro modo el procesador 
-      ejecutará las instrucciones anteriores y las siguientes 
+     /* Este salto es necesario, ya que de otro modo el procesador
+      ejecutará las instrucciones anteriores y las siguientes
       también, lo cual es un error de lógica*/
       es_mayor:
      /*  La ejecución continua aquí si el valor de %al (100) es mayor  que 50*/
       continuar:
-      /*  Fin de la comparación. El código de este punto hacia 
+      /*  Fin de la comparación. El código de este punto hacia
       Abajo se ejecutará para cualquier valor de %al */
 
 Ciclos
-======
+------
 
 Los ciclos son un componente fundamental de cualquier programa, ya que permiten repetir una serie de instrucciones un número determinado de veces. Existen varias formas de implementar los ciclos. Las dos formas más acostumbradas son:
 1.Combinar un registro que sirve de variable, una comparación de este registro y una instrucción de salto condicional para terminar el ciclo
@@ -511,8 +509,8 @@ El pseudocódigo es el siguiente:
     +-> ciclo:
     |  si cx = 0
     |   goto fin_ciclo
-    | (Demás instrucciones del ciclo)  
-    | decrementar cx  
+    | (Demás instrucciones del ciclo)
+    | decrementar cx
     |_goto ciclo
     fin_ciclo:
     Instrucciones a ejecutar luego del ciclo
@@ -521,7 +519,7 @@ El pseudocódigo es el siguiente:
 Implementación usando a cx como contador y realizando la comparación
 
 
-En sintaxis AT&T: 
+En sintaxis AT&T:
 
     movw $10, %cx /* Para el ejemplo, repetir 10 veces */
     ciclo:
@@ -534,7 +532,7 @@ En sintaxis AT&T:
     /* Instrucciones a ejecutar después del ciclo */
 
 
-En sintaxis Intel: 
+En sintaxis Intel:
 
     mov cx, 10 /* Para el ejemplo, repetir 10 veces */
     ciclo:
@@ -550,30 +548,30 @@ En sintaxis Intel:
 Implementación usando la instrucción loop y el registro cx
 
 
-En sintaxis AT&T: 
+En sintaxis AT&T:
 
       movw $10, %cx /* Para el ejemplo, repetir 10 veces */
       ciclo:
-       /* Demás instrucciones dentro del ciclo 
-       Importante: Recuerde que para el ciclo, se utiliza el registro %cx. 
+       /* Demás instrucciones dentro del ciclo
+       Importante: Recuerde que para el ciclo, se utiliza el registro %cx.
         Por esta razón no es aconsejable utilizarlo dentro del ciclo. */
-       
-      loop ciclo /* Decrementar automáticamente %cx y verificar si es 
-       mayor  que cero. Si %cx es mayor que cero, saltar 
-       a la  etiqueta 'ciclo'. En caso contrario, 
-       continuar la ejecución en la instrucción siguiente*/   
 
-En sintaxis Intel: 
+      loop ciclo /* Decrementar automáticamente %cx y verificar si es
+       mayor  que cero. Si %cx es mayor que cero, saltar
+       a la  etiqueta 'ciclo'. En caso contrario,
+       continuar la ejecución en la instrucción siguiente*/
 
-     mov cx, 10 /* Para el ejemplo, repetir 10 veces */  
+En sintaxis Intel:
+
+     mov cx, 10 /* Para el ejemplo, repetir 10 veces */
      ciclo:
-       /* Demás instrucciones dentro del ciclo 
-       Importante: Recuerde que para el ciclo, se usa el registro cx. 
+       /* Demás instrucciones dentro del ciclo
+       Importante: Recuerde que para el ciclo, se usa el registro cx.
        Por esta razón no se debe utilizar dentro del ciclo.
-       */   
+       */
     loop ciclo /* Decrementar automáticamente cx y verificar si es
-     mayor que cero. Si cx es mayor que cero, saltar a la 
-     etiqueta 'ciclo' En caso contrario, continuar la 
+     mayor que cero. Si cx es mayor que cero, saltar a la
+     etiqueta 'ciclo' En caso contrario, continuar la
      ejecución en la instrucción siguiente*/
 
 Ambas estrategias son válidas. Generalmente se utiliza la instrucción 'loop' y
